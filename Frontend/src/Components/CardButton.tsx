@@ -1,22 +1,23 @@
 /* Componente de botón de acción reutilizable */
 import type { MouseEventHandler } from "react";
-interface ActionButtonProps {
+interface CardButtonProps {
   onClick: MouseEventHandler<HTMLButtonElement>;
   iconClass: string;
   text: string;
 }
 
-export default function ActionButton({
+export default function CardButton({
   onClick,
   iconClass,
   text,
-}: ActionButtonProps) {
+}: CardButtonProps) {
   return (
     <button
       className="btn border-dark btn-lg mt-3"
       style={{
         borderRadius: "25px",
-        background: "linear-gradient(135deg, #253824ff 0%, #4e684cff 100%)",
+        background: "linear-gradient(135deg, #b5dcb3ff 0%, #4e684cff 100%)",
+        color: "black",
       }}
       onClick={onClick}
     >
