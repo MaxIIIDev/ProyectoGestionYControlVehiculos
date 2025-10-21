@@ -1,0 +1,47 @@
+################################
+# Logs (Default)
+################################
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+################################
+# Node.js / Build (Default)
+################################
+node_modules
+dist
+dist-ssr
+*.local
+
+################################
+# Editor directories and files (Default)
+################################
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+################################
+# ASP.NET Core / .NET Additions (Backend)
+################################
+# Carpetas de compilación
+**/bin/
+**/obj/
+
+# Archivos temporales de Visual Studio
+.vs/
+*.user
+*.pdb
+
+# Configuraciones sensibles 
+appsettings.Development.json
+appsettings.Local.json
