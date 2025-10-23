@@ -3,5 +3,12 @@ import CardGestion from "./CardGestion";
 import CardButton from "./CardButton";
 import CardRowContainer from "./CardRowContainer";
 import CardColContainer from "./CardColContainer";
+import NavButton from "./NavButton";
 
-export { CardGestion, CardButton, CardRowContainer, CardColContainer };
+export {
+  CardGestion,
+  CardButton,
+  CardRowContainer,
+  CardColContainer,
+  NavButton,
+};
