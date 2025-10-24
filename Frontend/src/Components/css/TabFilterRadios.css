@@ -6,8 +6,9 @@
   display: flex;
   align-items: center;
   height: 50px;
-  width: 400px;
-  overflow: hidden;
+  width: fit-content;
+  padding: 0 8px;
+  overflow: visible;
 }
 .filter-switch input {
   display: none;
@@ -24,14 +25,21 @@
   transition: all 0.5s;
   font-weight: 500;
   font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 150px;
 }
 .filter-switch .background {
   position: absolute;
-  width: 49%;
+  width: 100%;
   height: 38px;
   background-color: #ffc000;
   top: 4px;
   left: 4px;
+  margin-left: 4px;
+  margin-top: 2px;
   border-radius: 30px;
   transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -46,7 +54,17 @@
   color: #212121;
   font-weight: bold;
 }
+#option3:checked + label[for="option3"] {
+  color: #212121;
+  font-weight: bold;
+}
+#option4:checked + label[for="option4"] {
+  color: #212121;
+  font-weight: bold;
+}
 #option1:not(:checked) + label[for="option1"],
-#option2:not(:checked) + label[for="option2"] {
+#option2:not(:checked) + label[for="option2"],
+#option3:not(:checked) + label[for="option3"],
+#option4:not(:checked) + label[for="option4"] {
   color: #7d7d7d;
 }
