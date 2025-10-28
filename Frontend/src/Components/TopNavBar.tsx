@@ -19,6 +19,9 @@ export default function TopNavBar() {
           <Nav.Link as={Link} to="/Profile">
             <i className="bi bi-person me-2"></i> Perfil
           </Nav.Link>
+          <Nav.Link as={Link} to="/Notifications">
+            <i className="bi bi-bell me-2"></i> Notificaciones
+          </Nav.Link>
           <Nav.Link as={Link} to="/Logout">
             <i className="bi bi-box-arrow-right me-2"></i> Salir
           </Nav.Link>

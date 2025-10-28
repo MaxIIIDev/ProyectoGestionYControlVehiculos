@@ -1,0 +1,49 @@
+.card-btn {
+  font-size: 17px;
+  background: linear-gradient(135deg, #b5dcb3ff 0%, #4e684cff 100%);
+  background-size: 200% 200%;
+  border: none;
+  padding: 1em 1.5em;
+  color: #ffedd3;
+  text-transform: uppercase;
+  position: relative;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  transform: scale(1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.card-btn:hover {
+  color: #1e1e2b;
+  background: linear-gradient(
+    135deg,
+    #b5dcb3ff 0%,
+    #c7e7c5ff 25%,
+    #8ab688ff 50%,
+    #6a7c68ff 75%,
+    #4e684cff 100%
+  );
+  background-size: 200% 200%;
+  animation: animacionGradiente 2s ease infinite;
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transition: all 0.5s ease;
+}
+
+.card-btn:active {
+  transform: scale(0.98) translateY(0px);
+  transition: all 0.1s ease;
+}
+
+@keyframes animacionGradiente {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

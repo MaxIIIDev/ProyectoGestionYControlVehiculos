@@ -6,6 +6,7 @@ import CardColContainer from "./CardColContainer";
 import NavButton from "./NavButton";
 import TableFilterRadios from "./TableFilterRadios";
 import SideNavBar from "./SideNavBar";
+import NavButtonPosition from "./NavButtonPosition";
 
 export {
   CardGestion,
@@ -15,4 +16,5 @@ export {
   CardColContainer,
   NavButton,
   SideNavBar,
+  NavButtonPosition,
 };

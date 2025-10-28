@@ -6,5 +6,5 @@ interface CardRowContainerProps {
   children?: ReactNode;
 }
 export default function CardRowContainer({ children }: CardRowContainerProps) {
-  return <div className="row g-4 justify-content-center">{children}</div>;
+  return <div className="row g-4 mt-5 justify-content-center">{children}</div>;
 }
