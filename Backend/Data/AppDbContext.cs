@@ -1,4 +1,5 @@
 
+using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
 public class AppDbContext : DbContext
@@ -6,5 +7,18 @@ public class AppDbContext : DbContext
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
     }
+    public DbSet<Auditoria> Auditorias { get; set; }
+    public DbSet<ChecklistDiario> ChecklistsDiarios { get; set; }
+    public DbSet<Documento> Documentos { get; set; }
+    public DbSet<Matafuego> Matafuegos { get; set; }
+    public DbSet<MensajeChat> MensajesChats { get; set; }
+    public DbSet<Neumatico> Neumaticos { get; set; }
+    public DbSet<Persona> Personas { get; set; }
+    public DbSet<PosicionNeumatico> PosicionesNeumaticos { get; set; }
+    public DbSet<RegistroKilometraje> RegistrosKilometraje { get; set; }
+    public DbSet<Rol> Roles { get; set; }
+    public DbSet<Service> Services { get; set; }
+    public DbSet<Usuario> Usuarios { get; set; }
+    public DbSet<Vehiculo> Vehiculos { get; set; }
     
 }
