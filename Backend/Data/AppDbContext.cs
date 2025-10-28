@@ -20,5 +20,25 @@ public class AppDbContext : DbContext
     public DbSet<Service> Services { get; set; }
     public DbSet<Usuario> Usuarios { get; set; }
     public DbSet<Vehiculo> Vehiculos { get; set; }
-    
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Usuario>()
+            .HasIndex(u => u.Gmail)
+            .IsUnique();
+        modelBuilder.Entity<Usuario>()
+            .HasOne(u => u.Persona)
+            .WithOne(p => p.Usuario)
+            .HasForeignKey<Usuario>(u => u.IdPersona);
+        modelBuilder.Entity<Usuario>()
+            .HasIndex(u => u.IdPersona).IsUnique();
+
+        modelBuilder.Entity<Matafuego>()
+            .HasOne(v => v.Vehiculo)
+            .WithOne(m => m.Matafuego)
+            .HasForeignKey<Vehiculo>(v => v.IdMatafuego);
+        modelBuilder.Entity<Vehiculo>()
+            .HasIndex(v => v.IdMatafuego).IsUnique();
+    }
+
 }
