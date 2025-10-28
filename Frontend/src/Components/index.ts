@@ -5,6 +5,7 @@ import CardRowContainer from "./CardRowContainer";
 import CardColContainer from "./CardColContainer";
 import NavButton from "./NavButton";
 import TableFilterRadios from "./TableFilterRadios";
+import SideNavBar from "./SideNavBar";
 
 export {
   CardGestion,
@@ -13,4 +14,5 @@ export {
   TableFilterRadios,
   CardColContainer,
   NavButton,
+  SideNavBar,
 };
