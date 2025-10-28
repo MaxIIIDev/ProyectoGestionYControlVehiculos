@@ -9,21 +9,20 @@ namespace Backend.Models
         DelanteroIzquierdo,
         DelanteroDerecho,
         TraseroIzquierdo,
-        TraseroDerecho,  
-        TraseroDerechoInterno,
         TraseroIzquierdoInterno,
-        Auxilio,
+        TraseroIzquierdoExterno,
+        TraseroDerecho,
+        TraseroDerechoInterno,
         TraseroDerechoExterno,
-        TraseroIzquierdoExterno
+        Auxilio
     }
-    public class Neumatico(string marca, string medida, bool recapado, int kmColocacion, int kmRodados, string desgasteIrregular, PosicionNeumatico posicion, DateTime fechaColocacion, int vehiculoId, bool estado)
+    public class Neumatico(string marca, string medida, bool estandar, int kmColocacion, int kmRodados, string desgasteIrregular, PosicionNeumatico posicion, DateTime fechaColocacion, int idVehiculo, bool estado)
     {
         [Key]
         public int IdNeumatico { get; set; }
         public string Marca { get; set; } = marca;
-
         public string Medida { get; set; } = medida;
-        public bool Recapado { get; set; } = recapado;
+        public bool Estandar { get; set; } = estandar;
         public int KmColocacion { get; set; } = kmColocacion;
         public int KmRodados { get; set; } = kmRodados;
         public string DesgasteIrregular { get; set; } = desgasteIrregular;
@@ -31,14 +30,12 @@ namespace Backend.Models
         
         public DateTime FechaColocacion { get; set; } = fechaColocacion;
 
-        public bool Estado { get; set; } = estado;
-
+        [ForeignKey("IdVehiculo")]
         // Foreign key
-        public int VehiculoId { get; set; } = vehiculoId;
-
+        public int IdVehiculo { get; set; } = idVehiculo;
         // Navigation property
-        [ForeignKey("VehiculoId")]
-        public Vehiculo Vehiculo { get; set; } = null!;
+        public Vehiculo? Vehiculo { get; set; } = null!;
+        public bool Estado { get; set; } = estado;
 
         // Constructor vacío
         public Neumatico() : this(default!, default!, default, default, default, default!, default, default, default, true) { }

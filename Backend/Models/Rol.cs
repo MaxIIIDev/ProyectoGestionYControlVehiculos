@@ -5,13 +5,9 @@ namespace Backend.Models
 {
     public class Rol(string nombre, bool estado)
     {
-    
-
         [Key]
         public int IdRol { get; set; }
-
         public string Nombre { get; set; } = nombre;
-
         public bool Estado { get; set; } = estado;
 
         // Constructor vacío

@@ -6,19 +6,19 @@ namespace Backend.Models
     public class MensajeChat(string contenido, int idUsuario, Usuario usuario, DateTime fecha, bool estado)
     {
         [Key]
-        public int IdMensajeChat { get; set; }
-
+        public int IdMensajeChat { get; set; } = idUsuario;
+        
+        [ForeignKey("IdUsuario")]
         public int IdUsuario { get; set; }
 
-        [ForeignKey("IdUsuario")]
-        public Usuario Usuario { get; set; } = null!;
+        public Usuario? Usuario { get; set; } = usuario;
 
-        public DateTime Fecha { get; set; } = DateTime.Now;
+        public DateTime Fecha { get; set; } = fecha;
 
         public string Contenido { get; set; } = contenido;
 
-        public bool Estado { get; set; } = true;
+        public bool Estado { get; set; } = estado;
         // Constructor vacío
-        public MensajeChat() : this(default, default, null!, DateTime.Now, default!, true) { }
+        public MensajeChat() : this(default!, default, default!, default, true) { }
     }
 }

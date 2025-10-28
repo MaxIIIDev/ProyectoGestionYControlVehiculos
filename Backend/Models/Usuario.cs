@@ -3,24 +3,24 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models
 {
-    public class Usuario(string email, string contrasena, string? avatarUrl, int idRol, int idPersona, bool estado)
+    public class Usuario(string gmail, string contrasena, string? avatarUrl, int idRol, int idPersona, bool estado)
     {
         [Key]
         public int IdUsuario { get; set; }
 
-        public string Email { get; set; } = email;
+        public string Gmail { get; set; } = gmail;
 
         public string Contrasena { get; set; } = contrasena;
 
         public string? AvatarUrl { get; set; } = avatarUrl;
 
-        public int IdRol { get; set; } = idRol;
         [ForeignKey("IdRol")]
-        public Rol Rol { get; set; } = null!;
+        public int IdRol { get; set; } = idRol;
+        public Rol? Rol { get; set; } = null!;
 
-        public int IdPersona { get; set; } = idPersona;
         [ForeignKey("IdPersona")]
-        public Persona Persona { get; set; } = null!;
+        public int IdPersona { get; set; } = idPersona;
+        public Persona? Persona { get; set; } = null!;
 
         public bool Estado { get; set; } = estado;
 

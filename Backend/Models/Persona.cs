@@ -15,14 +15,10 @@ namespace Backend.Models
         public int Dni { get; set; } = dni;
 
         public DateOnly FechaNac { get; set; } = fechaNac;
-        
-        public int IdUsuario { get; set; } = idUsuario;
         [ForeignKey("IdUsuario")]
-        public Usuario Usuario { get; set; } = null!;
-
+        public int IdUsuario { get; set; } = idUsuario;
+        public Usuario? Usuario { get; set; } = null!;
         public bool Estado { get; set; } = estado;
-
-
         // Constructor vacío
         public Persona() : this(default!, default!, default, default, default, true) { }
     }

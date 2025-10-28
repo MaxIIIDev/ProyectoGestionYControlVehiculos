@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models
 {
-    public class Service(bool filtroDeAire, bool filtroDeAceite, bool filtroDeCombustible, bool correaPolyV, bool correaDentada, bool alineoBalanceo, int kmActual, int kmProx, int kmProxPolyV, int kmProxBombaDeAgua, string detalle, DateTime fecha, bool estado)
+    public class Service(bool filtroDeAire, bool filtroDeAceite, bool filtroDeCombustible, bool correaPolyV, bool correaDentada, bool alineoBalanceo, int kmActual, int kmProx, int kmProxPolyV, int kmProxBombaDeAgua , int idVehiculo, string detalle, DateTime fecha, bool estado)
     {
         [Key]
         public int IdService { get; set; } 
@@ -31,16 +31,16 @@ namespace Backend.Models
         public string Detalle { get; set; } = detalle;
 
         public DateTime Fecha { get; set; } = fecha;
+        [ForeignKey("IdVehiculo")]
 
-        public bool Estado { get; set; } = estado;
         // Foreign key
-        public int VehiculoId { get; set; } = vehiculoId;
+        public int IdVehiculo { get; set; } = idVehiculo;
 
         // Navigation property
-        [ForeignKey("VehiculoId")]
-        public Vehiculo Vehiculo { get; set; } = null!;
+        public Vehiculo? Vehiculo { get; set; } = null!;
+        public bool Estado { get; set; } = estado;
 
         // Constructor vacío
-        public Service() : this(default!, default!, default, default, default, default, default, default, default, default, default!, default, true) { }
+        public Service() : this(false, false, false, false, false, false, 0, 0, 0, 0, 0, "", DateTime.Now, true) { }
     }
 }
