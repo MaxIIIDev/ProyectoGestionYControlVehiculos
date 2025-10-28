@@ -8,17 +8,16 @@ namespace Backend.Models
         [Key]
         public int IdMensajeChat { get; set; } = idUsuario;
         
-        [ForeignKey("IdUsuario")]
+        [ForeignKey("Usuario")]
         public int IdUsuario { get; set; }
 
         public Usuario? Usuario { get; set; } = usuario;
 
         public DateTime Fecha { get; set; } = fecha;
-
+        [Required]
         public string Contenido { get; set; } = contenido;
 
         public bool Estado { get; set; } = estado;
-        // Constructor vacío
         public MensajeChat() : this(default!, default, default!, default, true) { }
     }
 }

@@ -8,13 +8,18 @@ namespace Backend.Models
         [Key]
         public int IdAuditoria { get; set; }
         public DateTime Fecha { get; set; } = DateTime.Now;
+        [Required]
         public int IdEntidad { get; set; } = idEntidad;
-
+        [Required]
+        [MinLength(3)]
+        [MaxLength(50)]
         public string Entidad { get; set; } = entidad; // query = @SELECT * FROM Auditoria WHERE Entidad = '${nombreEntidad}'-> de acá sacamos el nombre de la entidad e interpolamos a la tabla de la entidad en cuestión.
-
+        [Required]
+        [MinLength(3)]
+        [MaxLength(50)]
         public string Accion { get; set; } = accion;
-
-        [ForeignKey("IdUsuario")]
+        [Required]
+        [ForeignKey("Usuario")]
         public int IdUsuario { get; set; } = idUsuario;
         public Usuario? Usuario { get; set; } = null!;
 

@@ -7,12 +7,13 @@ namespace Backend.Models
     {
         [Key]
         public int IdRegistroKilometraje { get; set; }
+        [Required]
         public int Kilometraje { get; set; } = kilometraje;
+        [Required]
         public DateTime FechaRegistro { get; set; } = fechaRegistro;
-
         public bool Estado { get; set; } = estado;
 
-        [ForeignKey("IdVehiculo")]
+        [ForeignKey("Vehiculo")]
         // Foreign key
         public int IdVehiculo { get; set; } = idVehiculo;
         // Navigation property

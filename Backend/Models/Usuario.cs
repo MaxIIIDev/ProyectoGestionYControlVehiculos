@@ -7,24 +7,28 @@ namespace Backend.Models
     {
         [Key]
         public int IdUsuario { get; set; }
+        [Required]
+        [EmailAddress]
 
         public string Gmail { get; set; } = gmail;
-
+        [Required]
+        [MinLength(8)]
         public string Contrasena { get; set; } = contrasena;
 
         public string? AvatarUrl { get; set; } = avatarUrl;
 
-        [ForeignKey("IdRol")]
+        [ForeignKey("Rol")]
         public int IdRol { get; set; } = idRol;
         public Rol? Rol { get; set; } = null!;
 
-        [ForeignKey("IdPersona")]
+        [ForeignKey("Persona")]
         public int IdPersona { get; set; } = idPersona;
         public Persona? Persona { get; set; } = null!;
+        public Auditoria? Auditoria { get; set; }
 
+        public List<MensajeChat>? MensajeChat { get; set; }
         public bool Estado { get; set; } = estado;
 
-        // Constructor vacío
         public Usuario() : this(default!, default!, default, default, default, true)
         {
         }

@@ -7,6 +7,7 @@ namespace Backend.Models
     {
         [Key]
         public int IdChecklistDiario { get; set; }
+        
         public bool FaroDelanteroIzquierdo { get; set; } = faroDelanteroIzquierdo;
         public bool FaroDelanteroDerecho { get; set; } = faroDelanteroDerecho;
         public bool FaroTraseroIzquierdo { get; set; } = faroTraseroIzquierdo;
@@ -18,13 +19,14 @@ namespace Backend.Models
         public bool NivelRefrigerante { get; set; } = nivelRefrigerante;
         public bool NivelAguaParabrisas { get; set; } = nivelAguaParabrisas;
         public bool MatafuegoVigente { get; set; } = matafuegoVigente;
+        [MinLength(3)]
+        [MaxLength(255)]
         public string? Observaciones { get; set; } = observaciones;
+
         public DateTime Fecha { get; set; } = fecha;
 
-        [ForeignKey("IdVehiculo")]
-        // Foreign key
+        [ForeignKey("Vehiculo")]
         public int IdVehiculo { get; set; } = idVehiculo;
-        // Navigation property
         public Vehiculo? Vehiculo { get; set; } 
         public bool Estado { get; set; } = estado;
 

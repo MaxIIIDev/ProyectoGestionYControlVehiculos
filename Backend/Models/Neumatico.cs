@@ -4,40 +4,46 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Backend.Models
 
 {
-    public enum PosicionNeumatico
-    {
-        DelanteroIzquierdo,
-        DelanteroDerecho,
-        TraseroIzquierdo,
-        TraseroIzquierdoInterno,
-        TraseroIzquierdoExterno,
-        TraseroDerecho,
-        TraseroDerechoInterno,
-        TraseroDerechoExterno,
-        Auxilio
-    }
-    public class Neumatico(string marca, string medida, bool estandar, int kmColocacion, int kmRodados, string desgasteIrregular, PosicionNeumatico posicion, DateTime fechaColocacion, int idVehiculo, bool estado)
+    // public enum PosicionNeumatico
+    // {
+    //     DelanteroIzquierdo,
+    //     DelanteroDerecho,
+    //     TraseroIzquierdo,
+    //     TraseroIzquierdoInterno,
+    //     TraseroIzquierdoExterno,
+    //     TraseroDerecho,
+    //     TraseroDerechoInterno,
+    //     TraseroDerechoExterno,
+    //     Auxilio
+    // }
+    public class Neumatico(string marca, string medida, bool estandar, int kmColocacion, int kmRodados, bool desgasteIrregular,  DateOnly fechaColocacion, int idVehiculo, bool estado)
     {
         [Key]
         public int IdNeumatico { get; set; }
+        [Required]
         public string Marca { get; set; } = marca;
+        [Required]
         public string Medida { get; set; } = medida;
+        [Required]
         public bool Estandar { get; set; } = estandar;
+        [Required]
         public int KmColocacion { get; set; } = kmColocacion;
+        [Required]
         public int KmRodados { get; set; } = kmRodados;
-        public string DesgasteIrregular { get; set; } = desgasteIrregular;
-        public PosicionNeumatico Posicion { get; set; } = posicion;
-        
-        public DateTime FechaColocacion { get; set; } = fechaColocacion;
 
-        [ForeignKey("IdVehiculo")]
-        // Foreign key
+        public bool DesgasteIrregular { get; set; } = desgasteIrregular;
+
+        [ForeignKey("Posicion")]
+        public int IdPosicionNeumatico { get; set; }
+        public PosicionNeumatico? Posicion { get; set; } 
+        
+        public DateOnly FechaColocacion { get; set; } = fechaColocacion;
+
+        [ForeignKey("Vehiculo")]
         public int IdVehiculo { get; set; } = idVehiculo;
-        // Navigation property
         public Vehiculo? Vehiculo { get; set; } = null!;
         public bool Estado { get; set; } = estado;
 
-        // Constructor vacío
-        public Neumatico() : this(default!, default!, default, default, default, default!, default, default, default, true) { }
+        public Neumatico() : this(default!, default!, default, default, default, default!,  default, default, true) { }
     }
 }
