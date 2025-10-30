@@ -39,21 +39,25 @@ namespace Backend.Services
         }
 
         // UPDATE AUDITORIA
-        public async Task<bool> UpdateAsync(Auditoria auditoria)
+        public async Task UpdateAsync(Auditoria auditoria)
         {
+            if( await this.GetByIdAsync(auditoria.IdAuditoria) == null)
+            {
+                throw new KeyNotFoundException("Auditoria con id " + auditoria.IdAuditoria + " no encontrada");
+            }
             _context.Auditorias.Update(auditoria);
-            return await _context.SaveChangesAsync() > 0;
+            await _context.SaveChangesAsync();
         }
 
         // ELIMINAR AUDITORIA
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            var auditoria = await _context.Auditorias.FindAsync(id);
+            Auditoria? auditoria = await _context.Auditorias.FindAsync(id);
             if (auditoria == null)
-                return false;
+                throw new KeyNotFoundException("Auditoria con id " + id + " no encontrada");
 
             _context.Auditorias.Remove(auditoria);
-            return await _context.SaveChangesAsync() > 0;
+            await _context.SaveChangesAsync();
         }
 
 

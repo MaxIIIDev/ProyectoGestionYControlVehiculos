@@ -25,7 +25,7 @@ public class ControllerAuditoria : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAuditoriaById(int id)
     {
-        var auditoria = await _serviceAuditoria.GetByIdAsync(id);
+        Auditoria? auditoria = await _serviceAuditoria.GetByIdAsync(id);
         if (auditoria == null)
         {
             return NotFound();
@@ -37,34 +37,40 @@ public class ControllerAuditoria : ControllerBase
     public async Task<IActionResult> AddAuditoria([FromBody] CreateAuditoriaDto auditoriaDto)
     {
         Auditoria auditoria = new Auditoria(auditoriaDto.Entidad,auditoriaDto.IdEntidad,auditoriaDto.Accion,auditoriaDto.IdUsuario);
-        var newAuditoria = await _serviceAuditoria.AddAsync(auditoria);
+        Auditoria newAuditoria = await _serviceAuditoria.AddAsync(auditoria);
         return CreatedAtAction(nameof(GetAuditoriaById), new { id = newAuditoria.IdAuditoria }, newAuditoria);
     }
     // PUT ACTUALIZAR AUDITORIA
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateAuditoria(int id, [FromBody] Auditoria auditoria)
+    public async Task<IActionResult> UpdateAuditoria(int id,[FromBody] UpdateAuditoriaDto auditoriaDto)
     {
-        if (id != auditoria.IdAuditoria)
+        if (id <= 0)
         {
-            return BadRequest();
+            return BadRequest(" El id de la auditoria debe ser mayor a 0.");
         }
-
-        var updated = await _serviceAuditoria.UpdateAsync(auditoria);
-        if (!updated)
+        Auditoria auditoria = new Auditoria(auditoriaDto.Entidad, auditoriaDto.IdEntidad, auditoriaDto.Accion, auditoriaDto.IdUsuario);
+        auditoria.IdAuditoria = id;
+        try
         {
-            return NotFound();
+            await _serviceAuditoria.UpdateAsync(auditoria);
+            return NoContent();
         }
-
-        return NoContent();
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
     }
     // DELETE AUDITORIA
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAuditoria(int id)
     {
-        var deleted = await _serviceAuditoria.DeleteAsync(id);
-        if (!deleted)
+        try
         {
-            return NotFound();
+            await _serviceAuditoria.DeleteAsync(id);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
         }
         return NoContent();
     }
