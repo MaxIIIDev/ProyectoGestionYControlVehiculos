@@ -33,10 +33,12 @@ namespace Backend.Services
         }
 
         // UPDATE CHECKLISTDIARIO
-        public async Task<bool> UpdateAsync(ChecklistDiario checklistDiario)
+        public async Task UpdateAsync(ChecklistDiario checklistDiario)
         {
+            if(await this.GetByIdAsync(checklistDiario.IdChecklistDiario) == null)
+                throw new KeyNotFoundException("ChecklistDiario con id " + checklistDiario.IdChecklistDiario + " no encontrada");
             _context.ChecklistsDiarios.Update(checklistDiario);
-            return await _context.SaveChangesAsync() > 0;
+            await _context.SaveChangesAsync();
         }
 
         // ELIMINAR CHECKLISTDIARIO
@@ -44,7 +46,7 @@ namespace Backend.Services
         {
             var checklistDiario = await _context.ChecklistsDiarios.FindAsync(id);
             if (checklistDiario == null)
-                return false;
+                throw new KeyNotFoundException("ChecklistDiario con id " + id + " no encontrada");
 
             _context.ChecklistsDiarios.Remove(checklistDiario);
             return await _context.SaveChangesAsync() > 0;
@@ -54,7 +56,8 @@ namespace Backend.Services
         public async Task<bool> SoftDeleteAsync(int id)
         {
             var checklistDiario = await _context.ChecklistsDiarios.FindAsync(id);
-            if (checklistDiario == null) return false;
+            if (checklistDiario == null) 
+                throw new KeyNotFoundException("ChecklistDiario con id " + id + " no encontrada");
 
             checklistDiario.Estado = false;
             _context.ChecklistsDiarios.Update(checklistDiario);
@@ -65,7 +68,8 @@ namespace Backend.Services
         public async Task<bool> RestoreAsync(int id)
         {
             var checklistDiario = await _context.ChecklistsDiarios.FindAsync(id);
-            if (checklistDiario == null) return false;
+            if (checklistDiario == null) 
+                throw new KeyNotFoundException("ChecklistDiario con id " + id + " no encontrada");
 
             checklistDiario.Estado = true;
             _context.ChecklistsDiarios.Update(checklistDiario);
