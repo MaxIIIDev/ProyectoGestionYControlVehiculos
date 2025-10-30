@@ -13,43 +13,53 @@ namespace Backend.Services
         }
 
         // GET TODO AUDITORIAS
-        public async Task<List<Auditoria>> GetAllAsync()
+        public async Task<(string? ,List<Auditoria>?)> GetAllAsync()
         {
             try
             {
-                return await _context.Auditorias.ToListAsync();
+                List<Auditoria> auditorias = await _context.Auditorias.ToListAsync();
+                if (auditorias.Count <= 0)
+                    return ("No se encontraron auditorias", null);
+                return (null, auditorias); 
             }
             catch (Exception ex)
             {
+                HelperFor.ShowErrorMessageInConsole("ServiceAuditoria", "GetAllAsync", ex.Message);
                 throw new Exception("Error al obtener las auditorías: " + ex.Message);
-
             }
         }
 
         // AUDITORIA POR ID
-        public async Task<Auditoria?> GetByIdAsync(int id)
+        public async Task<( string?, Auditoria?)> GetByIdAsync(int id)
         {
             try
             {
-                return await _context.Auditorias.FindAsync(id);
+                Auditoria? auditoria = await _context.Auditorias.FindAsync(id);
+                if(auditoria == null)
+                    return ("No se encontro la auditoria con id: " + id, null);
+                return (null, auditoria);
             }
             catch (Exception ex)
             {
+                HelperFor.ShowErrorMessageInConsole("ServiceAuditoria", "GetByIdAsync", ex.Message);
                 throw new Exception("Error al obtener la auditoría: " + ex.Message);
             }
         }
         // NUEVA AUDITORIA
-        public async Task<Auditoria> AddAsync(Auditoria auditoria)
+        public async Task<(string?, bool)> AddAsync(Auditoria auditoria)
         {
             try
             {
-                _context.Auditorias.Add(auditoria);
-                await _context.SaveChangesAsync();
-                return auditoria;
+                await _context.Auditorias.AddAsync(auditoria);
+                int result = await _context.SaveChangesAsync();
+                if (result <= 0)
+                    return ("No se pudo agregar la auditoria", false);
+                return (null, true);
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al agregar la auditoría: " + ex.Message);
+                HelperFor.ShowErrorMessageInConsole("ServiceAuditoria", "AddAsync", ex.Message);
+                return ("Error al agregar la auditoria: " + ex.Message, false);
             }
         }
 
