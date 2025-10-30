@@ -1,4 +1,6 @@
+using System.Net;
 using Backend.Services;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,7 +33,26 @@ builder.Services.AddScoped<ServiceService>();
 builder.Services.AddScoped<ServiceUsuario>();
 builder.Services.AddScoped<ServiceVehiculo>();
 var app = builder.Build();
-
+app.UseExceptionHandler(appError =>
+{
+    appError.Run(async context =>
+    {
+        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        context.Response.ContentType = "application/json";
+        var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
+        if (exceptionHandlerFeature != null)
+        {
+            var logger = app.Services.GetRequiredService<ILogger<Program>>();
+            logger.LogError(exceptionHandlerFeature.Error,
+            "Ocurrio un error procesando la solicitud, error: {Message}", exceptionHandlerFeature.Error.Message);
+        }
+        await context.Response.WriteAsJsonAsync(new
+        {
+            StatusCode = context.Response.StatusCode,
+            Message = "Ocurrio un error interno en el servidor",
+        });
+    });
+});
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
