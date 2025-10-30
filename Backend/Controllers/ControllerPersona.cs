@@ -73,7 +73,7 @@ public class ControllerPersona : ControllerBase
     }
 
     // BAJA LOGICA PERSONA
-    [HttpDelete("baja/{id}")]
+    [HttpPatch("baja/{id}")]
     public async Task<IActionResult> SoftDeletePersona(int id)
     {
         var softDeleted = await _servicePersona.SoftDeleteAsync(id);
@@ -86,7 +86,7 @@ public class ControllerPersona : ControllerBase
     }
 
     // ALTA LOGICA PERSONA
-    [HttpPut("alta/{id}")]
+    [HttpPatch("alta/{id}")]
     public async Task<IActionResult> RestorePersona(int id)
     {
         var restored = await _servicePersona.RestoreAsync(id);
