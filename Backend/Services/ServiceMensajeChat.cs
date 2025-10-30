@@ -15,107 +15,57 @@ namespace Backend.Services
         // GET TODO MENSAJES CHAT
         public async Task<List<MensajeChat>> GetAllAsync()
         {
-            try
-            {
-                return await _context.MensajesChats.ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al obtener los mensajes de chat: " + ex.Message);
-
-            }
+            return await _context.MensajesChats.ToListAsync();
         }
         // MENSAJE CHAT POR ID
         public async Task<MensajeChat?> GetByIdAsync(int id)
         {
-            try
-            {
-                return await _context.MensajesChats.FindAsync(id);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al obtener el mensaje de chat: " + ex.Message);
-            }
+            return await _context.MensajesChats.FindAsync(id);
         }
         // NUEVO MENSAJE CHAT
         public async Task<MensajeChat> AddAsync(MensajeChat mensajeChat)
         {
-            try
-            {
-                _context.MensajesChats.Add(mensajeChat);
-                await _context.SaveChangesAsync();
-                return mensajeChat;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al agregar el mensaje de chat: " + ex.Message);
-            }
+            _context.MensajesChats.Add(mensajeChat);
+            await _context.SaveChangesAsync();
+            return mensajeChat;
         }
         // UPDATE MENSAJE CHAT
         public async Task<bool> UpdateAsync(MensajeChat mensajeChat)
         {
-            try
-            {
-                _context.MensajesChats.Update(mensajeChat);
-                return await _context.SaveChangesAsync() > 0;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al actualizar el mensaje de chat: " + ex.Message);
-            }
+            _context.MensajesChats.Update(mensajeChat);
+            return await _context.SaveChangesAsync() > 0;
         }
         // ELIMINAR MENSAJE CHAT
         public async Task<bool> DeleteAsync(int id)
         {
-            try
-            {
-                var mensajeChat = await _context.MensajesChats.FindAsync(id);
-                if (mensajeChat == null)
-                    return false;
+            var mensajeChat = await _context.MensajesChats.FindAsync(id);
+            if (mensajeChat == null)
+                return false;
 
-                _context.MensajesChats.Remove(mensajeChat);
-                return await _context.SaveChangesAsync() > 0;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al eliminar el mensaje de chat: " + ex.Message);
-            }
+            _context.MensajesChats.Remove(mensajeChat);
+            return await _context.SaveChangesAsync() > 0;
         }
         // BAJA LOGICA MENSAJE CHAT
         public async Task<bool> SoftDeleteAsync(int id)
         {
-            try
-            {
-                var mensajeChat = await _context.MensajesChats.FindAsync(id);
-                if (mensajeChat == null)
-                    return false;
+            var mensajeChat = await _context.MensajesChats.FindAsync(id);
+            if (mensajeChat == null)
+                return false;
 
-                mensajeChat.Estado = false;
-                _context.MensajesChats.Update(mensajeChat);
-                return await _context.SaveChangesAsync() > 0;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al dar de baja el mensaje de chat: " + ex.Message);
-            }
+            mensajeChat.Estado = false;
+            _context.MensajesChats.Update(mensajeChat);
+            return await _context.SaveChangesAsync() > 0;
         }
         // ALTA LOGICA MENSAJE CHAT
         public async Task<bool> RestoreAsync(int id)
         {
-            try
-            {
-                var mensajeChat = await _context.MensajesChats.FindAsync(id);
-                if (mensajeChat == null)
-                    return false;
+            var mensajeChat = await _context.MensajesChats.FindAsync(id);
+            if (mensajeChat == null)
+                return false;
 
-                mensajeChat.Estado = true;
-                _context.MensajesChats.Update(mensajeChat);
-                return await _context.SaveChangesAsync() > 0;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al restaurar el mensaje de chat: " + ex.Message);
-            }
+            mensajeChat.Estado = true;
+            _context.MensajesChats.Update(mensajeChat);
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

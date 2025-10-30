@@ -16,74 +16,38 @@ namespace Backend.Services
         // GET TODO POSICIONES NEUMATICOS
         public async Task<List<PosicionNeumatico>> GetAllAsync()
         {
-            try
-            {
-                return await _context.PosicionesNeumaticos.ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al obtener las posiciones de neumáticos: " + ex.Message);
-
-            }
+            return await _context.PosicionesNeumaticos.ToListAsync();
         }
 
         // POSICION NEUMATICO POR ID
         public async Task<PosicionNeumatico?> GetByIdAsync(int id)
         {
-            try
-            {
-                return await _context.PosicionesNeumaticos.FindAsync(id);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al obtener la posición de neumático: " + ex.Message);
-            }
+            return await _context.PosicionesNeumaticos.FindAsync(id);
         }
 
         // NUEVO POSICION NEUMATICO
         public async Task<PosicionNeumatico> AddAsync(PosicionNeumatico posicionNeumatico)
         {
-            try
-            {
-                _context.PosicionesNeumaticos.Add(posicionNeumatico);
-                await _context.SaveChangesAsync();
-                return posicionNeumatico;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al agregar la posición de neumático: " + ex.Message);
-            }
+            _context.PosicionesNeumaticos.Add(posicionNeumatico);
+            await _context.SaveChangesAsync();
+            return posicionNeumatico;
         }
 
         // UPDATE POSICION NEUMATICO
         public async Task<bool> UpdateAsync(PosicionNeumatico posicionNeumatico)
         {
-            try
-            {
-                _context.PosicionesNeumaticos.Update(posicionNeumatico);
-                return await _context.SaveChangesAsync() > 0;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al actualizar la posición de neumático: " + ex.Message);
-            }
+            _context.PosicionesNeumaticos.Update(posicionNeumatico);
+            return await _context.SaveChangesAsync() > 0;
         }
 
         // ELIMINAR POSICION NEUMATICO
         public async Task<bool> DeleteAsync(int id)
         {
-            try
-            {
-                var posicionNeumatico = await _context.PosicionesNeumaticos.FindAsync(id);
-                if (posicionNeumatico == null) return false;
+            var posicionNeumatico = await _context.PosicionesNeumaticos.FindAsync(id);
+            if (posicionNeumatico == null) return false;
 
-                _context.PosicionesNeumaticos.Remove(posicionNeumatico);
-                return await _context.SaveChangesAsync() > 0;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error al eliminar la posición de neumático: " + ex.Message);
-            }
+            _context.PosicionesNeumaticos.Remove(posicionNeumatico);
+            return await _context.SaveChangesAsync() > 0;
         }
 
 
