@@ -1,118 +1,122 @@
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
-public class ServiceUsuario
+
+namespace Backend.Services
 {
-    private readonly AppDbContext _context;
+    public class ServiceUsuario
+    {
+        private readonly AppDbContext _context;
 
-    public ServiceUsuario(AppDbContext context)
-    {
-        _context = context;
-    }
+        public ServiceUsuario(AppDbContext context)
+        {
+            _context = context;
+        }
 
-    // GET TODO USUARIOS
-    public async Task<List<Usuario>> GetAllAsync()
-    {
-        try
+        // GET TODO USUARIOS
+        public async Task<List<Usuario>> GetAllAsync()
         {
-            return await _context.Usuarios.ToListAsync();
-        }
-        catch (Exception ex)
-        {
-            throw new Exception("Error al obtener los usuarios: " + ex.Message);
+            try
+            {
+                return await _context.Usuarios.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener los usuarios: " + ex.Message);
 
+            }
         }
-    }
 
-    // USUARIO POR ID
-    public async Task<Usuario?> GetByIdAsync(int id)
-    {
-        try
+        // USUARIO POR ID
+        public async Task<Usuario?> GetByIdAsync(int id)
         {
-            return await _context.Usuarios.FindAsync(id);
+            try
+            {
+                return await _context.Usuarios.FindAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener el usuario: " + ex.Message);
+            }
         }
-        catch (Exception ex)
+        // NUEVO USUARIO
+        public async Task<Usuario> AddAsync(Usuario usuario)
         {
-            throw new Exception("Error al obtener el usuario: " + ex.Message);
+            try
+            {
+                _context.Usuarios.Add(usuario);
+                await _context.SaveChangesAsync();
+                return usuario;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al agregar el usuario: " + ex.Message);
+            }
         }
-    }
-    // NUEVO USUARIO
-    public async Task<Usuario> AddAsync(Usuario usuario)
-    {
-        try
+        // UPDATE USUARIO
+        public async Task<bool> UpdateAsync(Usuario usuario)
         {
-            _context.Usuarios.Add(usuario);
-            await _context.SaveChangesAsync();
-            return usuario;
+            try
+            {
+                _context.Usuarios.Update(usuario);
+                return await _context.SaveChangesAsync() > 0;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al actualizar el usuario: " + ex.Message);
+            }
         }
-        catch (Exception ex)
+        // ELIMINAR USUARIO
+        public async Task<bool> DeleteAsync(int id)
         {
-            throw new Exception("Error al agregar el usuario: " + ex.Message);
-        }
-    }
-    // UPDATE USUARIO
-    public async Task<bool> UpdateAsync(Usuario usuario)
-    {
-        try
-        {
-            _context.Usuarios.Update(usuario);
-            return await _context.SaveChangesAsync() > 0;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception("Error al actualizar el usuario: " + ex.Message);
-        }
-    }
-    // ELIMINAR USUARIO
-    public async Task<bool> DeleteAsync(int id)
-    {
-        try
-        {
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario == null)
-                return false;
+            try
+            {
+                var usuario = await _context.Usuarios.FindAsync(id);
+                if (usuario == null)
+                    return false;
 
-            _context.Usuarios.Remove(usuario);
-            return await _context.SaveChangesAsync() > 0;
+                _context.Usuarios.Remove(usuario);
+                return await _context.SaveChangesAsync() > 0;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al eliminar el usuario: " + ex.Message);
+            }
         }
-        catch (Exception ex)
+        // BAJA LOGICA USUARIO
+        public async Task<bool> SoftDeleteAsync(int id)
         {
-            throw new Exception("Error al eliminar el usuario: " + ex.Message);
-        }
-    }
-    // BAJA LOGICA USUARIO
-    public async Task<bool> SoftDeleteAsync(int id)
-    {
-        try
-        {
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario == null)
-                return false;
+            try
+            {
+                var usuario = await _context.Usuarios.FindAsync(id);
+                if (usuario == null)
+                    return false;
 
-            usuario.Estado = false;
-            _context.Usuarios.Update(usuario);
-            return await _context.SaveChangesAsync() > 0;
+                usuario.Estado = false;
+                _context.Usuarios.Update(usuario);
+                return await _context.SaveChangesAsync() > 0;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al dar de baja el usuario: " + ex.Message);
+            }
         }
-        catch (Exception ex)
+        //ALTA LOGICA USUARIO
+        public async Task<bool> RestoreAsync(int id)
         {
-            throw new Exception("Error al dar de baja el usuario: " + ex.Message);
-        }
-    }
-    //ALTA LOGICA USUARIO
-    public async Task<bool> RestoreAsync(int id)
-    {
-        try
-        {
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario == null)
-                return false;
+            try
+            {
+                var usuario = await _context.Usuarios.FindAsync(id);
+                if (usuario == null)
+                    return false;
 
-            usuario.Estado = true;
-            _context.Usuarios.Update(usuario);
-            return await _context.SaveChangesAsync() > 0;
-        }
-        catch (Exception ex)
-        {
-            throw new Exception("Error al restaurar el usuario: " + ex.Message);
+                usuario.Estado = true;
+                _context.Usuarios.Update(usuario);
+                return await _context.SaveChangesAsync() > 0;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al restaurar el usuario: " + ex.Message);
+            }
         }
     }
 }

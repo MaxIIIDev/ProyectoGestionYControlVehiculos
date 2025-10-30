@@ -1,6 +1,7 @@
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
-
+namespace Backend.Services
+{
 public class ServiceMatafuego
 {
     private readonly AppDbContext _context;
@@ -13,20 +14,26 @@ public class ServiceMatafuego
     // GET TODO MATAFUEGOS
     public async Task<List<Matafuego>> GetAllAsync()
     {
-        try {
+        try
+        {
             return await _context.Matafuegos.ToListAsync();
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             throw new Exception("Error al obtener los matafuegos: " + ex.Message);
-            
+
         }
     }
 
     // MATAFUEGO POR ID
     public async Task<Matafuego?> GetByIdAsync(int id)
     {
-        try {
+        try
+        {
             return await _context.Matafuegos.FindAsync(id);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             throw new Exception("Error al obtener el matafuego: " + ex.Message);
         }
     }
@@ -34,11 +41,14 @@ public class ServiceMatafuego
     // NUEVO MATAFUEGO
     public async Task<Matafuego> AddAsync(Matafuego matafuego)
     {
-        try {
+        try
+        {
             _context.Matafuegos.Add(matafuego);
             await _context.SaveChangesAsync();
             return matafuego;
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             throw new Exception("Error al agregar el matafuego: " + ex.Message);
         }
     }
@@ -46,10 +56,13 @@ public class ServiceMatafuego
     // UPDATE MATAFUEGO
     public async Task<bool> UpdateAsync(Matafuego matafuego)
     {
-        try {
+        try
+        {
             _context.Matafuegos.Update(matafuego);
             return await _context.SaveChangesAsync() > 0;
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             throw new Exception("Error al actualizar el matafuego: " + ex.Message);
         }
     }
@@ -88,7 +101,7 @@ public class ServiceMatafuego
             throw new Exception("Error al realizar la baja lógica del matafuego: " + ex.Message);
         }
     }
-    
+
     // ALTA LOGICA MATAFUEGO
     public async Task<bool> RestoreAsync(int id)
     {
@@ -106,4 +119,5 @@ public class ServiceMatafuego
             throw new Exception("Error al realizar la alta lógica del matafuego: " + ex.Message);
         }
     }
+}
 }
