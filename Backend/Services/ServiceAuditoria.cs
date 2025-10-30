@@ -13,9 +13,16 @@ namespace Backend.Services
         }
 
         // GET TODO AUDITORIAS
-        public async Task<List<Auditoria>> GetAllAsync()
+        public async Task<PagedResponse<Auditoria>> GetAllAsync(int numeroPagina, int tamanoPagina)
         {
-            return await _context.Auditorias.ToListAsync();
+            IQueryable<Auditoria> query = _context.Auditorias;
+            int totalRegistrosAuditoria = await query.CountAsync();
+            var auditorias = await query
+                            .OrderBy(a => a.IdAuditoria)
+                            .Skip((numeroPagina - 1) * tamanoPagina)
+                            .Take(tamanoPagina)
+                            .ToListAsync();
+            return new PagedResponse<Auditoria>(auditorias, totalRegistrosAuditoria, numeroPagina, tamanoPagina);
         }
 
         // AUDITORIA POR ID

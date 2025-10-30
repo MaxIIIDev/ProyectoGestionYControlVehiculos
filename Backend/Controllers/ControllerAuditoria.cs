@@ -15,9 +15,9 @@ public class ControllerAuditoria : ControllerBase
 
     // GET TODAS LAS AUDITORIAS
     [HttpGet]
-    public async Task<IActionResult> GetAllAuditorias()
+    public async Task<IActionResult> GetAllAuditorias([FromQuery] int numeroPagina = 1, [FromQuery] int tamanoPagina = 10)
     {
-        var auditorias = await _serviceAuditoria.GetAllAsync();
+        PagedResponse<Auditoria>? auditorias = await _serviceAuditoria.GetAllAsync(numeroPagina, tamanoPagina);
         return Ok(auditorias);
     }
 
