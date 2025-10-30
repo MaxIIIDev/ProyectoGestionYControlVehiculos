@@ -1,3 +1,4 @@
+using Backend.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +17,19 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
-
+builder.Services.AddScoped<ServiceAuditoria>();
+builder.Services.AddScoped<ServiceChecklistDiario>();
+builder.Services.AddScoped<ServiceDocumento>();
+builder.Services.AddScoped<ServiceMatafuego>();
+builder.Services.AddScoped<ServiceMensajeChat>();
+builder.Services.AddScoped<ServiceNeumatico>();
+builder.Services.AddScoped<ServicePersona>();
+builder.Services.AddScoped<ServicePosicionNeumatico>();
+builder.Services.AddScoped<ServiceRegistroKilometraje>();
+builder.Services.AddScoped<ServiceRol>();
+builder.Services.AddScoped<ServiceService>();
+builder.Services.AddScoped<ServiceUsuario>();
+builder.Services.AddScoped<ServiceVehiculo>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
