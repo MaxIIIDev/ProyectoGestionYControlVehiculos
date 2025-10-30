@@ -13,30 +13,22 @@ namespace Backend.Services
         }
 
         // GET TODO AUDITORIAS
-        public async Task<(string? ,List<Auditoria>?)> GetAllAsync()
+        public async Task<List<Auditoria>> GetAllAsync()
         {
-            List<Auditoria> auditorias = await _context.Auditorias.ToListAsync();
-            if (auditorias.Count <= 0)
-                return ("No se encontraron auditorias", null);
-            return (null, auditorias); 
+            return await _context.Auditorias.ToListAsync();
         }
 
         // AUDITORIA POR ID
-        public async Task<( string?, Auditoria?)> GetByIdAsync(int id)
+        public async Task<Auditoria?> GetByIdAsync(int id)
         {
-            Auditoria? auditoria = await _context.Auditorias.FindAsync(id);
-            if(auditoria == null)
-                return ("No se encontro la auditoria con id: " + id, null);
-            return (null, auditoria);
+            return await _context.Auditorias.FindAsync(id);
         }
         // NUEVA AUDITORIA
-        public async Task<(string?, bool)> AddAsync(Auditoria auditoria)
+        public async Task<Auditoria> AddAsync(Auditoria auditoria)
         {
-            await _context.Auditorias.AddAsync(auditoria);
-            int result = await _context.SaveChangesAsync();
-            if (result <= 0)
-                return ("No se pudo agregar la auditoria", false);
-            return (null, true);
+            _context.Auditorias.Add(auditoria);
+            await _context.SaveChangesAsync();
+            return auditoria;
         }
 
         // UPDATE AUDITORIA
