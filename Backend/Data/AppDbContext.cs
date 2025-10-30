@@ -40,5 +40,4 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Vehiculo>()
             .HasIndex(v => v.IdMatafuego).IsUnique();
     }
-
 }

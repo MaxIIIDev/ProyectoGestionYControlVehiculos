@@ -34,8 +34,9 @@ public class ControllerAuditoria : ControllerBase
     }
     // POST NUEVA AUDITORIA
     [HttpPost]
-    public async Task<IActionResult> AddAuditoria([FromBody] Auditoria auditoria)
+    public async Task<IActionResult> AddAuditoria([FromBody] CreateAuditoriaDto auditoriaDto)
     {
+        Auditoria auditoria = new Auditoria(auditoriaDto.Entidad,auditoriaDto.IdEntidad,auditoriaDto.Accion,auditoriaDto.IdUsuario);
         var newAuditoria = await _serviceAuditoria.AddAsync(auditoria);
         return CreatedAtAction(nameof(GetAuditoriaById), new { id = newAuditoria.IdAuditoria }, newAuditoria);
     }
