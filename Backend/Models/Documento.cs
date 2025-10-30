@@ -4,18 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models
 {
-    public class Documento(string? tarjetaVerde, string? tituloPropiedad, int vehiculoId, bool estado)
+    public class Documento(string tipo, DateOnly? fechaEmision, DateOnly? fechaVencimiento, int vehiculoId, bool estado)
     {
         [Key]
         public int IdDocumento { get; set; }
-        
-        public string? TarjetaVerde { get; set; } = tarjetaVerde;
-        public DateOnly? FechaEmisionTarjetaVerde { get; set; } = null;
-        public DateOnly? FechaVencimientoTarjetaVerde { get; set; } = null;
+        public string Tipo { get; set; } = tipo;
+        public List<string>? UrlArchivo { get; set; }
+        public DateOnly? FechaEmision { get; set; } = fechaEmision;
+        public DateOnly? FechaVencimiento { get; set; } = fechaVencimiento;
 
-        public string? TituloPropiedad { get; set; } = tituloPropiedad;
-        public DateOnly? FechaEmisionTitulo { get; set; } = null;
-        public DateOnly? FechaVencimientoTitulo { get; set; } = null;
+      
 
         [ForeignKey("Vehiculo")]
         public int IdVehiculo { get; set; } = vehiculoId;
@@ -23,6 +21,6 @@ namespace Backend.Models
         public bool Estado { get; set; } = estado;
 
        
-        public Documento() : this(default!, default!, default, true) { }
+        public Documento() : this(default!, default, default, default, true) { }
     }
 }
