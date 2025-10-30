@@ -43,8 +43,24 @@ app.UseExceptionHandler(appError =>
         if (exceptionHandlerFeature != null)
         {
             var logger = app.Services.GetRequiredService<ILogger<Program>>();
-            logger.LogError(exceptionHandlerFeature.Error,
-            "Ocurrio un error procesando la solicitud, error: {Message}", exceptionHandlerFeature.Error.Message);
+            var exception = exceptionHandlerFeature.Error;
+            var errorSource = exception.TargetSite;
+            var sourceClass = errorSource?.DeclaringType?.FullName;
+            var sourceMethod = errorSource?.Name;
+            var logMessage = @$"
+                --------------------------------------------------------------------------
+                [ ERROR CRÍTICO NO CONTROLADO ]
+                Clase : {sourceClass}
+                Metodo: {sourceMethod}
+                Error : {exception.Message}
+                --------------------------------------------------------------------------
+                ";
+            logger.LogError(
+                exception,
+                logMessage,
+                context.Request.Path,
+                exception.Message
+            );
         }
         await context.Response.WriteAsJsonAsync(new
         {
