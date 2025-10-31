@@ -1,3 +1,4 @@
+using AutoMapper;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,10 +7,12 @@ namespace Backend.Services
     public class ServicePersona
     {
         private readonly AppDbContext _context;
+        private readonly IMapper mapper;
 
-        public ServicePersona(AppDbContext context)
+        public ServicePersona(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            this.mapper = mapper;
         }
 
         // GET TODO PERSONAS
@@ -33,10 +36,13 @@ namespace Backend.Services
         }
 
         // UPDATE PERSONA
-        public async Task<bool> UpdateAsync(Persona persona)
+        public async Task UpdateAsync(Persona persona)
         {
-            _context.Personas.Update(persona);
-            return await _context.SaveChangesAsync() > 0;
+            Persona? persFinded = await this.GetByIdAsync(persona.IdPersona);
+            if( persFinded == null)
+                throw new KeyNotFoundException("Persona con id " + persona.IdPersona + " no encontrada");
+            mapper.Map(persona, persFinded);
+            await _context.SaveChangesAsync();
         }
 
         // ELIMINAR PERSONA

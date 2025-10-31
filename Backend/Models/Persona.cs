@@ -20,7 +20,7 @@ namespace Backend.Models
         [Required]
         public DateOnly FechaNac { get; set; } = fechaNac;
         [ForeignKey("Usuario")]
-        public int IdUsuario { get; set; } = idUsuario;
+        public int? IdUsuario { get; set; } = idUsuario;
         public Usuario? Usuario { get; set; } = null!;
         public bool Estado { get; set; } = estado;
         public Persona() : this(default!, default!, default, default, default, true) { }

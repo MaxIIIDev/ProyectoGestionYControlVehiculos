@@ -1,3 +1,4 @@
+using AutoMapper;
 using Backend.Services;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -7,10 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 public class ControllerPersona : ControllerBase
 {
     private readonly ServicePersona _servicePersona;
+    private readonly IMapper mapper;
 
-    public ControllerPersona(ServicePersona servicePersona)
+    public ControllerPersona(ServicePersona servicePersona, IMapper mapper)
     {
         _servicePersona = servicePersona;
+        this.mapper = mapper;
     }
 
     // GET TODAS LAS PERSONAS
@@ -35,28 +38,34 @@ public class ControllerPersona : ControllerBase
 
     // POST NUEVA PERSONA
     [HttpPost]
-    public async Task<IActionResult> AddPersona([FromBody] Persona persona)
-    {
+    public async Task<IActionResult> AddPersona([FromBody] CreatePersonaDto personaDto)
+    { 
+        Persona persona = mapper.Map<Persona>(personaDto);
         var newPersona = await _servicePersona.AddAsync(persona);
         return CreatedAtAction(nameof(GetPersonaById), new { id = newPersona.IdPersona }, newPersona);
     }
 
     // PUT ACTUALIZAR PERSONA
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdatePersona(int id, [FromBody] Persona persona)
+    public async Task<IActionResult> UpdatePersona(int id, [FromBody] UpdatePersonaDto personaDto)
     {
-        if (id != persona.IdPersona)
+        if (id <= 0)
         {
-            return BadRequest();
+            return BadRequest("El id debe ser mayor a 0");
         }
+        Persona persona = mapper.Map<Persona>(personaDto);
+        persona.IdPersona = id;
 
-        var updated = await _servicePersona.UpdateAsync(persona);
-        if (!updated)
+        try
         {
-            return NotFound();
+            await _servicePersona.UpdateAsync(persona);
+            return NoContent();
         }
-
-        return NoContent();
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        
     }
 
     // DELETE PERSONA
