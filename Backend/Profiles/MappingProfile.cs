@@ -16,6 +16,8 @@ namespace Backend.Profiles
             CreateMap<UpdateDocumentoDto, Documento>().ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<CreatePersonaDto, Persona>();
             CreateMap<UpdatePersonaDto, Persona>().ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<CreateMatafuegoDto, Matafuego>();
+            CreateMap<UpdateMatafuegoDto, Matafuego>().ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }

@@ -1,16 +1,20 @@
+using AutoMapper;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 [Route("api/matafuegos")]
 [ApiController]
 
 public class ControllerMatafuego : ControllerBase
 {
     private readonly ServiceMatafuego _serviceMatafuego;
+    private readonly IMapper mapper;
 
-    public ControllerMatafuego(ServiceMatafuego serviceMatafuego)
+    public ControllerMatafuego(ServiceMatafuego serviceMatafuego, IMapper mapper)
     {
         _serviceMatafuego = serviceMatafuego;
+        this.mapper = mapper;
     }
 
     // GET TODOS LOS MATAFUEGOS
@@ -35,28 +39,31 @@ public class ControllerMatafuego : ControllerBase
 
     // POST NUEVO MATAFUEGO
     [HttpPost]
-    public async Task<IActionResult> AddMatafuego([FromBody] Matafuego matafuego)
+    public async Task<IActionResult> AddMatafuego([FromBody] CreateMatafuegoDto matafuegoDto)
     {
+        Matafuego matafuego = mapper.Map<Matafuego>(matafuegoDto);
         var newMatafuego = await _serviceMatafuego.AddAsync(matafuego);
         return CreatedAtAction(nameof(GetMatafuegoById), new { id = newMatafuego.IdMatafuego }, newMatafuego);
     }
 
     // PUT ACTUALIZAR MATAFUEGO
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateMatafuego(int id, [FromBody] Matafuego matafuego)
+    public async Task<IActionResult> UpdateMatafuego(int id, [FromBody] UpdateMatafuegoDto matafuego)
     {
-        if (id != matafuego.IdMatafuego)
+        if (id <= 0)
         {
-            return BadRequest();
+            return BadRequest("El id debe ser mayor a 0");
         }
-
-        var updated = await _serviceMatafuego.UpdateAsync(matafuego);
-        if (!updated)
+        try
         {
-            return NotFound();
+            await _serviceMatafuego.UpdateAsync(id, matafuego);
+            return NoContent();
         }
-
-        return NoContent();
+        catch (KeyNotFoundException ex)
+        {
+            System.Console.WriteLine(ex.Message);
+            return NotFound(new { message = ex.Message });            
+        }
     }
 
     // DELETE MATAFUEGO

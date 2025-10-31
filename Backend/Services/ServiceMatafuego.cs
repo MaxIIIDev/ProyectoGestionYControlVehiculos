@@ -1,14 +1,17 @@
+using AutoMapper;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 namespace Backend.Services
 {
 public class ServiceMatafuego
 {
-    private readonly AppDbContext _context;
+        private readonly AppDbContext _context;
+        private readonly IMapper mapper;
 
-    public ServiceMatafuego(AppDbContext context)
+    public ServiceMatafuego(AppDbContext context, IMapper mapper)
     {
         _context = context;
+        this.mapper = mapper;
     }
 
     // GET TODO MATAFUEGOS
@@ -32,10 +35,15 @@ public class ServiceMatafuego
     }
 
     // UPDATE MATAFUEGO
-    public async Task<bool> UpdateAsync(Matafuego matafuego)
+    public async Task UpdateAsync(int id, UpdateMatafuegoDto matafuego)
     {
-        _context.Matafuegos.Update(matafuego);
-        return await _context.SaveChangesAsync() > 0;
+        Matafuego? matafuegoFinded = await this.GetByIdAsync(id);
+        if (matafuegoFinded == null) 
+            throw new KeyNotFoundException("Matafuego con id " + id + " no encontrada");
+
+        mapper.Map(matafuego, matafuegoFinded);
+        
+        await _context.SaveChangesAsync();
     }
 
     // ELIMINAR MATAFUEGO
