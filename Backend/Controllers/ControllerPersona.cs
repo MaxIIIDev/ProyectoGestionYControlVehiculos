@@ -58,7 +58,7 @@ public class ControllerPersona : ControllerBase
 
         try
         {
-            await _servicePersona.UpdateAsync(persona);
+            await _servicePersona.UpdateAsync(id, personaDto);
             return NoContent();
         }
         catch (KeyNotFoundException ex)

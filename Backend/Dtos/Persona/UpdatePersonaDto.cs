@@ -22,7 +22,7 @@ public class UpdatePersonaDto
     [Required(ErrorMessage = "El campo {0} es requerido")]
     public DateOnly? FechaNac { get; set; }
     
-    public int? IdUsuario { get; set; }
+   
 
     public bool Estado { get; set; } = true;
 

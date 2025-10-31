@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models
 {
-    public class Persona(string nombre, string apellido, int dni, DateOnly fechaNac, int idUsuario, bool estado)
+    public class Persona(string nombre, string apellido, int dni, DateOnly fechaNac,  bool estado)
     {
         [Key]
         public int IdPersona { get; set; }
@@ -19,10 +19,10 @@ namespace Backend.Models
         public int Dni { get; set; } = dni;
         [Required]
         public DateOnly FechaNac { get; set; } = fechaNac;
-        [ForeignKey("Usuario")]
-        public int? IdUsuario { get; set; } = idUsuario;
+        // [ForeignKey("Usuario")]
+        // public int? IdUsuario { get; set; } = idUsuario;
         public Usuario? Usuario { get; set; } = null!;
         public bool Estado { get; set; } = estado;
-        public Persona() : this(default!, default!, default, default, default, true) { }
+        public Persona() : this(default!, default!, default, default, true) { }
     }
 }

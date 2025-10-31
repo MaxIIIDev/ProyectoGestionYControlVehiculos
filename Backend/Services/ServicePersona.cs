@@ -36,12 +36,12 @@ namespace Backend.Services
         }
 
         // UPDATE PERSONA
-        public async Task UpdateAsync(Persona persona)
+        public async Task UpdateAsync(int id, UpdatePersonaDto persDto)
         {
-            Persona? persFinded = await this.GetByIdAsync(persona.IdPersona);
+            Persona? persFinded = await _context.Personas.FindAsync(id);
             if( persFinded == null)
-                throw new KeyNotFoundException("Persona con id " + persona.IdPersona + " no encontrada");
-            mapper.Map(persona, persFinded);
+                throw new KeyNotFoundException("Persona con id " + id + " no encontrada");
+            mapper.Map(persDto, persFinded);
             await _context.SaveChangesAsync();
         }
 
