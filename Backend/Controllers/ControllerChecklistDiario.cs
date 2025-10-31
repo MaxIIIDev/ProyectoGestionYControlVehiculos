@@ -52,10 +52,9 @@ public class ControllerChecklistDiario : ControllerBase
         if (id <= 0) return BadRequest("El id debe ser mayor a 0.");
 
         ChecklistDiario checklist = mapper.Map<ChecklistDiario>(checklistDto);
-        checklist.IdChecklistDiario = id;
         try
         {
-            await _serviceChecklistDiario.UpdateAsync(checklist);
+            await _serviceChecklistDiario.UpdateAsync(checklistDto, id);
             return NoContent();
         }
         catch (KeyNotFoundException)

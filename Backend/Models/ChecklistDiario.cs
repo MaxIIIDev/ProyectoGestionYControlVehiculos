@@ -24,7 +24,7 @@ namespace Backend.Models
         public string? Observaciones { get; set; } = observaciones;
 
         public DateTime Fecha { get; set; } = fecha;
-
+        [Required(ErrorMessage = "El idVehiculo es requerido")]
         [ForeignKey("Vehiculo")]
         public int IdVehiculo { get; set; } = idVehiculo;
         public Vehiculo? Vehiculo { get; set; } 

@@ -36,13 +36,13 @@ namespace Backend.Services
         }
 
         // UPDATE CHECKLISTDIARIO
-        public async Task UpdateAsync(ChecklistDiario checklistDiario)
+        public async Task UpdateAsync(UpdateChecklistDiarioDto checklistDiarioDto, int id)
         {
-            ChecklistDiario? checklistDiarioExistente = await this.GetByIdAsync(checklistDiario.IdChecklistDiario);
+            ChecklistDiario? checklistDiarioExistente = await this.GetByIdAsync(id);
             if(checklistDiarioExistente == null)
-                throw new KeyNotFoundException("ChecklistDiario con id " + checklistDiario.IdChecklistDiario + " no encontrada");
+                throw new KeyNotFoundException("ChecklistDiario con id " + id + " no encontrada");
 
-            mapper.Map(checklistDiario, checklistDiarioExistente);
+            mapper.Map(checklistDiarioDto, checklistDiarioExistente);
             await _context.SaveChangesAsync();
         }
 

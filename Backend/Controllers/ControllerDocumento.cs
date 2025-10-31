@@ -52,11 +52,10 @@ public class ControllerDocumento : ControllerBase
         {
             return BadRequest("El id debe ser mayor a 0");
         }
-        Documento documento = mapper.Map<Documento>(documentoDto);
-        documento.IdDocumento = id;
+        
         try
         {
-            await _serviceDocumento.UpdateAsync(documento);
+            await _serviceDocumento.UpdateAsync(id, documentoDto);
             return NoContent();
         }
         catch (KeyNotFoundException ex)

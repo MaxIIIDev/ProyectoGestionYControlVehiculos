@@ -9,7 +9,7 @@ namespace Backend.Models
         [Key]
         public int IdDocumento { get; set; }
         public string Tipo { get; set; } = tipo;
-        public List<string>? UrlArchivo { get; set; }
+        public List<string>? UrlArchivos { get; set; }
         public DateOnly? FechaEmision { get; set; } = fechaEmision;
         public DateOnly? FechaVencimiento { get; set; } = fechaVencimiento;
 

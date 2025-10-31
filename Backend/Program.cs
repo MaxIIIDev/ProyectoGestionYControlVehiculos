@@ -2,6 +2,7 @@ using System.Net;
 using Backend.Services;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Backend.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +33,10 @@ builder.Services.AddScoped<ServiceRol>();
 builder.Services.AddScoped<ServiceService>();
 builder.Services.AddScoped<ServiceUsuario>();
 builder.Services.AddScoped<ServiceVehiculo>();
-builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddProfile<MappingProfile>();
+});
 var app = builder.Build();
 app.UseExceptionHandler(appError =>
 {

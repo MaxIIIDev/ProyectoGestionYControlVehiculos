@@ -35,12 +35,13 @@ namespace Backend.Services
         }
 
         // UPDATE DOCUMENTO
-        public async Task UpdateAsync(Documento documento)
+        public async Task UpdateAsync(int id,UpdateDocumentoDto documento)
         {
-            Documento? docFinded = await this.GetByIdAsync(documento.IdDocumento);
+            Documento? docFinded = await this.GetByIdAsync(id);
             if( docFinded == null)
-                throw new KeyNotFoundException("Documento con id " + documento.IdDocumento + " no encontrada");
+                throw new KeyNotFoundException("Documento con id " + id + " no encontrada");
             mapper.Map(documento, docFinded);
+            System.Console.WriteLine(docFinded.IdDocumento);
             await _context.SaveChangesAsync();
         }
 

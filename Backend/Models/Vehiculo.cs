@@ -16,6 +16,7 @@ namespace Backend.Models
         [MaxLength(50)]
         public string Modelo { get; set; } = modelo;
         [Required]
+        [Range(1900, 2026)]
         public int Anio { get; set; } = anio;
         [Required]
         [MinLength(3)]
@@ -25,9 +26,11 @@ namespace Backend.Models
         [MinLength(3)]
         [MaxLength(50)]
         public string Color { get; set; } = color;
-        [Required]
+        [Required(ErrorMessage = "El campo {0} es requerido")]
+        [Range(1,20 , ErrorMessage = "El campo {0} debe estar entre {1} y {2}")]
         public int CantidadNeumaticos { get; set; } = cantidadNeumaticos;
-        [Required]
+        [Required(ErrorMessage = "El campo {0} es requerido")]
+        [Range(1,20 , ErrorMessage = "El campo {0} debe estar entre {1} y {2}")]
         public int CantidadAuxilios { get; set; } = cantidadAuxilios;
         [Required]
         [MinLength(3)]
