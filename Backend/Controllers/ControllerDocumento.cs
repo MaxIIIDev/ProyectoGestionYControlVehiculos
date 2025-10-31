@@ -1,3 +1,4 @@
+using AutoMapper;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -7,10 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 public class ControllerDocumento : ControllerBase
 {
     private readonly ServiceDocumento _serviceDocumento;
-
-    public ControllerDocumento(ServiceDocumento serviceDocumento)
+    private readonly IMapper mapper;
+    public ControllerDocumento(ServiceDocumento serviceDocumento, IMapper mapper)
     {
         _serviceDocumento = serviceDocumento;
+        this.mapper = mapper;
     }
 
     // GET TODOS LOS DOCUMENTOS
@@ -35,37 +37,41 @@ public class ControllerDocumento : ControllerBase
 
     // POST NUEVO DOCUMENTO
     [HttpPost]
-    public async Task<IActionResult> AddDocumento([FromBody] Documento documento)
+    public async Task<IActionResult> AddDocumento([FromBody] CreateDocumentoDto documentoDto)
     {
+        Documento documento = mapper.Map<Documento>(documentoDto);
         var newDocumento = await _serviceDocumento.AddAsync(documento);
         return CreatedAtAction(nameof(GetDocumentoById), new { id = newDocumento.IdDocumento }, newDocumento);
     }
 
     // PUT ACTUALIZAR DOCUMENTO
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateDocumento(int id, [FromBody] Documento documento)
+    public async Task<IActionResult> UpdateDocumento(int id, [FromBody] UpdateDocumentoDto documentoDto)
     {
-        if (id != documento.IdDocumento)
+        if (id <= 0)
         {
-            return BadRequest();
+            return BadRequest("El id debe ser mayor a 0");
         }
-
-        var updated = await _serviceDocumento.UpdateAsync(documento);
-        if (!updated)
+        Documento documento = mapper.Map<Documento>(documentoDto);
+        documento.IdDocumento = id;
+        try
         {
-            return NotFound();
+            await _serviceDocumento.UpdateAsync(documento);
+            return NoContent();
         }
-
-        return NoContent();
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
     }
     // DELETE DOCUMENTO
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDocumento(int id)
     {
-        var deleted = await _serviceDocumento.DeleteAsync(id);
+        bool deleted = await _serviceDocumento.DeleteAsync(id);
         if (!deleted)
         {
-            return NotFound();
+            return NotFound("Documento no encontrado con id: " + id);
         }
         return NoContent();
     }
@@ -77,7 +83,7 @@ public class ControllerDocumento : ControllerBase
         var result = await _serviceDocumento.SoftDeleteAsync(id);
         if (!result)
         {
-            return NotFound();
+            return NotFound("Documento no actualizado con id: " + id);
         }
         return NoContent();
     }
@@ -89,7 +95,7 @@ public class ControllerDocumento : ControllerBase
         var result = await _serviceDocumento.RestoreAsync(id);
         if (!result)
         {
-            return NotFound();
+            return NotFound("Documento no actualizado con id: " + id);
         }
         return NoContent();
     }

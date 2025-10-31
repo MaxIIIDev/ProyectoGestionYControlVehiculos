@@ -1,3 +1,4 @@
+using AutoMapper;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,10 +7,12 @@ namespace Backend.Services
     public class ServiceChecklistDiario
     {
         private readonly AppDbContext _context;
+        private readonly IMapper mapper;
 
-        public ServiceChecklistDiario(AppDbContext context)
+        public ServiceChecklistDiario(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            this.mapper = mapper;
         }
 
         // GET TODO CHECKLISTDIARIOS
@@ -35,9 +38,11 @@ namespace Backend.Services
         // UPDATE CHECKLISTDIARIO
         public async Task UpdateAsync(ChecklistDiario checklistDiario)
         {
-            if(await this.GetByIdAsync(checklistDiario.IdChecklistDiario) == null)
+            ChecklistDiario? checklistDiarioExistente = await this.GetByIdAsync(checklistDiario.IdChecklistDiario);
+            if(checklistDiarioExistente == null)
                 throw new KeyNotFoundException("ChecklistDiario con id " + checklistDiario.IdChecklistDiario + " no encontrada");
-            _context.ChecklistsDiarios.Update(checklistDiario);
+
+            mapper.Map(checklistDiario, checklistDiarioExistente);
             await _context.SaveChangesAsync();
         }
 

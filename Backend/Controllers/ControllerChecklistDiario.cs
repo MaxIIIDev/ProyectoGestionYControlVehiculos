@@ -1,3 +1,4 @@
+using AutoMapper;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +9,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 public class ControllerChecklistDiario : ControllerBase
 {
     private readonly ServiceChecklistDiario _serviceChecklistDiario;
-
-    public ControllerChecklistDiario(ServiceChecklistDiario serviceChecklistDiario)
+    private readonly IMapper mapper;
+    public ControllerChecklistDiario(ServiceChecklistDiario serviceChecklistDiario, IMapper mapper)
     {
         _serviceChecklistDiario = serviceChecklistDiario;
+        this.mapper = mapper;
     }
 
     // GET TODOS LOS CHECKLISTS DIARIOS
@@ -38,7 +40,7 @@ public class ControllerChecklistDiario : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddChecklistDiario([FromBody] CreateChecklistDiarioDto checklistDto)
     {
-        ChecklistDiario checklist = new ChecklistDiario(checklistDto.IdVehiculo, checklistDto.Fecha,checklistDto.FaroDelanteroIzquierdo,checklistDto.FaroDelanteroDerecho,checklistDto.FaroTraseroIzquierdo,checklistDto.FaroTraseroDerecho,checklistDto.LiquidoFrenos,checklistDto.NivelAceite,checklistDto.PresionNeumaticos,checklistDto.NivelFrenos,checklistDto.MatafuegoVigente,checklistDto.NivelRefrigerante,checklistDto.NivelAguaParabrisas,checklistDto.Observaciones,checklistDto.Estado);
+        ChecklistDiario checklist = mapper.Map<ChecklistDiario>(checklistDto);
         var newChecklist = await _serviceChecklistDiario.AddAsync(checklist);
         return CreatedAtAction(nameof(GetChecklistDiarioById), new { id = newChecklist.IdChecklistDiario }, newChecklist);
     }
@@ -48,8 +50,8 @@ public class ControllerChecklistDiario : ControllerBase
     public async Task<IActionResult> UpdateChecklistDiario(int id, [FromBody] UpdateChecklistDiarioDto checklistDto)
     {
         if (id <= 0) return BadRequest("El id debe ser mayor a 0.");
-        
-        ChecklistDiario checklist = new ChecklistDiario(checklistDto.IdVehiculo, checklistDto.Fecha, checklistDto.FaroDelanteroIzquierdo, checklistDto.FaroDelanteroDerecho, checklistDto.FaroTraseroIzquierdo, checklistDto.FaroTraseroDerecho, checklistDto.LiquidoFrenos, checklistDto.NivelAceite, checklistDto.PresionNeumaticos, checklistDto.NivelFrenos, checklistDto.MatafuegoVigente, checklistDto.NivelRefrigerante, checklistDto.NivelAguaParabrisas, checklistDto.Observaciones, checklistDto.Estado);
+
+        ChecklistDiario checklist = mapper.Map<ChecklistDiario>(checklistDto);
         checklist.IdChecklistDiario = id;
         try
         {

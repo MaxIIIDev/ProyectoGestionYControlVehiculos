@@ -1,3 +1,4 @@
+using AutoMapper;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,10 +7,11 @@ namespace Backend.Services
     public class ServiceAuditoria
     {
         private readonly AppDbContext _context;
-
-        public ServiceAuditoria(AppDbContext context)
+        private readonly IMapper mapper;
+        public ServiceAuditoria(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            this.mapper = mapper;
         }
 
         // GET TODO AUDITORIAS
@@ -41,11 +43,12 @@ namespace Backend.Services
         // UPDATE AUDITORIA
         public async Task UpdateAsync(Auditoria auditoria)
         {
-            if( await this.GetByIdAsync(auditoria.IdAuditoria) == null)
+            Auditoria? auditoriaFinded = await this.GetByIdAsync(auditoria.IdAuditoria);
+            if( auditoriaFinded == null)
             {
                 throw new KeyNotFoundException("Auditoria con id " + auditoria.IdAuditoria + " no encontrada");
             }
-            _context.Auditorias.Update(auditoria);
+            mapper.Map(auditoria, auditoriaFinded);
             await _context.SaveChangesAsync();
         }
 

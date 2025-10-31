@@ -1,3 +1,4 @@
+using AutoMapper;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -7,10 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 public class ControllerAuditoria : ControllerBase
 {
     private readonly ServiceAuditoria _serviceAuditoria;
-
-    public ControllerAuditoria(ServiceAuditoria serviceAuditoria)
+    private readonly IMapper mapper;
+    public ControllerAuditoria(ServiceAuditoria serviceAuditoria, IMapper mapper)
     {
         _serviceAuditoria = serviceAuditoria;
+        this.mapper = mapper;
     }
 
     // GET TODAS LAS AUDITORIAS
@@ -36,7 +38,7 @@ public class ControllerAuditoria : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddAuditoria([FromBody] CreateAuditoriaDto auditoriaDto)
     {
-        Auditoria auditoria = new Auditoria(auditoriaDto.Entidad,auditoriaDto.IdEntidad,auditoriaDto.Accion,auditoriaDto.IdUsuario);
+        Auditoria auditoria = mapper.Map<Auditoria>(auditoriaDto);
         Auditoria newAuditoria = await _serviceAuditoria.AddAsync(auditoria);
         return CreatedAtAction(nameof(GetAuditoriaById), new { id = newAuditoria.IdAuditoria }, newAuditoria);
     }
@@ -48,7 +50,7 @@ public class ControllerAuditoria : ControllerBase
         {
             return BadRequest(" El id de la auditoria debe ser mayor a 0.");
         }
-        Auditoria auditoria = new Auditoria(auditoriaDto.Entidad, auditoriaDto.IdEntidad, auditoriaDto.Accion, auditoriaDto.IdUsuario);
+        Auditoria auditoria = mapper.Map<Auditoria>(auditoriaDto);
         auditoria.IdAuditoria = id;
         try
         {

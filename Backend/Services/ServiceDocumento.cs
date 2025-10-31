@@ -1,3 +1,4 @@
+using AutoMapper;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,10 +7,11 @@ namespace Backend.Services
     public class ServiceDocumento
     {
         private readonly AppDbContext _context;
-
-        public ServiceDocumento(AppDbContext context)
+        private readonly IMapper mapper;
+        public ServiceDocumento(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            this.mapper = mapper;
         }
 
         // GET TODO DOCUMENTOS
@@ -33,10 +35,13 @@ namespace Backend.Services
         }
 
         // UPDATE DOCUMENTO
-        public async Task<bool> UpdateAsync(Documento documento)
+        public async Task UpdateAsync(Documento documento)
         {
-            _context.Documentos.Update(documento);
-            return await _context.SaveChangesAsync() > 0;
+            Documento? docFinded = await this.GetByIdAsync(documento.IdDocumento);
+            if( docFinded == null)
+                throw new KeyNotFoundException("Documento con id " + documento.IdDocumento + " no encontrada");
+            mapper.Map(documento, docFinded);
+            await _context.SaveChangesAsync();
         }
 
         // ELIMINAR DOCUMENTO

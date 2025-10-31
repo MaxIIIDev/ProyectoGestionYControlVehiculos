@@ -32,6 +32,7 @@ builder.Services.AddScoped<ServiceRol>();
 builder.Services.AddScoped<ServiceService>();
 builder.Services.AddScoped<ServiceUsuario>();
 builder.Services.AddScoped<ServiceVehiculo>();
+builder.Services.AddAutoMapper(typeof(Program));
 var app = builder.Build();
 app.UseExceptionHandler(appError =>
 {
