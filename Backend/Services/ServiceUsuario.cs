@@ -1,3 +1,4 @@
+using AutoMapper;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,10 +7,12 @@ namespace Backend.Services
     public class ServiceUsuario
     {
         private readonly AppDbContext _context;
+        private readonly IMapper mapper;
 
-        public ServiceUsuario(AppDbContext context)
+        public ServiceUsuario(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            this.mapper = mapper;
         }
 
         // GET TODO USUARIOS
@@ -31,10 +34,14 @@ namespace Backend.Services
             return usuario;
         }
         // UPDATE USUARIO
-        public async Task<bool> UpdateAsync(Usuario usuario)
+        public async Task UpdateAsync(int id, UpdateUsuarioDto usuarioDto)
         {
-            _context.Usuarios.Update(usuario);
-            return await _context.SaveChangesAsync() > 0;
+            Usuario? usuarioFinded = await _context.Usuarios.FindAsync(id);
+            if (usuarioFinded == null)
+                throw new KeyNotFoundException("Usuario con id " + id + " no encontrado");
+            mapper.Map(usuarioDto, usuarioFinded);
+            _context.Usuarios.Update(usuarioFinded);
+            await _context.SaveChangesAsync();
         }
         // ELIMINAR USUARIO
         public async Task<bool> DeleteAsync(int id)

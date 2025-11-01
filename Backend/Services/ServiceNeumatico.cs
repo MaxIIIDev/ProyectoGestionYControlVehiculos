@@ -1,3 +1,4 @@
+using AutoMapper;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,10 +7,12 @@ namespace Backend.Services
     public class ServiceNeumatico
     {
         private readonly AppDbContext _context;
+        private readonly IMapper mapper;
 
-        public ServiceNeumatico(AppDbContext context)
+        public ServiceNeumatico(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            this.mapper = mapper;
         }
 
         // GET TODO NEUMATICOS
@@ -33,10 +36,14 @@ namespace Backend.Services
         }
 
         // UPDATE NEUMATICO
-        public async Task<bool> UpdateAsync(Neumatico neumatico)
+        public async Task UpdateAsync(int id, UpdateNeumaticoDto neumaticoDto)
         {
-            _context.Neumaticos.Update(neumatico);
-            return await _context.SaveChangesAsync() > 0;
+            Neumatico? neumaticoFinded = await _context.Neumaticos.FindAsync(id);
+            if (neumaticoFinded == null)
+                throw new KeyNotFoundException("Neumatico con id " + id + " no encontrado");
+            mapper.Map(neumaticoDto, neumaticoFinded);
+            _context.Neumaticos.Update(neumaticoFinded);
+            await _context.SaveChangesAsync();
         }
 
         // ELIMINAR NEUMATICO

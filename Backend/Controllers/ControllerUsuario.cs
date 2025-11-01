@@ -1,3 +1,4 @@
+using AutoMapper;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -7,10 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 public class ControllerUsuario : ControllerBase
 {
     private readonly ServiceUsuario _serviceUsuario;
+    private readonly IMapper mapper;
 
-    public ControllerUsuario(ServiceUsuario serviceUsuario)
+    public ControllerUsuario(ServiceUsuario serviceUsuario, IMapper mapper)
     {
         _serviceUsuario = serviceUsuario;
+        this.mapper = mapper;
     }
 
     // GET TODOS LOS USUARIOS
@@ -34,32 +37,32 @@ public class ControllerUsuario : ControllerBase
     }
     // POST NUEVO USUARIO
     [HttpPost]
-    public async Task<IActionResult> CreateUsuario([FromBody] Usuario usuario)
+    public async Task<IActionResult> CreateUsuario([FromBody] CreateUsuarioDto usuarioDto)
     {
-        if (usuario == null)
-        {
-            return BadRequest();
-        }
-
-        var createdUsuario = await _serviceUsuario.AddAsync(usuario);
-        return CreatedAtAction(nameof(GetUsuarioById), new { id = createdUsuario.IdUsuario }, createdUsuario);
+        Usuario usu = mapper.Map<Usuario>(usuarioDto);
+        var newUsuario = await _serviceUsuario.AddAsync(usu);
+        return CreatedAtAction(nameof(GetUsuarioById), new { id = newUsuario.IdUsuario }, newUsuario);
     }
     // PUT ACTUALIZAR USUARIO
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateUsuario(int id, [FromBody] Usuario usuario)
+    public async Task<IActionResult> UpdateUsuario(int id, [FromBody] UpdateUsuarioDto usuarioDto)
     {
-        if (id != usuario.IdUsuario)
+        if (id <= 0)
         {
-            return BadRequest();
+            return BadRequest("El id debe ser mayor a 0");
         }
 
-        var updated = await _serviceUsuario.UpdateAsync(usuario);
-        if (!updated)
+        Usuario usuario = mapper.Map<Usuario>(usuarioDto);
+        usuario.IdUsuario = id;
+        try
         {
-            return NotFound();
+            await _serviceUsuario.UpdateAsync(id, usuarioDto);
+            return NoContent();
         }
-
-        return NoContent();
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { mensaje = ex.Message });
+        }
     }
     // DELETE USUARIO
     [HttpDelete("{id}")]

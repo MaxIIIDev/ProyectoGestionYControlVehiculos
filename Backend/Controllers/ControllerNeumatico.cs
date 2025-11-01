@@ -1,3 +1,4 @@
+using AutoMapper;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -7,10 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 public class ControllerNeumatico : ControllerBase
 {
     private readonly ServiceNeumatico _serviceNeumatico;
+    private readonly IMapper mapper;
 
-    public ControllerNeumatico(ServiceNeumatico serviceNeumatico)
+    public ControllerNeumatico(ServiceNeumatico serviceNeumatico, IMapper mapper)
     {
         _serviceNeumatico = serviceNeumatico;
+        this.mapper = mapper;
     }
 
     // GET TODOS LOS NEUMATICOS
@@ -35,28 +38,33 @@ public class ControllerNeumatico : ControllerBase
 
     // POST NUEVO NEUMATICO
     [HttpPost]
-    public async Task<IActionResult> AddNeumatico([FromBody] Neumatico neumatico)
+    public async Task<IActionResult> AddNeumatico([FromBody] CreateNeumaticoDto neumaticoDto)
     {
+        Neumatico neumatico = mapper.Map<Neumatico>(neumaticoDto);
         var newNeumatico = await _serviceNeumatico.AddAsync(neumatico);
         return CreatedAtAction(nameof(GetNeumaticoById), new { id = newNeumatico.IdNeumatico }, newNeumatico);
     }
 
     // PUT ACTUALIZAR NEUMATICO
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateNeumatico(int id, [FromBody] Neumatico neumatico)
+    public async Task<IActionResult> UpdateNeumatico(int id, [FromBody] UpdateNeumaticoDto neumaticoDto)
     {
-        if (id != neumatico.IdNeumatico)
+        if (id <= 0)
         {
-            return BadRequest();
+            return BadRequest("El id debe ser mayor a 0");
         }
 
-        var updated = await _serviceNeumatico.UpdateAsync(neumatico);
-        if (!updated)
+        Neumatico neumatico = mapper.Map<Neumatico>(neumaticoDto);
+        neumatico.IdNeumatico = id;
+        try
         {
-            return NotFound();
+            await _serviceNeumatico.UpdateAsync(id, neumaticoDto);
+            return NoContent();
         }
-
-        return NoContent();
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
     }
     // DELETE NEUMATICO
     [HttpDelete("{id}")]

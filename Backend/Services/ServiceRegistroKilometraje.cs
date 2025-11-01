@@ -1,3 +1,5 @@
+
+using AutoMapper;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,10 +8,12 @@ namespace Backend.Services
     public class ServiceRegistroKilometraje
     {
         private readonly AppDbContext _context;
+        private readonly IMapper mapper;
 
-        public ServiceRegistroKilometraje(AppDbContext context)
+        public ServiceRegistroKilometraje(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            this.mapper = mapper;
         }
 
         // GET TODO REGISTROS KILOMETRAJE
@@ -31,10 +35,13 @@ namespace Backend.Services
             return registroKilometraje;
         }
         // UPDATE REGISTRO KILOMETRAJE
-        public async Task<bool> UpdateAsync(RegistroKilometraje registroKilometraje)
+        public async Task UpdateAsync(int id, UpdateRegistroKilometrajeDto registroKilometrajeDto)
         {
-            _context.RegistrosKilometraje.Update(registroKilometraje);
-            return await _context.SaveChangesAsync() > 0;
+            RegistroKilometraje? registroFinded = await _context.RegistrosKilometraje.FindAsync(id);
+            if (registroFinded == null)
+                throw new KeyNotFoundException("Registro Kilometraje con id " + id + " no encontrado");
+            mapper.Map(registroKilometrajeDto, registroFinded);
+            await _context.SaveChangesAsync();
         }
         // ELIMINAR REGISTRO KILOMETRAJE
         public async Task<bool> DeleteAsync(int id)

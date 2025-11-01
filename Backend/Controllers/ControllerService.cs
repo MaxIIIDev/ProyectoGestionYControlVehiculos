@@ -1,3 +1,4 @@
+using AutoMapper;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -7,10 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 public class ControllerService : ControllerBase
 {
     private readonly ServiceService _serviceService;
+    private readonly IMapper mapper;
 
-    public ControllerService(ServiceService serviceService)
+    public ControllerService(ServiceService serviceService, IMapper mapper)
     {
         _serviceService = serviceService;
+        this.mapper = mapper;
     }
 
     // GET TODOS LOS SERVICIOS
@@ -34,32 +37,33 @@ public class ControllerService : ControllerBase
     }
     // POST NUEVO SERVICIO
     [HttpPost]
-    public async Task<IActionResult> CreateService([FromBody] Service service)
+    public async Task<IActionResult> CreateService([FromBody] CreateServiceDto serviceDto)
     {
-        if (service == null)
-        {
-            return BadRequest();
-        }
-
-        var createdService = await _serviceService.AddAsync(service);
-        return CreatedAtAction(nameof(GetServiceById), new { id = createdService.IdService }, createdService);
+        Service service = mapper.Map<Service>(serviceDto);
+        var newService = await _serviceService.AddAsync(service);
+        return CreatedAtAction(nameof(GetServiceById), new { id = newService.IdService }, newService);
     }
     // PUT ACTUALIZAR SERVICIO
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateService(int id, [FromBody] Service service)
+    public async Task<IActionResult> UpdateService(int id, [FromBody] UpdateServiceDto serviceDto)
     {
-        if (id != service.IdService)
+        if (id <= 0)
         {
-            return BadRequest();
+            return BadRequest("El id debe ser mayor a 0");
+        }
+        Service service = mapper.Map<Service>(serviceDto);
+        service.IdService = id;
+
+        try
+        {
+            await _serviceService.UpdateAsync(id ,serviceDto);
+            return NoContent();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
         }
 
-        var updated = await _serviceService.UpdateAsync(service);
-        if (!updated)
-        {
-            return NotFound();
-        }
-
-        return NoContent();
     }
     // DELETE SERVICIO
     [HttpDelete("{id}")]

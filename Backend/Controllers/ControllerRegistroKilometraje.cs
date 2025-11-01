@@ -1,3 +1,4 @@
+using AutoMapper;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -7,10 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 public class ControllerRegistroKilometraje : ControllerBase
 {
     private readonly ServiceRegistroKilometraje _serviceRegistroKilometraje;
-
-    public ControllerRegistroKilometraje(ServiceRegistroKilometraje serviceRegistroKilometraje)
+    private readonly IMapper mapper;
+    public ControllerRegistroKilometraje(ServiceRegistroKilometraje serviceRegistroKilometraje, IMapper mapper)
     {
         _serviceRegistroKilometraje = serviceRegistroKilometraje;
+        this.mapper = mapper;
     }
 
     // GET TODO REGISTROS KILOMETRAJE
@@ -33,27 +35,33 @@ public class ControllerRegistroKilometraje : ControllerBase
     }
     // POST NUEVO REGISTRO KILOMETRAJE
     [HttpPost]
-    public async Task<IActionResult> AddRegistroKilometraje([FromBody] RegistroKilometraje registroKilometraje)
+    public async Task<IActionResult> AddRegistroKilometraje([FromBody] CreateRegistroKilometrajeDto createDto)
     {
+        RegistroKilometraje registroKilometraje = mapper.Map<RegistroKilometraje>(createDto);
         var newRegistro = await _serviceRegistroKilometraje.AddAsync(registroKilometraje);
         return CreatedAtAction(nameof(GetRegistroKilometrajeById), new { id = newRegistro.IdRegistroKilometraje }, newRegistro);
     }
     // PUT ACTUALIZAR REGISTRO KILOMETRAJE
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateRegistroKilometraje(int id, [FromBody] RegistroKilometraje registroKilometraje)
+    public async Task<IActionResult> UpdateRegistroKilometraje(int id, [FromBody] UpdateRegistroKilometrajeDto updateRegistroDto)
     {
-        if (id != registroKilometraje.IdRegistroKilometraje)
+        if (id <= 0)
         {
-            return BadRequest();
+            return BadRequest("El id debe ser mayor a 0");
         }
 
-        var updated = await _serviceRegistroKilometraje.UpdateAsync(registroKilometraje);
-        if (!updated)
-        {
-            return NotFound();
-        }
+        RegistroKilometraje registroKilometraje = mapper.Map<RegistroKilometraje>(updateRegistroDto);
+        registroKilometraje.IdRegistroKilometraje = id;
 
-        return NoContent();
+        try
+        {
+            await _serviceRegistroKilometraje.UpdateAsync(id, updateRegistroDto);
+            return NoContent();
+        } catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { mensaje = ex.Message });
+        }
+        
     }
     // DELETE REGISTRO KILOMETRAJE
     [HttpDelete("{id}")]

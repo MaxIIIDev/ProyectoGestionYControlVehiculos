@@ -1,3 +1,4 @@
+using AutoMapper;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,10 +7,12 @@ namespace Backend.Services
     public class ServiceRol
     {
         private readonly AppDbContext _context;
+        private readonly IMapper mapper;
 
-        public ServiceRol(AppDbContext context)
+        public ServiceRol(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            this.mapper = mapper;
         }
 
         // GET TODO ROLES
@@ -31,10 +34,15 @@ namespace Backend.Services
             return rol;
         }
         // UPDATE ROL
-        public async Task<bool> UpdateAsync(Rol rol)
+        public async Task UpdateAsync(int id, UpdateRolDto rolDto)
         {
-            _context.Roles.Update(rol);
-            return await _context.SaveChangesAsync() > 0;
+            Rol? rolFinded = await _context.Roles.FindAsync(id);
+            if (rolFinded == null)
+                throw new KeyNotFoundException("Rol con id " + id + " no encontrada");
+
+            mapper.Map(rolDto, rolFinded);
+            _context.Roles.Update(rolFinded);
+            await _context.SaveChangesAsync();
         }
         // ELIMINAR ROL
         public async Task<bool> DeleteAsync(int id)

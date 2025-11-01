@@ -1,3 +1,4 @@
+using AutoMapper;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -7,10 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 public class ControllerRol : ControllerBase
 {
     private readonly ServiceRol _serviceRol;
+    private readonly IMapper mapper;
 
-    public ControllerRol(ServiceRol serviceRol)
+    public ControllerRol(ServiceRol serviceRol, IMapper mapper)
     {
         _serviceRol = serviceRol;
+        this.mapper = mapper;
     }
 
     // GET TODOS LOS ROLES
@@ -34,32 +37,32 @@ public class ControllerRol : ControllerBase
     }
     // POST NUEVO ROL
     [HttpPost]
-    public async Task<IActionResult> CreateRol([FromBody] Rol rol)
+    public async Task<IActionResult> CreateRol([FromBody] CreateRolDto rolDto)
     {
-        if (rol == null)
-        {
-            return BadRequest();
-        }
-
-        var createdRol = await _serviceRol.AddAsync(rol);
-        return CreatedAtAction(nameof(GetRolById), new { id = createdRol.IdRol }, createdRol);
+        Rol rol = mapper.Map<Rol>(rolDto);
+        var newRol = await _serviceRol.AddAsync(rol);
+        return CreatedAtAction(nameof(GetRolById), new { id = newRol.IdRol }, newRol);
     }
     // PUT ACTUALIZAR ROL
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateRol(int id, [FromBody] Rol rol)
+    public async Task<IActionResult> UpdateRol(int id, [FromBody] UpdateRolDto rolDto)
     {
-        if (id != rol.IdRol)
+        if (id <= 0)
         {
-            return BadRequest();
+            return BadRequest("El id debe ser mayor a 0");
         }
 
-        var updated = await _serviceRol.UpdateAsync(rol);
-        if (!updated)
+        Rol rol = mapper.Map<Rol>(rolDto);
+        rol.IdRol = id;
+        try
         {
-            return NotFound();
+            await _serviceRol.UpdateAsync(id, rolDto);
+            return NoContent();
         }
-
-        return NoContent();
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
     }
     // DELETE ROL
     [HttpDelete("{id}")]

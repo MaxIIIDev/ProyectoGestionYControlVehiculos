@@ -1,3 +1,4 @@
+using AutoMapper;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -7,10 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 public class ControllerVehiculo : ControllerBase
 {
     private readonly ServiceVehiculo _serviceVehiculo;
+    private readonly IMapper mapper;
 
-    public ControllerVehiculo(ServiceVehiculo serviceVehiculo)
+    public ControllerVehiculo(ServiceVehiculo serviceVehiculo, IMapper mapper)
     {
         _serviceVehiculo = serviceVehiculo;
+        this.mapper = mapper;
     }
 
     // GET TODOS LOS VEHICULOS
@@ -34,31 +37,32 @@ public class ControllerVehiculo : ControllerBase
     }
     // POST NUEVO VEHICULO
     [HttpPost]
-    public async Task<IActionResult> CreateVehiculo([FromBody] Vehiculo vehiculo)
+    public async Task<IActionResult> CreateVehiculo([FromBody] CreateVehiculoDto vehiculoDto)
     {
-        if (vehiculo == null)
-        {
-            return BadRequest();
-        }
-
-        var createdVehiculo = await _serviceVehiculo.AddAsync(vehiculo);
-        return CreatedAtAction(nameof(GetVehiculoById), new { id = createdVehiculo.IdVehiculo }, createdVehiculo);
+        Vehiculo vehiculo = mapper.Map<Vehiculo>(vehiculoDto);
+        var newVehiculo = await _serviceVehiculo.AddAsync(vehiculo);
+        return CreatedAtAction(nameof(GetVehiculoById), new { id = newVehiculo.IdVehiculo }, newVehiculo);
     }
     // PUT ACTUALIZAR VEHICULO
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateVehiculo(int id, [FromBody] Vehiculo vehiculo)
+    public async Task<IActionResult> UpdateVehiculo(int id, [FromBody] UpdateVehiculoDto vehiculoDto)
     {
-        if (id != vehiculo.IdVehiculo)
+        if (id <= 0)
         {
-            return BadRequest();
+            return BadRequest("El id debe ser mayor a 0");
         }
 
-        var updated = await _serviceVehiculo.UpdateAsync(vehiculo);
-        if (!updated)
+        Vehiculo vehiculo = mapper.Map<Vehiculo>(vehiculoDto);
+        vehiculo.IdVehiculo = id;
+        try
         {
-            return NotFound();
+            await _serviceVehiculo.UpdateAsync(id, vehiculoDto);
+            return NoContent();
         }
-        return NoContent();
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { Message = ex.Message });
+        }
     }
     // DELETE VEHICULO
     [HttpDelete("{id}")]

@@ -1,3 +1,4 @@
+using AutoMapper;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,10 +7,12 @@ namespace Backend.Services
     public class ServiceVehiculo
     {
         private readonly AppDbContext _context;
+        private readonly IMapper mapper;
 
-        public ServiceVehiculo(AppDbContext context)
+        public ServiceVehiculo(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            this.mapper = mapper;
         }
 
         // GET TODO VEHICULOS
@@ -33,10 +36,14 @@ namespace Backend.Services
         }
 
         // UPDATE VEHICULO
-        public async Task<bool> UpdateAsync(Vehiculo vehiculo)
+        public async Task UpdateAsync(int id, UpdateVehiculoDto vehiculoDto)
         {
-            _context.Vehiculos.Update(vehiculo);
-            return await _context.SaveChangesAsync() > 0;
+            Vehiculo? vehiculoFinded = await _context.Vehiculos.FindAsync(id);
+            if (vehiculoFinded == null)
+                throw new KeyNotFoundException("Vehiculo con id " + id + " no encontrado");
+            mapper.Map(vehiculoDto, vehiculoFinded);
+            _context.Vehiculos.Update(vehiculoFinded);
+            await _context.SaveChangesAsync();
         }
 
         // ELIMINAR VEHICULO
