@@ -16,7 +16,7 @@ namespace Backend.Models
     //     TraseroDerechoExterno,
     //     Auxilio
     // }
-    public class Neumatico(string marca, string medida, bool estandar, int kmColocacion, int kmRodados, bool desgasteIrregular,  DateOnly fechaColocacion, int idVehiculo, bool estado)
+    public class Neumatico(string marca, string medida, bool estandar, int kmColocacion, int kmRodados, bool desgasteIrregular,  DateOnly fechaColocacion, int? idVehiculo, bool estado)
     {
         [Key]
         public int IdNeumatico { get; set; }
@@ -40,7 +40,7 @@ namespace Backend.Models
         public DateOnly FechaColocacion { get; set; } = fechaColocacion;
 
         [ForeignKey("Vehiculo")]
-        public int IdVehiculo { get; set; } = idVehiculo;
+        public int? IdVehiculo { get; set; } = idVehiculo;
         public Vehiculo? Vehiculo { get; set; } = null!;
         public bool Estado { get; set; } = estado;
 

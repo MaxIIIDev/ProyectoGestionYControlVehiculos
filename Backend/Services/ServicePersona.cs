@@ -26,10 +26,17 @@ namespace Backend.Services
         {
             return await _context.Personas.FindAsync(id);
         }
+        // PERSONA POR DNI
+        public async Task<Persona?> GetByDniAsync(int dni)
+        {
+            return await _context.Personas.FirstOrDefaultAsync(p => p.Dni == dni);
+        }
 
         // NUEVA PERSONA
         public async Task<Persona> AddAsync(Persona persona)
         {
+            if(await GetByDniAsync(persona.Dni) != null)
+                throw new InvalidOperationException("Ya existe una persona con el DNI " + persona.Dni); //Al controller
             _context.Personas.Add(persona);
             await _context.SaveChangesAsync();
             return persona;
@@ -38,8 +45,11 @@ namespace Backend.Services
         // UPDATE PERSONA
         public async Task UpdateAsync(int id, UpdatePersonaDto persDto)
         {
+
             Persona? persFinded = await _context.Personas.FindAsync(id);
-            if( persFinded == null)
+            if (persFinded != null && persDto.Dni != null && await GetByDniAsync((int)persDto.Dni) is Persona persExistente && persExistente.IdPersona != id)
+                throw new InvalidOperationException("Ya existe una persona con el DNI " + persDto.Dni); //Al controller
+            if (persFinded == null)
                 throw new KeyNotFoundException("Persona con id " + id + " no encontrada");
             mapper.Map(persDto, persFinded);
             await _context.SaveChangesAsync();

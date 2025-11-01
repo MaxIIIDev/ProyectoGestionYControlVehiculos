@@ -19,6 +19,7 @@ namespace Backend.Models
         [Range(1900, 2026)]
         public int Anio { get; set; } = anio;
         [Required]
+        
         [MinLength(3)]
         [MaxLength(20)]
         public string Patente { get; set; } = patente;
