@@ -12,12 +12,14 @@ namespace Backend.Profiles
             CreateMap<UpdateAuditoriaDto, Auditoria>().ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<CreateChecklistDiarioDto, ChecklistDiario>();
             CreateMap<UpdateChecklistDiarioDto, ChecklistDiario>().ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
-             CreateMap<CreateDocumentoDto, Documento>();
+            CreateMap<CreateDocumentoDto, Documento>();
             CreateMap<UpdateDocumentoDto, Documento>().ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<CreatePersonaDto, Persona>();
             CreateMap<UpdatePersonaDto, Persona>().ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<CreateMatafuegoDto, Matafuego>();
             CreateMap<UpdateMatafuegoDto, Matafuego>().ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<CreatePosicionNeumaticoDto, PosicionNeumatico>();
+            CreateMap<UpdatePosicionNeumaticoDto, PosicionNeumatico>().ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }

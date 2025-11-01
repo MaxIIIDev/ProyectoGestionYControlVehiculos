@@ -1,3 +1,4 @@
+using AutoMapper;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -7,10 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 public class ControllerPosicionNeumatico : ControllerBase
 {
     private readonly ServicePosicionNeumatico _servicePosicionNeumatico;
-
-    public ControllerPosicionNeumatico(ServicePosicionNeumatico servicePosicionNeumatico)
+    private readonly IMapper mapper;
+    public ControllerPosicionNeumatico(ServicePosicionNeumatico servicePosicionNeumatico, IMapper mapper)
     {
         _servicePosicionNeumatico = servicePosicionNeumatico;
+        this.mapper = mapper;
     }
 
     // GET TODAS LAS POSICIONES DE NEUMATICOS
@@ -34,27 +36,35 @@ public class ControllerPosicionNeumatico : ControllerBase
     }
     // POST NUEVA POSICION DE NEUMATICO
     [HttpPost]
-    public async Task<IActionResult> AddPosicionNeumatico([FromBody] PosicionNeumatico posicionNeumatico)
+    public async Task<IActionResult> AddPosicionNeumatico([FromBody] CreatePosicionNeumaticoDto posicionNeumaticoDto)
     {
+        PosicionNeumatico posicionNeumatico = mapper.Map<PosicionNeumatico>(posicionNeumaticoDto);
         var newPosicion = await _servicePosicionNeumatico.AddAsync(posicionNeumatico);
         return CreatedAtAction(nameof(GetPosicionNeumaticoById), new { id = newPosicion.IdPosicionNeumatico }, newPosicion);
     }
     // PUT ACTUALIZAR POSICION DE NEUMATICO
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdatePosicionNeumatico(int id, [FromBody] PosicionNeumatico posicionNeumatico)
+    public async Task<IActionResult> UpdatePosicionNeumatico(int id, [FromBody] UpdatePosicionNeumaticoDto posicionNeumaticoDto)
     {
-        if (id != posicionNeumatico.IdPosicionNeumatico)
+        if (id <= 0)
         {
-            return BadRequest();
+            return BadRequest("El id debe ser mayor a 0");
         }
 
-        var updated = await _servicePosicionNeumatico.UpdateAsync(posicionNeumatico);
-        if (!updated)
+        PosicionNeumatico posicionNeumatico = mapper.Map<PosicionNeumatico>(posicionNeumaticoDto);
+        posicionNeumatico.IdPosicionNeumatico = id;
+
+        try
         {
-            return NotFound();
+            await _servicePosicionNeumatico.UpdateAsync(id, posicionNeumaticoDto);
+            return NoContent();
+        }
+        catch(KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
         }
 
-        return NoContent();
+        
     }
     // DELETE POSICION DE NEUMATICO
     [HttpDelete("{id}")]
