@@ -1,5 +1,6 @@
 /*Card Reactivo de gestion sin botones*/
 import type { ReactNode } from "react";
+import "../Components/css/CardGestion.css";
 
 interface CardGestionProps {
   title: string;
