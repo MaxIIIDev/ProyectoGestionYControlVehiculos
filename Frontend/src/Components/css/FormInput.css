@@ -1,15 +1,18 @@
 .form-input {
-  border: none;
+  border: grey solid 0.1px;
   outline: none;
   border-radius: 15px;
   padding: 1em;
-  background-color: #cccccc06;
-  box-shadow: inset 2px 5px 10px rgba(0, 0, 0, 0.5);
+  background-color: #cccccc;
+  box-shadow: inset 8px 8px 12px rgba(0, 0, 0, 1);
   transition: 300ms ease-in-out;
+  placeholder {
+    color: #666666;
+  }
 }
 
 .form-input:focus {
-  background-color: #e0e0e02a;
+  background-color: #e0e0e0;
   transform: scale(1.05);
-  box-shadow: 13px 13px 100px #9696963a, -13px -13px 100px #ffffffad;
+  box-shadow: inset 4px 7px 15px rgba(0, 0, 0, 0.4);
 }
