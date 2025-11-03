@@ -7,6 +7,7 @@ import VehiculosMantenimiento from "../../views/VehiculosMantenimieto";
 import VehiculosListar from "../../views/VehiculosListar";
 import VehiculosAgregar from "../../views/VehiculosAgregar";
 import Matafuegos from "../../views/Matafuegos";
+import Neumaticos from "../../views/Neumaticos";
 
 export default function RoutesComponent() {
   return (
@@ -31,6 +32,7 @@ export default function RoutesComponent() {
         <Route path="/VehiculosListar" element={<VehiculosListar />} />
         <Route path="/VehiculosAgregar" element={<VehiculosAgregar />} />
         <Route path="/Matafuegos" element={<Matafuegos />} />
+        <Route path="/Neumaticos" element={<Neumaticos />} />
       </Routes>
     </Col>
   );

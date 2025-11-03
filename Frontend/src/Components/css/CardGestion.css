@@ -1,0 +1,7 @@
+.card-gestion {
+  box-shadow: 0 8px 32px 5px rgba(0, 0, 0, 1);
+  border-radius: 20px;
+  background: linear-gradient(135deg, #000000ff 0%, #8a8a8aff 100%);
+  color: white;
+  padding: 20px;
+}

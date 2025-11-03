@@ -31,21 +31,23 @@ export default function SideNavBar() {
                 <Accordion.Body className="p-0">
                   <Nav className="flex-column">
                     <Nav.Link as={Link} to="/VehiculosGestion" className="ps-4">
-                      <i className="bi bi-list"></i> Gestión de Vehículos
+                      <i className="bi bi-list"></i> Gestión
                     </Nav.Link>
                     <Nav.Link
                       as={Link}
                       to="/ControlKilometraje"
                       className="ps-4"
                     >
-                      <i className="bi bi-speedometer2"></i> Control de
-                      Kilometraje
+                      <i className="bi bi-speedometer2"></i> Control
                     </Nav.Link>
                     <Nav.Link as={Link} to="/Mantenimiento" className="ps-4">
                       <i className="bi bi-wrench"></i> Mantenimiento
                     </Nav.Link>
                     <Nav.Link as={Link} to="/Matafuegos" className="ps-4">
                       <i className="bi bi-fire"></i> Matafuegos
+                    </Nav.Link>
+                    <Nav.Link as={Link} to="/Neumaticos" className="ps-4">
+                      <i className="bi bi-disc"></i> Neumaticos
                     </Nav.Link>
                   </Nav>
                 </Accordion.Body>
