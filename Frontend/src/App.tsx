@@ -12,7 +12,7 @@ import FormInput from "./Components/FormInput";
 
 function App() {
   return (
-    <>
+    /*<>
       <Router>
         <TopNavBar />
         <Container fluid>
@@ -22,6 +22,18 @@ function App() {
           </Row>
         </Container>
       </Router>
+    </>*/
+    <>
+      <Form>
+        <FormInput placeholder="Nombre" type="text" name="name" id="name" />
+        <FormInput placeholder="Email" type="email" name="email" id="email" />
+        <FormInput
+          placeholder="Contraseña"
+          type="password"
+          name="password"
+          id="password"
+        />
+      </Form>
     </>
   );
 }

@@ -14,7 +14,7 @@ export default function FormInput({
   id,
 }: FormInputProps) {
   return (
-    <div className="form-control">
+    <div className="p-2 mb-2">
       <input
         type={type}
         className="form-input"
