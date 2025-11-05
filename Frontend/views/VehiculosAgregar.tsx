@@ -1,8 +1,9 @@
-import { Col, Form, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import FormInput from "../src/Components/FormInput";
 import FormCard from "../src/Components/FormCard";
 import React, { useState } from "react";
 import FormButtons from "../src/Components/FormButtons";
+import Form from "../src/Components/Form";
 
 export default function VehiculoAgregar() {
   const initialState = {
@@ -55,7 +56,11 @@ export default function VehiculoAgregar() {
             "inset 0 0 16px 4px rgba(255, 255, 255, 0.86), inset 0 0 32px 0 rgba(0,0,0,0.15)",
         }}
       >
-        <Form>
+        <Form
+          name="vehiculoForm"
+          method="POST"
+          action="http://localhost:5097/api/vehiculos"
+        >
           <Row
             className="mb-1"
             style={{
