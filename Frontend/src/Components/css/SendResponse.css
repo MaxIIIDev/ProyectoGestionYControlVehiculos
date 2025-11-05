@@ -1,0 +1,88 @@
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 5%;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  color: black;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 2.5rem 2rem 2rem 2rem;
+  min-width: 30%;
+  max-width: 40%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  text-align: center;
+  animation: modalFadeIn 0.25s;
+}
+
+@keyframes modalFadeIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-content-button-ok {
+  font-size: 17px;
+  background: transparent;
+  border: none;
+  padding: 1em 1.5em;
+  color: #156725;
+  text-transform: uppercase;
+  position: relative;
+  transition: 0.5s ease;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.modal-content-button-ok::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background-color: #a2c9aa;
+  transition: 0.5s ease;
+}
+
+.modal-content-button-ok:hover {
+  color: #1e1e2b;
+  transition-delay: 0.5s;
+}
+
+.modal-content-button-ok:hover::before {
+  width: 50%;
+  margin-left: 25%;
+}
+
+.modal-content-button-ok::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 0;
+  width: 100%;
+  background: linear-gradient(360deg, #a2c9aa 0%, #338142 100%);
+  transition: 0.4s ease;
+  z-index: -1;
+}
+
+.modal-content-button-ok:hover::after {
+  height: 100%;
+  transition-delay: 0.4s;
+  color: aliceblue;
+  border-radius: 2.5rem;
+}

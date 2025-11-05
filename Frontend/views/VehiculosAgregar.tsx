@@ -4,6 +4,8 @@ import FormCard from "../src/Components/FormCard";
 import React, { useState } from "react";
 import FormButtons from "../src/Components/FormButtons";
 import Form from "../src/Components/Form";
+import SendResponse from "../src/Components/SendResponse";
+import { useNavigate } from "react-router-dom";
 
 export default function VehiculoAgregar() {
   const initialState = {
@@ -30,11 +32,17 @@ export default function VehiculoAgregar() {
     CantidadAuxilios: "",
   });
 
+  const [showResponse, setShowResponse] = useState(false);
+  const handleSuccess = () => {
+    setShowResponse(true);
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  const navigate = useNavigate();
   return (
     <>
       <FormCard
@@ -60,6 +68,7 @@ export default function VehiculoAgregar() {
           name="vehiculoForm"
           method="POST"
           action="http://localhost:5097/api/vehiculos"
+          onSuccess={handleSuccess}
         >
           <Row
             className="mb-1"
@@ -221,6 +230,19 @@ export default function VehiculoAgregar() {
 
           <FormButtons setFormData={setFormData} initialState={initialState} />
         </Form>
+        <SendResponse
+          show={showResponse}
+          type="new"
+          message={"Vehículo registrado con éxito"}
+          onAccept={() => {
+            setShowResponse(false);
+            navigate("/");
+          }}
+          onAcceptAndContinue={() => {
+            setShowResponse(false);
+            setFormData(initialState);
+          }}
+        />
       </FormCard>
     </>
   );
