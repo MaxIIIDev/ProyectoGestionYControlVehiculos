@@ -65,7 +65,8 @@ export default function VehiculoAgregar() {
             className="mb-1"
             style={{
               border: "1px solid white ",
-              margin: "20px",
+              marginLeft: "20px",
+              marginRight: "20px",
               padding: "10px",
               borderRadius: "10px",
             }}
