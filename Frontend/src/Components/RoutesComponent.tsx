@@ -29,8 +29,8 @@ export default function RoutesComponent() {
         <Route path="/ControlKilometraje" element={<VehiculosKilometros />} />
         <Route path="/KilometrosListar" element={<KilometrosListar />} />
         <Route path="/Mantenimiento" element={<VehiculosMantenimiento />} />
-        <Route path="/VehiculosListar" element={<VehiculosListar />} />
-        <Route path="/VehiculosAgregar" element={<VehiculosAgregar />} />
+        <Route path="/Vehiculos/Listar" element={<VehiculosListar />} />
+        <Route path="/Vehiculos/Nuevo" element={<VehiculosAgregar />} />
         <Route path="/Matafuegos" element={<Matafuegos />} />
         <Route path="/Neumaticos" element={<Neumaticos />} />
       </Routes>

@@ -1,27 +1,32 @@
+import { Form } from "react-bootstrap";
 import "./css/FormInput.css";
 
 interface FormInputProps {
-  placeholder: string;
-  type: string;
-  name: string;
-  id: string;
+  label : string
+  placeholder ?: string
+  type : string
+  name : string
+  value : string | number
+  onChange : (e : React.ChangeEvent<HTMLInputElement>) => void
+  className ?: string
+  style ?: React.CSSProperties
+  required: boolean
 }
 
-export default function FormInput({
-  placeholder,
-  type,
-  name,
-  id,
-}: FormInputProps) {
+export default function FormInput({ label, placeholder, type, name, value, onChange,className , required , style   } : FormInputProps) {
   return (
-    <div className="p-2 mb-2">
-      <input
+    <Form.Group className="mb-3" controlId={name}>
+      <Form.Label>{label}</Form.Label>
+      <Form.Control
+        className={`form-input ${className}`}
         type={type}
-        className="form-input"
-        name={name}
-        id={id}
         placeholder={placeholder}
+        name={name}
+        value={value}
+        onChange={onChange}
+        required={required}
+        style={style}
       />
-    </div>
+    </Form.Group>
   );
 }
