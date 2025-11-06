@@ -29,7 +29,7 @@ export default function FormInput({ label, placeholder, type, name, value, onCha
         style={style}
         isInvalid={!!error}
       />
-      <Form.Control.Feedback type="invalid">
+      <Form.Control.Feedback type="invalid"  className=" mx-2 px-1 fs-6 text-start">
         {error}
       </Form.Control.Feedback>
     </Form.Group>

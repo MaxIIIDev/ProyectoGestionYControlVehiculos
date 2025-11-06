@@ -1,17 +1,21 @@
 import NavButton from "./NavButton";
 import "./css/FormButtons.css";
 
-interface FormButtonsProps {
-  setFormData: (data: any) => void;
-  initialState: any;
+interface FormButtonsProps<T> {
+  setFormData: React.Dispatch<React.SetStateAction<T>>;
+  initialState: T;
+  formClear: () => void;
 }
 
-export default function FormButtons({
+export default function FormButtons<T>({
   setFormData,
   initialState,
-}: FormButtonsProps) {
+  formClear
+
+}: FormButtonsProps<T>) {
   const formReset = () => {
     setFormData(initialState);
+    formClear();
   };
 
   return (
@@ -21,7 +25,7 @@ export default function FormButtons({
         text=" Volver"
       ></NavButton>
 
-      <button type="reset" className="btn-cancel" onClick={formReset}>
+      <button type="reset" className="btn-cancel" onClick={formReset} >
         <i className="bi bi-eraser-fill"></i> Limpiar
       </button>
       <button type="submit" className="btn-submit">

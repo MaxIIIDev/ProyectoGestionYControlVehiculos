@@ -56,6 +56,9 @@ export default function VehiculoAgregar() {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }
+  const formCleanTextErrors = () => {
+    setErrors({});
+  };
   const handleSuccess = () => {
     Swal.fire({
       title: 'Vehículo registrado con éxito',
@@ -71,46 +74,46 @@ export default function VehiculoAgregar() {
       }
     })
   };
-  const handleError = (errorMessage: string) => {
+  const handleError = (errorMessage: unknown) => {
     Swal.fire({
       title: 'Error al registrar el vehículo',
-      text: errorMessage,
+      text: errorMessage instanceof Error ? errorMessage.message : String(errorMessage),
       icon: 'error',
       confirmButtonText: 'Aceptar'
     })
   }
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!ValidateForm()) {
-      handleError("Por favor, corrige los errores en el formulario.");
-      return;
-    }
-    try {
-      const response = await fetch("http://localhost:5097/api/vehiculos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData), // Enviamos los datos del estado
-      });
+  // const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   if (!ValidateForm()) {
+  //     handleError("Por favor, corrige los errores en el formulario.");
+  //     return;
+  //   }
+  //   try { // Se puede refactorizar para usar un servicio comun
+  //     const response = await fetch("http://localhost:5097/api/vehiculos", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(formData), // Enviamos los datos del estado
+  //     });
 
-      if (response.ok) {
-        handleSuccess(); 
-      } else {
-        const errorData = await response.json();
-        let message = "Error en la respuesta del servidor";
-        if (errorData.errors) {
-          const firstErrorKey = Object.keys(errorData.errors)[0];
-          message = errorData.errors[firstErrorKey][0];
-        } else if (errorData.title) {
-          message = errorData.title;
-        } else if( errorData.message){
-          message = errorData.message;
-        }
-        handleError(message);
-      }
-    } catch (error) {
-      handleError(error instanceof Error ? error.message : "No se pudo conectar al servidor.");
-    }
-  }
+  //     if (response.ok) {
+  //       handleSuccess(); 
+  //     } else {
+  //       const errorData = await response.json();
+  //       let message = "Error en la respuesta del servidor";
+  //       if (errorData.errors) {
+  //         const firstErrorKey = Object.keys(errorData.errors)[0];
+  //         message = errorData.errors[firstErrorKey][0];
+  //       } else if (errorData.title) {
+  //         message = errorData.title;
+  //       } else if( errorData.message){
+  //         message = errorData.message;
+  //       }
+  //       handleError(message);
+  //     }
+  //   } catch (error) {
+  //     handleError(error instanceof Error ? error.message : "No se pudo conectar al servidor.");
+  //   }
+  // }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -144,9 +147,9 @@ export default function VehiculoAgregar() {
           name="vehiculoForm"
           method="POST"
           action="http://localhost:5097/api/vehiculos"
-          onSubmit={onSubmit}
-          //onSuccess={handleSuccess}
-          //onError={handleError}
+          validateForm={ValidateForm}
+          onSuccess={handleSuccess}
+          onError={handleError}
         >
           <Row
             className="mb-1"
@@ -315,7 +318,7 @@ export default function VehiculoAgregar() {
             </Col>
           </Row>
 
-          <FormButtons setFormData={setFormData} initialState={initialState} />
+          <FormButtons setFormData={setFormData} initialState={initialState} formClear={formCleanTextErrors} />
         </Form>
         
       </FormCard>
