@@ -7,11 +7,11 @@ interface FormProps {
   action: string;
   target?: string;
   onSuccess?: () => void;
-  onError?: (error: any) => void;
+  onError?: (error: unknown) => void;
 }
 
 const handleSubmit =
-  (onSuccess?: () => void, onError?: (error: any) => void) =>
+  (onSuccess?: () => void, onError?: (error: unknown) => void) =>
   (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     fetch(e.currentTarget.action, {
@@ -20,7 +20,25 @@ const handleSubmit =
       body: JSON.stringify(Object.fromEntries(new FormData(e.currentTarget))),
     })
       .then((response) => {
-        if (!response.ok) throw new Error("Error en la respuesta del servidor");
+        if (!response.ok) {
+          return response.json().then(errorBody=> {
+            let errorMessage = "Error en la respuesta del servidor";
+            if(errorBody.errors){
+              const errorKeys = Object.keys(errorBody.errors);
+              if(errorKeys.length > 0){
+                const firstErrorMessage = errorBody.errors[errorKeys[0]];
+                if(firstErrorMessage.length > 0){
+                  errorMessage = firstErrorMessage[0];
+                }
+              }
+            }else if(errorBody.title){
+              errorMessage = errorBody.title;
+            } else if(errorBody.message){
+              errorMessage = errorBody.message;
+            }
+            throw new Error(errorMessage);
+          });
+        }
         return response.json();
       })
       .then((data) => {

@@ -4,8 +4,8 @@ import FormCard from "../src/Components/FormCard";
 import React, { useState } from "react";
 import FormButtons from "../src/Components/FormButtons";
 import Form from "../src/Components/Form";
-import SendResponse from "../src/Components/SendResponse";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function VehiculoAgregar() {
   const initialState = {
@@ -32,16 +32,37 @@ export default function VehiculoAgregar() {
     CantidadAuxilios: "",
   });
 
-  const [showResponse, setShowResponse] = useState(false);
   const handleSuccess = () => {
-    setShowResponse(true);
+    Swal.fire({
+      title: 'Vehículo registrado con éxito',
+      icon: 'success',
+      showCancelButton: true,
+      confirmButtonText: 'Aceptar y continuar',
+      cancelButtonText: 'Aceptar y volver al inicio'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setFormData(initialState);
+      } else {
+        navigate("/");
+      }
+    })
   };
+  const handleError = (error:unknown) => {
+    const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
+    Swal.fire({
+      title: 'Error al registrar el vehículo',
+      text: errorMessage,
+      icon: 'error',
+      confirmButtonText: 'Aceptar'
+    })
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  
   const navigate = useNavigate();
   return (
     <>
@@ -69,6 +90,7 @@ export default function VehiculoAgregar() {
           method="POST"
           action="http://localhost:5097/api/vehiculos"
           onSuccess={handleSuccess}
+          onError={handleError}
         >
           <Row
             className="mb-1"
@@ -230,19 +252,7 @@ export default function VehiculoAgregar() {
 
           <FormButtons setFormData={setFormData} initialState={initialState} />
         </Form>
-        <SendResponse
-          show={showResponse}
-          type="new"
-          message={"Vehículo registrado con éxito"}
-          onAccept={() => {
-            setShowResponse(false);
-            navigate("/");
-          }}
-          onAcceptAndContinue={() => {
-            setShowResponse(false);
-            setFormData(initialState);
-          }}
-        />
+        
       </FormCard>
     </>
   );
