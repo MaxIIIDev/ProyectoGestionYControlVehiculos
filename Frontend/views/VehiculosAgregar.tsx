@@ -20,18 +20,42 @@ export default function VehiculoAgregar() {
     CantidadAuxilios: "",
   };
 
-  const [formData, setFormData] = useState({
-    Marca: "",
-    Modelo: "",
-    Anio: "",
-    Patente: "",
-    Color: "",
-    NumeroChasis: "",
-    NumeroMotor: "",
-    CantidadNeumaticos: "",
-    CantidadAuxilios: "",
-  });
-
+  const [formData, setFormData] = useState(initialState);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const ValidateForm = (): boolean => {
+    const newErrors: { [key: string]: string } = {};
+    if(formData.Marca.trim().length < 3 ||  formData.Marca.trim().length > 50){
+      newErrors.Marca = "La marca debe tener entre 3 y 50 caracteres";
+    }
+    
+    if(!formData.Modelo.trim() || formData.Modelo.trim().length < 3 || formData.Modelo.trim().length > 50){
+      newErrors.Modelo = "El modelo es requerido y debe tener entre 3 y 50 caracteres";
+    }
+    const currentYear = new Date().getFullYear();
+    if(!formData.Anio || isNaN(Number(formData.Anio)) || Number(formData.Anio) < 1900 || Number(formData.Anio) > currentYear){
+      newErrors.Anio = `El año es requerido y debe estar entre 1900 y ${currentYear}`;
+    }
+    if(!formData.Patente.trim() || formData.Patente.trim().length < 3 || formData.Patente.trim().length > 20){
+      newErrors.Patente = "La patente es requerida y debe tener entre 3 y 20 caracteres";
+    }
+    if(!formData.Color.trim() || formData.Color.trim().length < 3 || formData.Color.trim().length > 50){
+      newErrors.Color = "El color es requerido y debe tener entre 3 y 50 caracteres";
+    }
+    if(!formData.CantidadNeumaticos || isNaN(Number(formData.CantidadNeumaticos)) || Number(formData.CantidadNeumaticos) < 0 || Number(formData.CantidadNeumaticos) > 20){
+      newErrors.CantidadNeumaticos = "La cantidad de neumáticos es requerida y debe estar entre 0 y 20";
+    }
+    if(!formData.CantidadAuxilios || isNaN(Number(formData.CantidadAuxilios)) || Number(formData.CantidadAuxilios) < 0 || Number(formData.CantidadAuxilios) > 20){
+      newErrors.CantidadAuxilios = "La cantidad de auxilios es requerida y debe estar entre 0 y 20";
+    }
+    if(!formData.NumeroChasis.trim() || formData.NumeroChasis.trim().length < 3 || formData.NumeroChasis.trim().length > 50){
+      newErrors.NumeroChasis = "El número de chasis es requerido y debe tener entre 3 y 50 caracteres";
+    }
+    if(!formData.NumeroMotor.trim() || formData.NumeroMotor.trim().length < 3 || formData.NumeroMotor.trim().length > 50){
+      newErrors.NumeroMotor = "El número de motor es requerido y debe tener entre 3 y 50 caracteres";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }
   const handleSuccess = () => {
     Swal.fire({
       title: 'Vehículo registrado con éxito',
@@ -47,14 +71,45 @@ export default function VehiculoAgregar() {
       }
     })
   };
-  const handleError = (error:unknown) => {
-    const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
+  const handleError = (errorMessage: string) => {
     Swal.fire({
       title: 'Error al registrar el vehículo',
       text: errorMessage,
       icon: 'error',
       confirmButtonText: 'Aceptar'
     })
+  }
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!ValidateForm()) {
+      handleError("Por favor, corrige los errores en el formulario.");
+      return;
+    }
+    try {
+      const response = await fetch("http://localhost:5097/api/vehiculos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData), // Enviamos los datos del estado
+      });
+
+      if (response.ok) {
+        handleSuccess(); 
+      } else {
+        const errorData = await response.json();
+        let message = "Error en la respuesta del servidor";
+        if (errorData.errors) {
+          const firstErrorKey = Object.keys(errorData.errors)[0];
+          message = errorData.errors[firstErrorKey][0];
+        } else if (errorData.title) {
+          message = errorData.title;
+        } else if( errorData.message){
+          message = errorData.message;
+        }
+        handleError(message);
+      }
+    } catch (error) {
+      handleError(error instanceof Error ? error.message : "No se pudo conectar al servidor.");
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,8 +144,9 @@ export default function VehiculoAgregar() {
           name="vehiculoForm"
           method="POST"
           action="http://localhost:5097/api/vehiculos"
-          onSuccess={handleSuccess}
-          onError={handleError}
+          onSubmit={onSubmit}
+          //onSuccess={handleSuccess}
+          //onError={handleError}
         >
           <Row
             className="mb-1"
@@ -120,6 +176,7 @@ export default function VehiculoAgregar() {
                 value={formData.Marca}
                 onChange={handleChange}
                 required={true}
+                error={errors.Marca}
               />
             </Col>
             <Col md="3">
@@ -131,6 +188,7 @@ export default function VehiculoAgregar() {
                 value={formData.Modelo}
                 onChange={handleChange}
                 required={true}
+                error={errors.Modelo}
               />
             </Col>
             <Col md="1">
@@ -142,6 +200,7 @@ export default function VehiculoAgregar() {
                 value={formData.Anio}
                 onChange={handleChange}
                 required={true}
+                error={errors.Anio}
               />
             </Col>
             <Col md="3">
@@ -153,6 +212,7 @@ export default function VehiculoAgregar() {
                 value={formData.Patente}
                 onChange={handleChange}
                 required={true}
+                error={errors.Patente}
               />
             </Col>
             <Col md="2">
@@ -164,6 +224,7 @@ export default function VehiculoAgregar() {
                 value={formData.Color}
                 onChange={handleChange}
                 required={true}
+                error={errors.Color}
               />
             </Col>
           </Row>
@@ -194,6 +255,7 @@ export default function VehiculoAgregar() {
                 value={formData.NumeroChasis}
                 onChange={handleChange}
                 required={true}
+                error={errors.NumeroChasis}
               />
             </Col>
             <Col>
@@ -205,6 +267,7 @@ export default function VehiculoAgregar() {
                 value={formData.NumeroMotor}
                 onChange={handleChange}
                 required={true}
+                error={errors.NumeroMotor}
               />
             </Col>
           </Row>
@@ -235,6 +298,7 @@ export default function VehiculoAgregar() {
                 value={formData.CantidadNeumaticos}
                 onChange={handleChange}
                 required={true}
+                error={errors.CantidadNeumaticos}
               />
             </Col>
             <Col md="6">
@@ -246,6 +310,7 @@ export default function VehiculoAgregar() {
                 value={formData.CantidadAuxilios}
                 onChange={handleChange}
                 required={true}
+                error={errors.CantidadAuxilios}
               />
             </Col>
           </Row>
