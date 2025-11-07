@@ -6,6 +6,7 @@ import FormButtons from "../src/Components/FormButtons";
 import Form from "../src/Components/Form";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import { endpoints } from "../src/Components/Routes/Enrouters";
 
 export default function VehiculoAgregar() {
   const initialState = {
@@ -127,38 +128,6 @@ export default function VehiculoAgregar() {
       confirmButtonText: "Aceptar",
     });
   };
-  // const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   if (!ValidateForm()) {
-  //     handleError("Por favor, corrige los errores en el formulario.");
-  //     return;
-  //   }
-  //   try { // Se puede refactorizar para usar un servicio comun
-  //     const response = await fetch("http://localhost:5097/api/vehiculos", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(formData), // Enviamos los datos del estado
-  //     });
-
-  //     if (response.ok) {
-  //       handleSuccess();
-  //     } else {
-  //       const errorData = await response.json();
-  //       let message = "Error en la respuesta del servidor";
-  //       if (errorData.errors) {
-  //         const firstErrorKey = Object.keys(errorData.errors)[0];
-  //         message = errorData.errors[firstErrorKey][0];
-  //       } else if (errorData.title) {
-  //         message = errorData.title;
-  //       } else if( errorData.message){
-  //         message = errorData.message;
-  //       }
-  //       handleError(message);
-  //     }
-  //   } catch (error) {
-  //     handleError(error instanceof Error ? error.message : "No se pudo conectar al servidor.");
-  //   }
-  // }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -185,14 +154,16 @@ export default function VehiculoAgregar() {
           borderRadius: "10px",
           boxShadow:
             "inset 0 0 16px 4px rgba(255, 255, 255, 0.86), inset 0 0 32px 0 rgba(0,0,0,0.15)",
-        }}>
+        }}
+      >
         <Form
           name="vehiculoForm"
-          method="POST"
-          action="http://localhost:5097/api/vehiculos"
+          method={endpoints.vehiculos.nuevo.method}
+          action={endpoints.vehiculos.nuevo.action}
           validateForm={ValidateForm}
           onSuccess={handleSuccess}
-          onError={handleError}>
+          onError={handleError}
+        >
           <Row
             className="mb-1"
             style={{
@@ -201,13 +172,15 @@ export default function VehiculoAgregar() {
               marginRight: "20px",
               padding: "10px",
               borderRadius: "10px",
-            }}>
+            }}
+          >
             <h3
               style={{
                 borderBottom: "1px dashed white",
                 marginBottom: "3px",
                 padding: "10px",
-              }}>
+              }}
+            >
               Información del Vehículo
             </h3>
             <Col md="3">
@@ -278,13 +251,15 @@ export default function VehiculoAgregar() {
               border: "1px solid white ",
               padding: "10px",
               borderRadius: "10px",
-            }}>
+            }}
+          >
             <h3
               style={{
                 borderBottom: "1px dashed white",
                 marginBottom: "3px",
                 padding: "10px",
-              }}>
+              }}
+            >
               Informacion Tecnica
             </h3>
             <Col>
@@ -319,13 +294,15 @@ export default function VehiculoAgregar() {
               border: "1px solid white ",
               padding: "10px",
               borderRadius: "10px",
-            }}>
+            }}
+          >
             <h3
               style={{
                 borderBottom: "1px dashed white",
                 marginBottom: "3px",
                 padding: "10px",
-              }}>
+              }}
+            >
               Información de Neumáticos
             </h3>
             <Col md="6">

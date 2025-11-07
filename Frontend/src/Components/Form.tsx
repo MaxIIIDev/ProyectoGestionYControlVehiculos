@@ -8,50 +8,25 @@ interface FormProps {
   onSuccess?: () => void;
   onError?: (error: unknown) => void;
   validateForm: () => boolean;
-  //onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
-// const handleSubmit =
-//   (onSuccess?: () => void, onError?: (error: unknown) => void) =>
-//   (e: React.FormEvent<HTMLFormElement>) => {
-//     e.preventDefault();
-//     fetch(e.currentTarget.action, {
-//       method: e.currentTarget.method,
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify(Object.fromEntries(new FormData(e.currentTarget))),
-//     })
-//       .then((response) => {
-//         if (!response.ok) {
-//           return response.json().then(errorBody=> {
-//             let errorMessage = "Error en la respuesta del servidor";
-//             if(errorBody.errors){
-//               const errorKeys = Object.keys(errorBody.errors);
-//               if(errorKeys.length > 0){
-//                 const firstErrorMessage = errorBody.errors[errorKeys[0]];
-//                 if(firstErrorMessage.length > 0){
-//                   errorMessage = firstErrorMessage[0];
-//                 }
-//               }
-//             }else if(errorBody.title){
-//               errorMessage = errorBody.title;
-//             } else if(errorBody.message){
-//               errorMessage = errorBody.message;
-//             }
-//             throw new Error(errorMessage);
-//           });
-//         }
-//         return response.json();
-//       })
-//       .then((data) => {
-//         console.log("Success:", data);
-//         if (onSuccess) onSuccess();
-//       })
-//       .catch((error) => {
-//         console.error("Error:", error);
-//         if (onError) onError(error);
-//       });
-//   };
-const onSubmit = (onSuccess:() => void , onError: (error: unknown) => void, validateForm: () => boolean) => {
+/** 
+ * action y method deben coincidir con los definidos en Enrouters.tsx
+ * Ejemplo:
+ * <Form
+      name="vehiculoForm"
+      method={Enrouters.VehiculosAgregar.method}
+      action={Enrouters.VehiculosAgregar.action}
+      ... resto de las props que sean necesarias
+   >
+   </Form>
+ */
+
+const onSubmit = (
+  onSuccess: () => void,
+  onError: (error: unknown) => void,
+  validateForm: () => boolean
+) => {
   return (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateForm()) {
@@ -65,19 +40,19 @@ const onSubmit = (onSuccess:() => void , onError: (error: unknown) => void, vali
     })
       .then((response) => {
         if (!response.ok) {
-          return response.json().then(errorBody=> {
+          return response.json().then((errorBody) => {
             let errorMessage = "Error en la respuesta del servidor";
-            if(errorBody.errors){
+            if (errorBody.errors) {
               const errorKeys = Object.keys(errorBody.errors);
-              if(errorKeys.length > 0){
+              if (errorKeys.length > 0) {
                 const firstErrorMessage = errorBody.errors[errorKeys[0]];
-                if(firstErrorMessage.length > 0){
+                if (firstErrorMessage.length > 0) {
                   errorMessage = firstErrorMessage[0];
                 }
               }
-            }else if(errorBody.title){
+            } else if (errorBody.title) {
               errorMessage = errorBody.title;
-            } else if(errorBody.message){
+            } else if (errorBody.message) {
               errorMessage = errorBody.message;
             }
             throw new Error(errorMessage);
@@ -103,16 +78,16 @@ export default function Form({
   target,
   onSuccess,
   onError,
-  validateForm
+  validateForm,
 }: FormProps) {
   return (
-    <form 
+    <form
       name={name}
       method={method}
       action={action}
       target={target}
       onSubmit={onSubmit(onSuccess!, onError!, validateForm)}
-      >
+    >
       {children}
     </form>
   );
