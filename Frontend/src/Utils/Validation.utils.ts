@@ -1,19 +1,19 @@
-import { ZodError } from "zod";
+import * as zod from "zod";
 
-// 1. Define un tipo reutilizable para tu objeto de errores
 export type FormErrors = { [key: string]: string };
 
-export function formatZodErrors(error: ZodError): FormErrors {
-  const zodErrors: Record<string, string[] | undefined> =
-    error.flatten().fieldErrors;
-
+export function formatZodErrors(error: zod.ZodError): FormErrors {
+  const errord = error.issues;
   const newErrors: FormErrors = {};
 
-  Object.entries(zodErrors).forEach(([key, errorMessages]) => {
-    if (errorMessages) {
-      newErrors[key] = errorMessages[0];
+  if (errord && errord.length > 0) {
+    for (const e of errord) {
+      if (e.path && e.path.length > 0) {
+        const key: string = e.path[0].toString();
+        newErrors[key] = e.message;
+      }
     }
-  });
+  }
 
   return newErrors;
 }
