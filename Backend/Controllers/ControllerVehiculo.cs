@@ -2,9 +2,9 @@ using AutoMapper;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
+
 [Route("api/vehiculos")]
 [ApiController]
-
 public class ControllerVehiculo : ControllerBase
 {
     private readonly ServiceVehiculo _serviceVehiculo;
@@ -35,17 +35,33 @@ public class ControllerVehiculo : ControllerBase
         }
         return Ok(vehiculo);
     }
+
     // POST NUEVO VEHICULO
     [HttpPost]
     public async Task<IActionResult> CreateVehiculo([FromBody] CreateVehiculoDto vehiculoDto)
     {
         Vehiculo vehiculo = mapper.Map<Vehiculo>(vehiculoDto);
-        var newVehiculo = await _serviceVehiculo.AddAsync(vehiculo);
-        return CreatedAtAction(nameof(GetVehiculoById), new { id = newVehiculo.IdVehiculo }, newVehiculo);
+        try
+        {
+            var newVehiculo = await _serviceVehiculo.AddAsync(vehiculo);
+            return CreatedAtAction(
+                nameof(GetVehiculoById),
+                new { id = newVehiculo.IdVehiculo },
+                newVehiculo
+            );
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
     }
+
     // PUT ACTUALIZAR VEHICULO
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateVehiculo(int id, [FromBody] UpdateVehiculoDto vehiculoDto)
+    public async Task<IActionResult> UpdateVehiculo(
+        int id,
+        [FromBody] UpdateVehiculoDto vehiculoDto
+    )
     {
         if (id <= 0)
         {
@@ -63,7 +79,12 @@ public class ControllerVehiculo : ControllerBase
         {
             return NotFound(new { Message = ex.Message });
         }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
     }
+
     // DELETE VEHICULO
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteVehiculo(int id)
@@ -75,6 +96,7 @@ public class ControllerVehiculo : ControllerBase
         }
         return NoContent();
     }
+
     // BAJA LOGICA VEHICULO
     [HttpPatch("baja/{id}")]
     public async Task<IActionResult> SoftDeleteVehiculo(int id)
@@ -86,6 +108,7 @@ public class ControllerVehiculo : ControllerBase
         }
         return NoContent();
     }
+
     // ALTA LOGICA VEHICULO
     [HttpPatch("alta/{id}")]
     public async Task<IActionResult> RestoreVehiculo(int id)

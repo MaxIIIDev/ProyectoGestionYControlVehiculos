@@ -1,6 +1,6 @@
-
 using AutoMapper;
 using Backend.Models;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Services
@@ -8,12 +8,18 @@ namespace Backend.Services
     public class ServiceRegistroKilometraje
     {
         private readonly AppDbContext _context;
+        private readonly ServiceVehiculo _serviceVehiculo;
         private readonly IMapper mapper;
 
-        public ServiceRegistroKilometraje(AppDbContext context, IMapper mapper)
+        public ServiceRegistroKilometraje(
+            AppDbContext context,
+            IMapper mapper,
+            ServiceVehiculo serviceVehiculo
+        )
         {
             _context = context;
             this.mapper = mapper;
+            _serviceVehiculo = serviceVehiculo;
         }
 
         // GET TODO REGISTROS KILOMETRAJE
@@ -27,22 +33,38 @@ namespace Backend.Services
         {
             return await _context.RegistrosKilometraje.FindAsync(id);
         }
+
         // NUEVO REGISTRO KILOMETRAJE
         public async Task<RegistroKilometraje> AddAsync(RegistroKilometraje registroKilometraje)
         {
+            if (_serviceVehiculo.GetByIdAsync(registroKilometraje.IdVehiculo) == null)
+                throw new KeyNotFoundException(
+                    "Vehiculo con id " + registroKilometraje.IdVehiculo + " no encontrado"
+                );
             _context.RegistrosKilometraje.Add(registroKilometraje);
             await _context.SaveChangesAsync();
             return registroKilometraje;
         }
+
         // UPDATE REGISTRO KILOMETRAJE
         public async Task UpdateAsync(int id, UpdateRegistroKilometrajeDto registroKilometrajeDto)
         {
             RegistroKilometraje? registroFinded = await _context.RegistrosKilometraje.FindAsync(id);
             if (registroFinded == null)
-                throw new KeyNotFoundException("Registro Kilometraje con id " + id + " no encontrado");
+                throw new KeyNotFoundException(
+                    "Registro Kilometraje con id " + id + " no encontrado"
+                );
+            if (
+                registroFinded.IdVehiculo != registroKilometrajeDto.IdVehiculo
+                && _serviceVehiculo.GetByIdAsync(registroKilometrajeDto.IdVehiculo) == null
+            )
+                throw new KeyNotFoundException(
+                    "Vehiculo con id " + registroKilometrajeDto.IdVehiculo + " no encontrado"
+                );
             mapper.Map(registroKilometrajeDto, registroFinded);
             await _context.SaveChangesAsync();
         }
+
         // ELIMINAR REGISTRO KILOMETRAJE
         public async Task<bool> DeleteAsync(int id)
         {
@@ -65,6 +87,7 @@ namespace Backend.Services
             _context.RegistrosKilometraje.Update(registroKilometraje);
             return await _context.SaveChangesAsync() > 0;
         }
+
         // ALTA LOGICA REGISTRO KILOMETRAJE
         public async Task<bool> RestoreAsync(int id)
         {

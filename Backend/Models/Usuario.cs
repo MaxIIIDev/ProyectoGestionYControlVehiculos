@@ -3,14 +3,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models
 {
-    public class Usuario(string gmail, string contrasena, string? avatarUrl, int idRol, int idPersona, bool estado)
+    public class Usuario(
+        string gmail,
+        string contrasena,
+        string? avatarUrl,
+        int idRol,
+        int idPersona,
+        bool estado
+    )
     {
         [Key]
         public int IdUsuario { get; set; }
+
         [Required]
         [EmailAddress]
-
         public string Gmail { get; set; } = gmail;
+
         [Required]
         [MinLength(8)]
         public string Contrasena { get; set; } = contrasena;
@@ -29,8 +37,7 @@ namespace Backend.Models
         public List<MensajeChat>? MensajeChat { get; set; }
         public bool Estado { get; set; } = estado;
 
-        public Usuario() : this(default!, default!, default, default, default, true)
-        {
-        }
+        public Usuario()
+            : this(default!, default!, default, default, default, true) { }
     }
 }

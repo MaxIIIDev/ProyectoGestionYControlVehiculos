@@ -3,12 +3,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models
 {
-    public class RegistroKilometraje(int idVehiculo, DateTime fechaRegistro, int kilometraje, bool estado)
+    public class RegistroKilometraje(
+        int idVehiculo,
+        DateTime fechaRegistro,
+        int kilometraje,
+        bool estado
+    )
     {
         [Key]
         public int IdRegistroKilometraje { get; set; }
+
         [Required]
         public int Kilometraje { get; set; } = kilometraje;
+
         [Required]
         public DateTime FechaRegistro { get; set; } = fechaRegistro;
         public bool Estado { get; set; } = estado;
@@ -16,10 +23,12 @@ namespace Backend.Models
         [ForeignKey("Vehiculo")]
         // Foreign key
         public int IdVehiculo { get; set; } = idVehiculo;
+
         // Navigation property
         public Vehiculo? Vehiculo { get; set; } = null!;
 
         // Constructor vacío
-        public RegistroKilometraje() : this(default, default, default, true) { }
+        public RegistroKilometraje()
+            : this(default, default, default, true) { }
     }
 }

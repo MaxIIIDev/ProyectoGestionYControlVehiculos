@@ -26,23 +26,50 @@ namespace Backend.Services
         {
             return await _context.Usuarios.FindAsync(id);
         }
+
+        public async Task<Usuario?> getUsuarioByIdPersonaAsync(int id)
+        {
+            return await _context.Usuarios.FirstOrDefaultAsync(u => u.IdPersona == id);
+        }
+
+        public async Task<Usuario?> getUsuarioByEmailAsync(string gmail)
+        {
+            return await _context.Usuarios.FirstOrDefaultAsync(u => u.Gmail == gmail);
+        }
+
         // NUEVO USUARIO
         public async Task<Usuario> AddAsync(Usuario usuario)
         {
+            if (await this.getUsuarioByEmailAsync(usuario.Gmail) is not null)
+                throw new InvalidOperationException(
+                    "El usuario con gmail " + usuario.Gmail + " ya existe"
+                );
+            if (await this.getUsuarioByIdPersonaAsync(usuario.IdPersona) is not null)
+            {
+                throw new InvalidOperationException(
+                    "La persona con id " + usuario.IdPersona + " ya tiene un usuario"
+                );
+            }
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
             return usuario;
         }
+
         // UPDATE USUARIO
         public async Task UpdateAsync(int id, UpdateUsuarioDto usuarioDto)
         {
             Usuario? usuarioFinded = await _context.Usuarios.FindAsync(id);
             if (usuarioFinded == null)
                 throw new KeyNotFoundException("Usuario con id " + id + " no encontrado");
+            if (usuarioFinded.Gmail != usuarioDto.Gmail && usuarioFinded.IdUsuario != id)
+                throw new InvalidOperationException(
+                    "El usuario con gmail " + usuarioDto.Gmail + " ya existe"
+                );
             mapper.Map(usuarioDto, usuarioFinded);
             _context.Usuarios.Update(usuarioFinded);
             await _context.SaveChangesAsync();
         }
+
         // ELIMINAR USUARIO
         public async Task<bool> DeleteAsync(int id)
         {
@@ -53,6 +80,7 @@ namespace Backend.Services
             _context.Usuarios.Remove(usuario);
             return await _context.SaveChangesAsync() > 0;
         }
+
         // BAJA LOGICA USUARIO
         public async Task<bool> SoftDeleteAsync(int id)
         {
@@ -64,6 +92,7 @@ namespace Backend.Services
             _context.Usuarios.Update(usuario);
             return await _context.SaveChangesAsync() > 0;
         }
+
         //ALTA LOGICA USUARIO
         public async Task<bool> RestoreAsync(int id)
         {

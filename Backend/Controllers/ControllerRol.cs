@@ -2,9 +2,9 @@ using AutoMapper;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
+
 [Route("api/rol")]
 [ApiController]
-
 public class ControllerRol : ControllerBase
 {
     private readonly ServiceRol _serviceRol;
@@ -35,6 +35,7 @@ public class ControllerRol : ControllerBase
         }
         return Ok(rol);
     }
+
     // POST NUEVO ROL
     [HttpPost]
     public async Task<IActionResult> CreateRol([FromBody] CreateRolDto rolDto)
@@ -43,6 +44,7 @@ public class ControllerRol : ControllerBase
         var newRol = await _serviceRol.AddAsync(rol);
         return CreatedAtAction(nameof(GetRolById), new { id = newRol.IdRol }, newRol);
     }
+
     // PUT ACTUALIZAR ROL
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateRol(int id, [FromBody] UpdateRolDto rolDto)
@@ -64,6 +66,7 @@ public class ControllerRol : ControllerBase
             return NotFound(new { message = ex.Message });
         }
     }
+
     // DELETE ROL
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteRol(int id)
@@ -75,6 +78,7 @@ public class ControllerRol : ControllerBase
         }
         return NoContent();
     }
+
     // BAJA LOGICA ROL
     [HttpPatch("baja/{id}")]
     public async Task<IActionResult> SoftDeleteRol(int id)
@@ -86,6 +90,7 @@ public class ControllerRol : ControllerBase
         }
         return NoContent();
     }
+
     // ALTA LOGICA ROL
     [HttpPatch("alta/{id}")]
     public async Task<IActionResult> RestoreRol(int id)

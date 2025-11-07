@@ -2,14 +2,18 @@ using AutoMapper;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
+
 [Route("api/registro-kilometraje")]
 [ApiController]
-
 public class ControllerRegistroKilometraje : ControllerBase
 {
     private readonly ServiceRegistroKilometraje _serviceRegistroKilometraje;
     private readonly IMapper mapper;
-    public ControllerRegistroKilometraje(ServiceRegistroKilometraje serviceRegistroKilometraje, IMapper mapper)
+
+    public ControllerRegistroKilometraje(
+        ServiceRegistroKilometraje serviceRegistroKilometraje,
+        IMapper mapper
+    )
     {
         _serviceRegistroKilometraje = serviceRegistroKilometraje;
         this.mapper = mapper;
@@ -22,6 +26,7 @@ public class ControllerRegistroKilometraje : ControllerBase
         var registros = await _serviceRegistroKilometraje.GetAllAsync();
         return Ok(registros);
     }
+
     // GET REGISTRO KILOMETRAJE POR ID
     [HttpGet("{id}")]
     public async Task<IActionResult> GetRegistroKilometrajeById(int id)
@@ -33,36 +38,57 @@ public class ControllerRegistroKilometraje : ControllerBase
         }
         return Ok(registro);
     }
+
     // POST NUEVO REGISTRO KILOMETRAJE
     [HttpPost]
-    public async Task<IActionResult> AddRegistroKilometraje([FromBody] CreateRegistroKilometrajeDto createDto)
+    public async Task<IActionResult> AddRegistroKilometraje(
+        [FromBody] CreateRegistroKilometrajeDto createDto
+    )
     {
         RegistroKilometraje registroKilometraje = mapper.Map<RegistroKilometraje>(createDto);
-        var newRegistro = await _serviceRegistroKilometraje.AddAsync(registroKilometraje);
-        return CreatedAtAction(nameof(GetRegistroKilometrajeById), new { id = newRegistro.IdRegistroKilometraje }, newRegistro);
+        try
+        {
+            var newRegistro = await _serviceRegistroKilometraje.AddAsync(registroKilometraje);
+            return CreatedAtAction(
+                nameof(GetRegistroKilometrajeById),
+                new { id = newRegistro.IdRegistroKilometraje },
+                newRegistro
+            );
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { mensaje = ex.Message });
+        }
     }
+
     // PUT ACTUALIZAR REGISTRO KILOMETRAJE
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateRegistroKilometraje(int id, [FromBody] UpdateRegistroKilometrajeDto updateRegistroDto)
+    public async Task<IActionResult> UpdateRegistroKilometraje(
+        int id,
+        [FromBody] UpdateRegistroKilometrajeDto updateRegistroDto
+    )
     {
         if (id <= 0)
         {
             return BadRequest("El id debe ser mayor a 0");
         }
 
-        RegistroKilometraje registroKilometraje = mapper.Map<RegistroKilometraje>(updateRegistroDto);
+        RegistroKilometraje registroKilometraje = mapper.Map<RegistroKilometraje>(
+            updateRegistroDto
+        );
         registroKilometraje.IdRegistroKilometraje = id;
 
         try
         {
             await _serviceRegistroKilometraje.UpdateAsync(id, updateRegistroDto);
             return NoContent();
-        } catch (KeyNotFoundException ex)
+        }
+        catch (KeyNotFoundException ex)
         {
             return NotFound(new { mensaje = ex.Message });
         }
-        
     }
+
     // DELETE REGISTRO KILOMETRAJE
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteRegistroKilometraje(int id)
@@ -74,6 +100,7 @@ public class ControllerRegistroKilometraje : ControllerBase
         }
         return NoContent();
     }
+
     // BAJA LOGICA REGISTRO KILOMETRAJE
     [HttpPatch("baja/{id}")]
     public async Task<IActionResult> SoftDeleteRegistroKilometraje(int id)
@@ -85,6 +112,7 @@ public class ControllerRegistroKilometraje : ControllerBase
         }
         return NoContent();
     }
+
     // ALTA LOGICA REGISTRO KILOMETRAJE
     [HttpPatch("alta/{id}")]
     public async Task<IActionResult> RestoreRegistroKilometraje(int id)

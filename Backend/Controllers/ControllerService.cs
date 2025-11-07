@@ -2,9 +2,9 @@ using AutoMapper;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
+
 [Route("api/services")]
 [ApiController]
-
 public class ControllerService : ControllerBase
 {
     private readonly ServiceService _serviceService;
@@ -35,14 +35,20 @@ public class ControllerService : ControllerBase
         }
         return Ok(service);
     }
+
     // POST NUEVO SERVICIO
     [HttpPost]
     public async Task<IActionResult> CreateService([FromBody] CreateServiceDto serviceDto)
     {
         Service service = mapper.Map<Service>(serviceDto);
         var newService = await _serviceService.AddAsync(service);
-        return CreatedAtAction(nameof(GetServiceById), new { id = newService.IdService }, newService);
+        return CreatedAtAction(
+            nameof(GetServiceById),
+            new { id = newService.IdService },
+            newService
+        );
     }
+
     // PUT ACTUALIZAR SERVICIO
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateService(int id, [FromBody] UpdateServiceDto serviceDto)
@@ -56,15 +62,15 @@ public class ControllerService : ControllerBase
 
         try
         {
-            await _serviceService.UpdateAsync(id ,serviceDto);
+            await _serviceService.UpdateAsync(id, serviceDto);
             return NoContent();
         }
         catch (KeyNotFoundException ex)
         {
             return NotFound(new { message = ex.Message });
         }
-
     }
+
     // DELETE SERVICIO
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteService(int id)
@@ -76,6 +82,7 @@ public class ControllerService : ControllerBase
         }
         return NoContent();
     }
+
     // BAJA LOGICA SERVICIO
     [HttpPatch("baja/{id}")]
     public async Task<IActionResult> SoftDeleteService(int id)
@@ -87,6 +94,7 @@ public class ControllerService : ControllerBase
         }
         return NoContent();
     }
+
     // ALTA LOGICA SERVICIO
     [HttpPatch("alta/{id}")]
     public async Task<IActionResult> RestoreService(int id)

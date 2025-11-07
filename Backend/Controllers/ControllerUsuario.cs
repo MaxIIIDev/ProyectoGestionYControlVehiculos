@@ -2,9 +2,9 @@ using AutoMapper;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
+
 [Route("api/usuarios")]
 [ApiController]
-
 public class ControllerUsuario : ControllerBase
 {
     private readonly ServiceUsuario _serviceUsuario;
@@ -35,14 +35,27 @@ public class ControllerUsuario : ControllerBase
         }
         return Ok(usuario);
     }
+
     // POST NUEVO USUARIO
     [HttpPost]
     public async Task<IActionResult> CreateUsuario([FromBody] CreateUsuarioDto usuarioDto)
     {
         Usuario usu = mapper.Map<Usuario>(usuarioDto);
-        var newUsuario = await _serviceUsuario.AddAsync(usu);
-        return CreatedAtAction(nameof(GetUsuarioById), new { id = newUsuario.IdUsuario }, newUsuario);
+        try
+        {
+            var newUsuario = await _serviceUsuario.AddAsync(usu);
+            return CreatedAtAction(
+                nameof(GetUsuarioById),
+                new { id = newUsuario.IdUsuario },
+                newUsuario
+            );
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { mensaje = ex.Message });
+        }
     }
+
     // PUT ACTUALIZAR USUARIO
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateUsuario(int id, [FromBody] UpdateUsuarioDto usuarioDto)
@@ -63,7 +76,12 @@ public class ControllerUsuario : ControllerBase
         {
             return NotFound(new { mensaje = ex.Message });
         }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { mensaje = ex.Message });
+        }
     }
+
     // DELETE USUARIO
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUsuario(int id)
@@ -75,6 +93,7 @@ public class ControllerUsuario : ControllerBase
         }
         return NoContent();
     }
+
     // BAJA LOGICA USUARIO
     [HttpPatch("baja/{id}")]
     public async Task<IActionResult> SoftDeleteUsuario(int id)
@@ -86,6 +105,7 @@ public class ControllerUsuario : ControllerBase
         }
         return NoContent();
     }
+
     // ALTA LOGICA USUARIO
     [HttpPatch("alta/{id}")]
     public async Task<IActionResult> RestoreUsuario(int id)
