@@ -50,7 +50,8 @@ namespace Backend.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var neumatico = await _context.Neumaticos.FindAsync(id);
-            if (neumatico == null) return false;
+            if (neumatico == null)
+                return false;
 
             _context.Neumaticos.Remove(neumatico);
             return await _context.SaveChangesAsync() > 0;
@@ -60,7 +61,8 @@ namespace Backend.Services
         public async Task<bool> SoftDeleteAsync(int id)
         {
             var neumatico = await _context.Neumaticos.FindAsync(id);
-            if (neumatico == null) return false;
+            if (neumatico == null)
+                return false;
             neumatico.Estado = false;
             _context.Neumaticos.Update(neumatico);
             return await _context.SaveChangesAsync() > 0;
@@ -70,7 +72,8 @@ namespace Backend.Services
         public async Task<bool> RestoreAsync(int id)
         {
             var neumatico = await _context.Neumaticos.FindAsync(id);
-            if (neumatico == null) return false;
+            if (neumatico == null)
+                return false;
             neumatico.Estado = true;
             _context.Neumaticos.Update(neumatico);
             return await _context.SaveChangesAsync() > 0;

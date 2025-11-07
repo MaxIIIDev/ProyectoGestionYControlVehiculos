@@ -24,64 +24,109 @@ export default function VehiculoAgregar() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const ValidateForm = (): boolean => {
     const newErrors: { [key: string]: string } = {};
-    if(formData.Marca.trim().length < 3 ||  formData.Marca.trim().length > 50){
+    if (formData.Marca.trim().length < 3 || formData.Marca.trim().length > 50) {
       newErrors.Marca = "La marca debe tener entre 3 y 50 caracteres";
     }
-    
-    if(!formData.Modelo.trim() || formData.Modelo.trim().length < 3 || formData.Modelo.trim().length > 50){
-      newErrors.Modelo = "El modelo es requerido y debe tener entre 3 y 50 caracteres";
+
+    if (
+      !formData.Modelo.trim() ||
+      formData.Modelo.trim().length < 3 ||
+      formData.Modelo.trim().length > 50
+    ) {
+      newErrors.Modelo =
+        "El modelo es requerido y debe tener entre 3 y 50 caracteres";
     }
     const currentYear = new Date().getFullYear();
-    if(!formData.Anio || isNaN(Number(formData.Anio)) || Number(formData.Anio) < 1900 || Number(formData.Anio) > currentYear){
+    if (
+      !formData.Anio ||
+      isNaN(Number(formData.Anio)) ||
+      Number(formData.Anio) < 1900 ||
+      Number(formData.Anio) > currentYear
+    ) {
       newErrors.Anio = `El año es requerido y debe estar entre 1900 y ${currentYear}`;
     }
-    if(!formData.Patente.trim() || formData.Patente.trim().length < 3 || formData.Patente.trim().length > 20){
-      newErrors.Patente = "La patente es requerida y debe tener entre 3 y 20 caracteres";
+    if (
+      !formData.Patente.trim() ||
+      formData.Patente.trim().length < 3 ||
+      formData.Patente.trim().length > 20
+    ) {
+      newErrors.Patente =
+        "La patente es requerida y debe tener entre 3 y 20 caracteres";
     }
-    if(!formData.Color.trim() || formData.Color.trim().length < 3 || formData.Color.trim().length > 50){
-      newErrors.Color = "El color es requerido y debe tener entre 3 y 50 caracteres";
+    if (
+      !formData.Color.trim() ||
+      formData.Color.trim().length < 3 ||
+      formData.Color.trim().length > 50
+    ) {
+      newErrors.Color =
+        "El color es requerido y debe tener entre 3 y 50 caracteres";
     }
-    if(!formData.CantidadNeumaticos || isNaN(Number(formData.CantidadNeumaticos)) || Number(formData.CantidadNeumaticos) < 0 || Number(formData.CantidadNeumaticos) > 20){
-      newErrors.CantidadNeumaticos = "La cantidad de neumáticos es requerida y debe estar entre 0 y 20";
+    if (
+      !formData.CantidadNeumaticos ||
+      isNaN(Number(formData.CantidadNeumaticos)) ||
+      Number(formData.CantidadNeumaticos) < 0 ||
+      Number(formData.CantidadNeumaticos) > 20
+    ) {
+      newErrors.CantidadNeumaticos =
+        "La cantidad de neumáticos es requerida y debe estar entre 0 y 20";
     }
-    if(!formData.CantidadAuxilios || isNaN(Number(formData.CantidadAuxilios)) || Number(formData.CantidadAuxilios) < 0 || Number(formData.CantidadAuxilios) > 20){
-      newErrors.CantidadAuxilios = "La cantidad de auxilios es requerida y debe estar entre 0 y 20";
+    if (
+      !formData.CantidadAuxilios ||
+      isNaN(Number(formData.CantidadAuxilios)) ||
+      Number(formData.CantidadAuxilios) < 0 ||
+      Number(formData.CantidadAuxilios) > 20
+    ) {
+      newErrors.CantidadAuxilios =
+        "La cantidad de auxilios es requerida y debe estar entre 0 y 20";
     }
-    if(!formData.NumeroChasis.trim() || formData.NumeroChasis.trim().length < 3 || formData.NumeroChasis.trim().length > 50){
-      newErrors.NumeroChasis = "El número de chasis es requerido y debe tener entre 3 y 50 caracteres";
+    if (
+      !formData.NumeroChasis.trim() ||
+      formData.NumeroChasis.trim().length < 3 ||
+      formData.NumeroChasis.trim().length > 50
+    ) {
+      newErrors.NumeroChasis =
+        "El número de chasis es requerido y debe tener entre 3 y 50 caracteres";
     }
-    if(!formData.NumeroMotor.trim() || formData.NumeroMotor.trim().length < 3 || formData.NumeroMotor.trim().length > 50){
-      newErrors.NumeroMotor = "El número de motor es requerido y debe tener entre 3 y 50 caracteres";
+    if (
+      !formData.NumeroMotor.trim() ||
+      formData.NumeroMotor.trim().length < 3 ||
+      formData.NumeroMotor.trim().length > 50
+    ) {
+      newErrors.NumeroMotor =
+        "El número de motor es requerido y debe tener entre 3 y 50 caracteres";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }
+  };
   const formCleanTextErrors = () => {
     setErrors({});
   };
   const handleSuccess = () => {
     Swal.fire({
-      title: 'Vehículo registrado con éxito',
-      icon: 'success',
+      title: "Vehículo registrado con éxito",
+      icon: "success",
       showCancelButton: true,
-      confirmButtonText: 'Aceptar y continuar',
-      cancelButtonText: 'Aceptar y volver al inicio'
+      confirmButtonText: "Aceptar y continuar",
+      cancelButtonText: "Aceptar y volver al inicio",
     }).then((result) => {
       if (result.isConfirmed) {
         setFormData(initialState);
       } else {
         navigate("/");
       }
-    })
+    });
   };
   const handleError = (errorMessage: unknown) => {
     Swal.fire({
-      title: 'Error al registrar el vehículo',
-      text: errorMessage instanceof Error ? errorMessage.message : String(errorMessage),
-      icon: 'error',
-      confirmButtonText: 'Aceptar'
-    })
-  }
+      title: "Error al registrar el vehículo",
+      text:
+        errorMessage instanceof Error
+          ? errorMessage.message
+          : String(errorMessage),
+      icon: "error",
+      confirmButtonText: "Aceptar",
+    });
+  };
   // const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   //   e.preventDefault();
   //   if (!ValidateForm()) {
@@ -96,7 +141,7 @@ export default function VehiculoAgregar() {
   //     });
 
   //     if (response.ok) {
-  //       handleSuccess(); 
+  //       handleSuccess();
   //     } else {
   //       const errorData = await response.json();
   //       let message = "Error en la respuesta del servidor";
@@ -120,7 +165,6 @@ export default function VehiculoAgregar() {
     setFormData({ ...formData, [name]: value });
   };
 
-  
   const navigate = useNavigate();
   return (
     <>
@@ -141,16 +185,14 @@ export default function VehiculoAgregar() {
           borderRadius: "10px",
           boxShadow:
             "inset 0 0 16px 4px rgba(255, 255, 255, 0.86), inset 0 0 32px 0 rgba(0,0,0,0.15)",
-        }}
-      >
+        }}>
         <Form
           name="vehiculoForm"
           method="POST"
           action="http://localhost:5097/api/vehiculos"
           validateForm={ValidateForm}
           onSuccess={handleSuccess}
-          onError={handleError}
-        >
+          onError={handleError}>
           <Row
             className="mb-1"
             style={{
@@ -159,15 +201,13 @@ export default function VehiculoAgregar() {
               marginRight: "20px",
               padding: "10px",
               borderRadius: "10px",
-            }}
-          >
+            }}>
             <h3
               style={{
                 borderBottom: "1px dashed white",
                 marginBottom: "3px",
                 padding: "10px",
-              }}
-            >
+              }}>
               Información del Vehículo
             </h3>
             <Col md="3">
@@ -238,15 +278,13 @@ export default function VehiculoAgregar() {
               border: "1px solid white ",
               padding: "10px",
               borderRadius: "10px",
-            }}
-          >
+            }}>
             <h3
               style={{
                 borderBottom: "1px dashed white",
                 marginBottom: "3px",
                 padding: "10px",
-              }}
-            >
+              }}>
               Informacion Tecnica
             </h3>
             <Col>
@@ -281,15 +319,13 @@ export default function VehiculoAgregar() {
               border: "1px solid white ",
               padding: "10px",
               borderRadius: "10px",
-            }}
-          >
+            }}>
             <h3
               style={{
                 borderBottom: "1px dashed white",
                 marginBottom: "3px",
                 padding: "10px",
-              }}
-            >
+              }}>
               Información de Neumáticos
             </h3>
             <Col md="6">
@@ -318,9 +354,12 @@ export default function VehiculoAgregar() {
             </Col>
           </Row>
 
-          <FormButtons setFormData={setFormData} initialState={initialState} formClear={formCleanTextErrors} />
+          <FormButtons
+            setFormData={setFormData}
+            initialState={initialState}
+            formClear={formCleanTextErrors}
+          />
         </Form>
-        
       </FormCard>
     </>
   );

@@ -37,7 +37,7 @@ namespace Backend.Services
         // NUEVO REGISTRO KILOMETRAJE
         public async Task<RegistroKilometraje> AddAsync(RegistroKilometraje registroKilometraje)
         {
-            if (_serviceVehiculo.GetByIdAsync(registroKilometraje.IdVehiculo) == null)
+            if (await _serviceVehiculo.GetByIdAsync(registroKilometraje.IdVehiculo) is null)
                 throw new KeyNotFoundException(
                     "Vehiculo con id " + registroKilometraje.IdVehiculo + " no encontrado"
                 );
@@ -56,7 +56,7 @@ namespace Backend.Services
                 );
             if (
                 registroFinded.IdVehiculo != registroKilometrajeDto.IdVehiculo
-                && _serviceVehiculo.GetByIdAsync(registroKilometrajeDto.IdVehiculo) == null
+                && await _serviceVehiculo.GetByIdAsync(registroKilometrajeDto.IdVehiculo) is null
             )
                 throw new KeyNotFoundException(
                     "Vehiculo con id " + registroKilometrajeDto.IdVehiculo + " no encontrado"

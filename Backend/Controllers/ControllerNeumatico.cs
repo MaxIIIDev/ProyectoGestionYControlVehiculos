@@ -2,9 +2,9 @@ using AutoMapper;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
+
 [Route("api/neumaticos")]
 [ApiController]
-
 public class ControllerNeumatico : ControllerBase
 {
     private readonly ServiceNeumatico _serviceNeumatico;
@@ -42,12 +42,19 @@ public class ControllerNeumatico : ControllerBase
     {
         Neumatico neumatico = mapper.Map<Neumatico>(neumaticoDto);
         var newNeumatico = await _serviceNeumatico.AddAsync(neumatico);
-        return CreatedAtAction(nameof(GetNeumaticoById), new { id = newNeumatico.IdNeumatico }, newNeumatico);
+        return CreatedAtAction(
+            nameof(GetNeumaticoById),
+            new { id = newNeumatico.IdNeumatico },
+            newNeumatico
+        );
     }
 
     // PUT ACTUALIZAR NEUMATICO
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateNeumatico(int id, [FromBody] UpdateNeumaticoDto neumaticoDto)
+    public async Task<IActionResult> UpdateNeumatico(
+        int id,
+        [FromBody] UpdateNeumaticoDto neumaticoDto
+    )
     {
         if (id <= 0)
         {
@@ -66,6 +73,7 @@ public class ControllerNeumatico : ControllerBase
             return NotFound(new { message = ex.Message });
         }
     }
+
     // DELETE NEUMATICO
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteNeumatico(int id)
@@ -77,6 +85,7 @@ public class ControllerNeumatico : ControllerBase
         }
         return NoContent();
     }
+
     // BAJA LOGICA NEUMATICO
     [HttpPatch("baja/{id}")]
     public async Task<IActionResult> SoftDeleteNeumatico(int id)
@@ -88,6 +97,7 @@ public class ControllerNeumatico : ControllerBase
         }
         return NoContent();
     }
+
     // ALTA LOGICA NEUMATICO
     [HttpPatch("alta/{id}")]
     public async Task<IActionResult> RestoreNeumatico(int id)

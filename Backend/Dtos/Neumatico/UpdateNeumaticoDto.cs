@@ -35,7 +35,7 @@ public class UpdateNeumaticoDto
     public DateOnly? FechaColocacion { get; set; }
 
     [Range(1, int.MaxValue, ErrorMessage = "El campo {0} debe estar entre {1} y {2}")]
-    public int IdVehiculo { get; set; }
+    public int? IdVehiculo { get; set; }
 
     public bool Estado { get; set; }
 }

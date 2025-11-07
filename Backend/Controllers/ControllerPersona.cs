@@ -1,6 +1,6 @@
 using AutoMapper;
-using Backend.Services;
 using Backend.Models;
+using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/personas")]
@@ -39,10 +39,21 @@ public class ControllerPersona : ControllerBase
     // POST NUEVA PERSONA
     [HttpPost]
     public async Task<IActionResult> AddPersona([FromBody] CreatePersonaDto personaDto)
-    { 
+    {
         Persona persona = mapper.Map<Persona>(personaDto);
-        var newPersona = await _servicePersona.AddAsync(persona);
-        return CreatedAtAction(nameof(GetPersonaById), new { id = newPersona.IdPersona }, newPersona);
+        try
+        {
+            var newPersona = await _servicePersona.AddAsync(persona);
+            return CreatedAtAction(
+                nameof(GetPersonaById),
+                new { id = newPersona.IdPersona },
+                newPersona
+            );
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     // PUT ACTUALIZAR PERSONA
@@ -65,7 +76,10 @@ public class ControllerPersona : ControllerBase
         {
             return NotFound(new { message = ex.Message });
         }
-        
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     // DELETE PERSONA
