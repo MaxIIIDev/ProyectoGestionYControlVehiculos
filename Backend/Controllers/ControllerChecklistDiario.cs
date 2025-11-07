@@ -3,13 +3,14 @@ using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+
 [Route("api/checklist")]
 [ApiController]
-
 public class ControllerChecklistDiario : ControllerBase
 {
     private readonly ServiceChecklistDiario _serviceChecklistDiario;
     private readonly IMapper mapper;
+
     public ControllerChecklistDiario(ServiceChecklistDiario serviceChecklistDiario, IMapper mapper)
     {
         _serviceChecklistDiario = serviceChecklistDiario;
@@ -38,18 +39,28 @@ public class ControllerChecklistDiario : ControllerBase
 
     // POST NUEVO CHECKLIST DIARIO
     [HttpPost]
-    public async Task<IActionResult> AddChecklistDiario([FromBody] CreateChecklistDiarioDto checklistDto)
+    public async Task<IActionResult> AddChecklistDiario(
+        [FromBody] CreateChecklistDiarioDto checklistDto
+    )
     {
         ChecklistDiario checklist = mapper.Map<ChecklistDiario>(checklistDto);
         var newChecklist = await _serviceChecklistDiario.AddAsync(checklist);
-        return CreatedAtAction(nameof(GetChecklistDiarioById), new { id = newChecklist.IdChecklistDiario }, newChecklist);
+        return CreatedAtAction(
+            nameof(GetChecklistDiarioById),
+            new { id = newChecklist.IdChecklistDiario },
+            newChecklist
+        );
     }
 
     // PUT ACTUALIZAR CHECKLIST DIARIO
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateChecklistDiario(int id, [FromBody] UpdateChecklistDiarioDto checklistDto)
+    public async Task<IActionResult> UpdateChecklistDiario(
+        int id,
+        [FromBody] UpdateChecklistDiarioDto checklistDto
+    )
     {
-        if (id <= 0) return BadRequest("El id debe ser mayor a 0.");
+        if (id <= 0)
+            return BadRequest("El id debe ser mayor a 0.");
 
         ChecklistDiario checklist = mapper.Map<ChecklistDiario>(checklistDto);
         try
@@ -61,22 +72,23 @@ public class ControllerChecklistDiario : ControllerBase
         {
             return NotFound("ChecklistDiario no encontrado con id: " + id);
         }
-
     }
 
     // DELETE CHECKLIST DIARIO
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteChecklistDiario(int id)
     {
-        if (id <= 0) return BadRequest("El id debe ser mayor a 0.");
+        if (id <= 0)
+            return BadRequest("El id debe ser mayor a 0.");
         try
         {
-            if (await _serviceChecklistDiario.DeleteAsync(id) == false) return NotFound("ChecklistDiario no encontrado con id: " + id);
+            if (await _serviceChecklistDiario.DeleteAsync(id) == false)
+                return NotFound("ChecklistDiario no encontrado con id: " + id);
             return NoContent();
         }
         catch (KeyNotFoundException ex)
         {
-            return NotFound(new { message = ex.Message });            
+            return NotFound(new { message = ex.Message });
         }
     }
 
@@ -84,10 +96,12 @@ public class ControllerChecklistDiario : ControllerBase
     [HttpPatch("baja/{id}")]
     public async Task<IActionResult> SoftDeleteChecklistDiario(int id)
     {
-        if(id <= 0) return BadRequest("El id debe ser mayor a 0.");
+        if (id <= 0)
+            return BadRequest("El id debe ser mayor a 0.");
         try
         {
-            if( await _serviceChecklistDiario.SoftDeleteAsync(id) == false) return NotFound("ChecklistDiario no actualizado con id: " + id);
+            if (await _serviceChecklistDiario.SoftDeleteAsync(id) == false)
+                return NotFound("ChecklistDiario no actualizado con id: " + id);
             return NoContent();
         }
         catch (KeyNotFoundException ex)
@@ -100,15 +114,17 @@ public class ControllerChecklistDiario : ControllerBase
     [HttpPatch("alta/{id}")]
     public async Task<IActionResult> RestoreChecklistDiario(int id)
     {
-        if(id <= 0) return BadRequest("El id debe ser mayor a 0.");
+        if (id <= 0)
+            return BadRequest("El id debe ser mayor a 0.");
         try
         {
-            if( await _serviceChecklistDiario.RestoreAsync(id) == false) return NotFound("ChecklistDiario no actualizado con id: " + id);
+            if (await _serviceChecklistDiario.RestoreAsync(id) == false)
+                return NotFound("ChecklistDiario no actualizado con id: " + id);
             return NoContent();
         }
         catch (KeyNotFoundException ex)
         {
-            return NotFound(new { message = ex.Message });            
+            return NotFound(new { message = ex.Message });
         }
     }
 }

@@ -3,9 +3,9 @@ using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+
 [Route("api/matafuegos")]
 [ApiController]
-
 public class ControllerMatafuego : ControllerBase
 {
     private readonly ServiceMatafuego _serviceMatafuego;
@@ -43,12 +43,19 @@ public class ControllerMatafuego : ControllerBase
     {
         Matafuego matafuego = mapper.Map<Matafuego>(matafuegoDto);
         var newMatafuego = await _serviceMatafuego.AddAsync(matafuego);
-        return CreatedAtAction(nameof(GetMatafuegoById), new { id = newMatafuego.IdMatafuego }, newMatafuego);
+        return CreatedAtAction(
+            nameof(GetMatafuegoById),
+            new { id = newMatafuego.IdMatafuego },
+            newMatafuego
+        );
     }
 
     // PUT ACTUALIZAR MATAFUEGO
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateMatafuego(int id, [FromBody] UpdateMatafuegoDto matafuego)
+    public async Task<IActionResult> UpdateMatafuego(
+        int id,
+        [FromBody] UpdateMatafuegoDto matafuego
+    )
     {
         if (id <= 0)
         {
@@ -62,7 +69,7 @@ public class ControllerMatafuego : ControllerBase
         catch (KeyNotFoundException ex)
         {
             System.Console.WriteLine(ex.Message);
-            return NotFound(new { message = ex.Message });            
+            return NotFound(new { message = ex.Message });
         }
     }
 
@@ -101,5 +108,5 @@ public class ControllerMatafuego : ControllerBase
         }
         return NoContent();
     }
-// ACA HAY Q VER TAMBIEN EL TEMA DE LA CARGA DE DOCUMENTOS RELACIONADOS
+    // ACA HAY Q VER TAMBIEN EL TEMA DE LA CARGA DE DOCUMENTOS RELACIONADOS
 }

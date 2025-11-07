@@ -7,11 +7,18 @@ namespace Backend.Services
     public class ServiceDocumento
     {
         private readonly AppDbContext _context;
+        private readonly ServiceVehiculo _serviceVehiculo;
         private readonly IMapper mapper;
-        public ServiceDocumento(AppDbContext context, IMapper mapper)
+
+        public ServiceDocumento(
+            AppDbContext context,
+            IMapper mapper,
+            ServiceVehiculo serviceVehiculo
+        )
         {
             _context = context;
             this.mapper = mapper;
+            _serviceVehiculo = serviceVehiculo;
         }
 
         // GET TODO DOCUMENTOS
@@ -35,11 +42,18 @@ namespace Backend.Services
         }
 
         // UPDATE DOCUMENTO
-        public async Task UpdateAsync(int id,UpdateDocumentoDto documento)
+        public async Task UpdateAsync(int id, UpdateDocumentoDto documento)
         {
             Documento? docFinded = await this.GetByIdAsync(id);
-            if( docFinded == null)
+            if (docFinded == null)
                 throw new KeyNotFoundException("Documento con id " + id + " no encontrada");
+            if (
+                docFinded.IdVehiculo != documento.IdVehiculo
+                && await _serviceVehiculo.GetByIdAsync(documento.IdVehiculo) is null
+            )
+                throw new KeyNotFoundException(
+                    "Vehiculo con id " + documento.IdVehiculo + " no encontrado"
+                );
             mapper.Map(documento, docFinded);
             System.Console.WriteLine(docFinded.IdDocumento);
             await _context.SaveChangesAsync();
@@ -49,7 +63,8 @@ namespace Backend.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var documento = await _context.Documentos.FindAsync(id);
-            if (documento == null) return false;
+            if (documento == null)
+                return false;
 
             _context.Documentos.Remove(documento);
             return await _context.SaveChangesAsync() > 0;
@@ -59,7 +74,8 @@ namespace Backend.Services
         public async Task<bool> SoftDeleteAsync(int id)
         {
             var documento = await _context.Documentos.FindAsync(id);
-            if (documento == null) return false;
+            if (documento == null)
+                return false;
 
             documento.Estado = false;
             _context.Documentos.Update(documento);
@@ -70,7 +86,8 @@ namespace Backend.Services
         public async Task<bool> RestoreAsync(int id)
         {
             var documento = await _context.Documentos.FindAsync(id);
-            if (documento == null) return false;
+            if (documento == null)
+                return false;
 
             documento.Estado = true;
             _context.Documentos.Update(documento);

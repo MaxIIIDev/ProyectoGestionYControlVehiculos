@@ -39,9 +39,15 @@ namespace Backend.Services
         public async Task UpdateAsync(UpdateChecklistDiarioDto checklistDiarioDto, int id)
         {
             ChecklistDiario? checklistDiarioExistente = await this.GetByIdAsync(id);
-            if(checklistDiarioExistente == null)
+            if (checklistDiarioExistente == null)
                 throw new KeyNotFoundException("ChecklistDiario con id " + id + " no encontrada");
-
+            if (
+                checklistDiarioExistente.IdVehiculo != checklistDiarioDto.IdVehiculo
+                && await _context.Vehiculos.FindAsync(checklistDiarioDto.IdVehiculo) == null
+            )
+                throw new KeyNotFoundException(
+                    "Vehiculo con id " + checklistDiarioDto.IdVehiculo + " no encontrado"
+                );
             mapper.Map(checklistDiarioDto, checklistDiarioExistente);
             await _context.SaveChangesAsync();
         }
@@ -61,7 +67,7 @@ namespace Backend.Services
         public async Task<bool> SoftDeleteAsync(int id)
         {
             var checklistDiario = await _context.ChecklistsDiarios.FindAsync(id);
-            if (checklistDiario == null) 
+            if (checklistDiario == null)
                 throw new KeyNotFoundException("ChecklistDiario con id " + id + " no encontrada");
 
             checklistDiario.Estado = false;
@@ -73,7 +79,7 @@ namespace Backend.Services
         public async Task<bool> RestoreAsync(int id)
         {
             var checklistDiario = await _context.ChecklistsDiarios.FindAsync(id);
-            if (checklistDiario == null) 
+            if (checklistDiario == null)
                 throw new KeyNotFoundException("ChecklistDiario con id " + id + " no encontrada");
 
             checklistDiario.Estado = true;

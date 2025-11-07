@@ -2,13 +2,14 @@ using AutoMapper;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
+
 [Route("api/documentos")]
 [ApiController]
-
 public class ControllerDocumento : ControllerBase
 {
     private readonly ServiceDocumento _serviceDocumento;
     private readonly IMapper mapper;
+
     public ControllerDocumento(ServiceDocumento serviceDocumento, IMapper mapper)
     {
         _serviceDocumento = serviceDocumento;
@@ -41,18 +42,25 @@ public class ControllerDocumento : ControllerBase
     {
         Documento documento = mapper.Map<Documento>(documentoDto);
         var newDocumento = await _serviceDocumento.AddAsync(documento);
-        return CreatedAtAction(nameof(GetDocumentoById), new { id = newDocumento.IdDocumento }, newDocumento);
+        return CreatedAtAction(
+            nameof(GetDocumentoById),
+            new { id = newDocumento.IdDocumento },
+            newDocumento
+        );
     }
 
     // PUT ACTUALIZAR DOCUMENTO
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateDocumento(int id, [FromBody] UpdateDocumentoDto documentoDto)
+    public async Task<IActionResult> UpdateDocumento(
+        int id,
+        [FromBody] UpdateDocumentoDto documentoDto
+    )
     {
         if (id <= 0)
         {
             return BadRequest("El id debe ser mayor a 0");
         }
-        
+
         try
         {
             await _serviceDocumento.UpdateAsync(id, documentoDto);
@@ -63,6 +71,7 @@ public class ControllerDocumento : ControllerBase
             return NotFound(new { message = ex.Message });
         }
     }
+
     // DELETE DOCUMENTO
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDocumento(int id)
@@ -98,5 +107,5 @@ public class ControllerDocumento : ControllerBase
         }
         return NoContent();
     }
-// HAY Q VER COMO APLICAR LO DE LOS PATHS Y LO DE ARCHIVOS ACA
+    // HAY Q VER COMO APLICAR LO DE LOS PATHS Y LO DE ARCHIVOS ACA
 }

@@ -8,6 +8,7 @@ namespace Backend.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper mapper;
+
         public ServiceAuditoria(AppDbContext context, IMapper mapper)
         {
             _context = context;
@@ -20,11 +21,16 @@ namespace Backend.Services
             IQueryable<Auditoria> query = _context.Auditorias;
             int totalRegistrosAuditoria = await query.CountAsync();
             var auditorias = await query
-                            .OrderBy(a => a.IdAuditoria)
-                            .Skip((numeroPagina - 1) * tamanoPagina)
-                            .Take(tamanoPagina)
-                            .ToListAsync();
-            return new PagedResponse<Auditoria>(auditorias, totalRegistrosAuditoria, numeroPagina, tamanoPagina);
+                .OrderBy(a => a.IdAuditoria)
+                .Skip((numeroPagina - 1) * tamanoPagina)
+                .Take(tamanoPagina)
+                .ToListAsync();
+            return new PagedResponse<Auditoria>(
+                auditorias,
+                totalRegistrosAuditoria,
+                numeroPagina,
+                tamanoPagina
+            );
         }
 
         // AUDITORIA POR ID
@@ -32,6 +38,7 @@ namespace Backend.Services
         {
             return await _context.Auditorias.FindAsync(id);
         }
+
         // NUEVA AUDITORIA
         public async Task<Auditoria> AddAsync(Auditoria auditoria)
         {
@@ -44,9 +51,11 @@ namespace Backend.Services
         public async Task UpdateAsync(Auditoria auditoria)
         {
             Auditoria? auditoriaFinded = await this.GetByIdAsync(auditoria.IdAuditoria);
-            if( auditoriaFinded == null)
+            if (auditoriaFinded == null)
             {
-                throw new KeyNotFoundException("Auditoria con id " + auditoria.IdAuditoria + " no encontrada");
+                throw new KeyNotFoundException(
+                    "Auditoria con id " + auditoria.IdAuditoria + " no encontrada"
+                );
             }
             mapper.Map(auditoria, auditoriaFinded);
             await _context.SaveChangesAsync();
@@ -62,8 +71,6 @@ namespace Backend.Services
             _context.Auditorias.Remove(auditoria);
             await _context.SaveChangesAsync();
         }
-
-
     }
 
     // FALTA HACER EL SERVICIO Q REVISA ENTITY NAME Y SU ID PARA TRAERLO SEGUN NECESARIO

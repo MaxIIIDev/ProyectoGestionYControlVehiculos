@@ -2,13 +2,14 @@ using AutoMapper;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
+
 [Route("api/auditorias")]
 [ApiController]
-
 public class ControllerAuditoria : ControllerBase
 {
     private readonly ServiceAuditoria _serviceAuditoria;
     private readonly IMapper mapper;
+
     public ControllerAuditoria(ServiceAuditoria serviceAuditoria, IMapper mapper)
     {
         _serviceAuditoria = serviceAuditoria;
@@ -17,9 +18,15 @@ public class ControllerAuditoria : ControllerBase
 
     // GET TODAS LAS AUDITORIAS
     [HttpGet]
-    public async Task<IActionResult> GetAllAuditorias([FromQuery] int numeroPagina = 1, [FromQuery] int tamanoPagina = 10)
+    public async Task<IActionResult> GetAllAuditorias(
+        [FromQuery] int numeroPagina = 1,
+        [FromQuery] int tamanoPagina = 10
+    )
     {
-        PagedResponse<Auditoria>? auditorias = await _serviceAuditoria.GetAllAsync(numeroPagina, tamanoPagina);
+        PagedResponse<Auditoria>? auditorias = await _serviceAuditoria.GetAllAsync(
+            numeroPagina,
+            tamanoPagina
+        );
         return Ok(auditorias);
     }
 
@@ -34,17 +41,26 @@ public class ControllerAuditoria : ControllerBase
         }
         return Ok(auditoria);
     }
+
     // POST NUEVA AUDITORIA
     [HttpPost]
     public async Task<IActionResult> AddAuditoria([FromBody] CreateAuditoriaDto auditoriaDto)
     {
         Auditoria auditoria = mapper.Map<Auditoria>(auditoriaDto);
         Auditoria newAuditoria = await _serviceAuditoria.AddAsync(auditoria);
-        return CreatedAtAction(nameof(GetAuditoriaById), new { id = newAuditoria.IdAuditoria }, newAuditoria);
+        return CreatedAtAction(
+            nameof(GetAuditoriaById),
+            new { id = newAuditoria.IdAuditoria },
+            newAuditoria
+        );
     }
+
     // PUT ACTUALIZAR AUDITORIA
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateAuditoria(int id,[FromBody] UpdateAuditoriaDto auditoriaDto)
+    public async Task<IActionResult> UpdateAuditoria(
+        int id,
+        [FromBody] UpdateAuditoriaDto auditoriaDto
+    )
     {
         if (id <= 0)
         {
@@ -62,6 +78,7 @@ public class ControllerAuditoria : ControllerBase
             return NotFound(new { message = ex.Message });
         }
     }
+
     // DELETE AUDITORIA
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAuditoria(int id)
