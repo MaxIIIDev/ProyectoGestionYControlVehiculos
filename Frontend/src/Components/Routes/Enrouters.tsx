@@ -1,4 +1,6 @@
-const API_ROUTE = "http://localhost:5097/api";
+import url from "../../../../Backend/Properties/launchSettings.json";
+
+const API_ROUTE = url.profiles.http.applicationUrl;
 
 export const endpoints = {
   vehiculos: {

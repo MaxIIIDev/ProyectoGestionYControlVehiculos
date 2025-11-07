@@ -1,8 +1,8 @@
 using System.Net;
+using Backend.Profiles;
 using Backend.Services;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
-using Backend.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,20 +11,14 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("MySqlConnection");
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(
-        policy =>
-        {
-            policy.AllowAnyOrigin()
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    });
 });
 builder.Services.AddControllers();
 builder.Services.AddDbContextPool<AppDbContext>(options =>
-    options.UseMySql(
-        connectionString,
-        ServerVersion.AutoDetect(connectionString)
-    )
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
 );
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -62,7 +56,8 @@ app.UseExceptionHandler(appError =>
             var errorSource = exception.TargetSite;
             var sourceClass = errorSource?.DeclaringType?.FullName;
             var sourceMethod = errorSource?.Name;
-            var logMessage = @$"
+            var logMessage =
+                @$"
                 --------------------------------------------------------------------------
                 [ ERROR CRÍTICO NO CONTROLADO ]
                 Clase : {sourceClass}
@@ -70,20 +65,18 @@ app.UseExceptionHandler(appError =>
                 Error : {exception.Message}
                 --------------------------------------------------------------------------
                 ";
-            logger.LogError(
-                exception,
-                logMessage,
-                context.Request.Path,
-                exception.Message
-            );
+            logger.LogError(exception, logMessage, context.Request.Path, exception.Message);
         }
-        await context.Response.WriteAsJsonAsync(new
-        {
-            StatusCode = context.Response.StatusCode,
-            Message = "Ocurrio un error interno en el servidor",
-        });
+        await context.Response.WriteAsJsonAsync(
+            new
+            {
+                StatusCode = context.Response.StatusCode,
+                Message = "Ocurrio un error interno en el servidor",
+            }
+        );
     });
 });
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -100,5 +93,3 @@ app.UseCors();
 app.MapControllers();
 
 app.Run();
-
-
