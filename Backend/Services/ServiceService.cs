@@ -1,6 +1,7 @@
 using AutoMapper;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
+
 namespace Backend.Services
 {
     public class ServiceService
@@ -25,6 +26,7 @@ namespace Backend.Services
         {
             return await _context.Services.FindAsync(id);
         }
+
         // NUEVO SERVICIO
         public async Task<Service> AddAsync(Service service)
         {
@@ -32,6 +34,7 @@ namespace Backend.Services
             await _context.SaveChangesAsync();
             return service;
         }
+
         // UPDATE SERVICIO
         public async Task UpdateAsync(int id, UpdateServiceDto serviceDto)
         {
@@ -42,6 +45,7 @@ namespace Backend.Services
             _context.Services.Update(serviceFinded);
             await _context.SaveChangesAsync();
         }
+
         // ELIMINAR SERVICIO
         public async Task<bool> DeleteAsync(int id)
         {
@@ -52,21 +56,25 @@ namespace Backend.Services
             _context.Services.Remove(service);
             return await _context.SaveChangesAsync() > 0;
         }
+
         // BAJA LOGICA SERVICIO
         public async Task<bool> SoftDeleteAsync(int id)
         {
             var service = await _context.Services.FindAsync(id);
-            if (service == null) return false;
+            if (service == null)
+                return false;
 
             service.Estado = false;
             _context.Services.Update(service);
             return await _context.SaveChangesAsync() > 0;
         }
+
         // ALTA LOGICA SERVICIO
         public async Task<bool> RestoreAsync(int id)
         {
             var service = await _context.Services.FindAsync(id);
-            if (service == null) return false;
+            if (service == null)
+                return false;
 
             service.Estado = true;
             _context.Services.Update(service);
