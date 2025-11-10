@@ -45,9 +45,9 @@ export default function VehiculosListar() {
         <TabFilterRadios
           defaultValue="opcion1"
           options={[
-            { value: "opcion1", label: " Ver Todos", icon: "bi-house" },
-            { value: "opcion2", label: " Ver Activos", icon: "bi-car" },
-            { value: "opcion3", label: " Ver Inactivos", icon: "bi-bicycle" },
+            { value: "opcion1", label: " Ver Todos", icon: "bi-eye" },
+            { value: "opcion2", label: " Ver Activos", icon: "bi-power" },
+            { value: "opcion3", label: " Ver Inactivos", icon: "bi-x-circle" },
           ]}
         />
       </div>
