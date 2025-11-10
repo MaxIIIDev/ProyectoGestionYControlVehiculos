@@ -9,12 +9,12 @@ export const endpoints = {
       method: "PUT",
     },
     bajaLogica: {
-      action: (id: number) => `${API_ROUTE}/Vehiculos/BajaLogica/${id}`,
-      method: "PUT",
+      action: (id: number) => `${API_ROUTE}/Vehiculos/baja/${id}`,
+      method: "PATCH",
     },
     altaLogica: {
-      action: (id: number) => `${API_ROUTE}/Vehiculos/AltaLogica/${id}`,
-      method: "PUT",
+      action: (id: number) => `${API_ROUTE}/Vehiculos/alta/${id}`,
+      method: "PATCH",
     },
     eliminar: {
       action: (id: number) => `${API_ROUTE}/Vehiculos/${id}`,

@@ -7,6 +7,7 @@ import NavButtonPosition from "../src/Components/NavButtonPosition";
 import ModalTableHandler from "../src/Components/Functions/ModalTableHandler";
 import ModalTable from "../src/Components/Table/ModalTable";
 import { ButtonEdit } from "../src/Components/Table/ModalTableButtonsAll";
+import AltaBajaLogica from "../src/Components/Table/AltaBajaLogica";
 
 const headers = [
   "Marca",
@@ -104,7 +105,29 @@ export default function VehiculosListar() {
               selectedId ? parseInt(selectedId) : 0
             )}
           />
-          {/* Aquí puedes agregar Boton de alta/baja usando el boolean estado para definir si da alta o baja */}
+          <AltaBajaLogica
+            estado={selectedEstado}
+            methodAlta={endpoints.vehiculos.altaLogica.method}
+            endpointBaja={endpoints.vehiculos.bajaLogica.action(
+              selectedId ? parseInt(selectedId) : 0
+            )}
+            methodBaja={endpoints.vehiculos.bajaLogica.method}
+            endpointAlta={endpoints.vehiculos.altaLogica.action(
+              selectedId ? parseInt(selectedId) : 0
+            )}
+            onChange={(nuevoEstado) => {
+              setSelectedEstado(nuevoEstado);
+              // Hay que actualizar el estado en la tabla tambien, sino no se ve el cambio hasta ctrl+F5
+              setData((prevData) =>
+                prevData.map((vehiculo) =>
+                  String(vehiculo.idVehiculo) === selectedId
+                    ? { ...vehiculo, estado: nuevoEstado }
+                    : vehiculo
+                )
+              );
+              setShowModal(false);
+            }}
+          />
         </ModalTable>
       </TableContainer>
       <NavButtonPosition />

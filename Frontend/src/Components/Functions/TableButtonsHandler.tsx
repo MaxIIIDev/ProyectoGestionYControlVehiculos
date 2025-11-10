@@ -9,13 +9,3 @@ export function ModalTableEditHandler(endpoint: string, method: string) {
       console.error("Error:", err);
     });
 }
-
-export function ModalTableCloseHandler() {
-  // Lógica para cerrar el modal
-  const modalElement = document.getElementById("modalTable");
-  if (modalElement) {
-    // Suponiendo que estás usando Bootstrap para modales
-
-    modalElement;
-  }
-}
