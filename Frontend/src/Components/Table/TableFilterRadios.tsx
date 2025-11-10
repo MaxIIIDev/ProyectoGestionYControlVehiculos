@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./css/TabFilterRadios.css";
+import "../css/TabFilterRadios.css";
 
 interface Option {
   label: string;

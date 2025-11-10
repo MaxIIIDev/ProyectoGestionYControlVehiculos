@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { onSubmit } from "./Functions/FormFunctions";
+import { onSubmit } from "../Functions/FormFunctions";
 
 interface FormProps {
   children?: ReactNode;

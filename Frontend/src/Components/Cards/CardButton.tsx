@@ -1,6 +1,6 @@
 /* Componente de botón de acción reutilizable */
 import type { MouseEventHandler } from "react";
-import "./css/CardButton.css";
+import "../css/CardButton.css";
 interface CardButtonProps {
   onClick: MouseEventHandler<HTMLButtonElement>;
   iconClass: string;

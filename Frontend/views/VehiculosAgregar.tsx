@@ -1,9 +1,9 @@
 import { Col, Row } from "react-bootstrap";
-import FormInput from "../src/Components/FormInput";
-import FormCard from "../src/Components/FormCard";
+import FormInput from "../src/Components/Form/FormInput";
+import FormCard from "../src/Components/Form/FormCard";
 import React, { useState } from "react";
-import FormButtons from "../src/Components/FormButtons";
-import Form from "../src/Components/Form";
+import FormButtons from "../src/Components/Form/FormButtons";
+import Form from "../src/Components/Form/Form";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { endpoints } from "../src/Components/Routes/Enrouters";
@@ -168,14 +168,16 @@ export default function VehiculoAgregar() {
           borderRadius: "10px",
           boxShadow:
             "inset 0 0 16px 4px rgba(255, 255, 255, 0.86), inset 0 0 32px 0 rgba(0,0,0,0.15)",
-        }}>
+        }}
+      >
         <Form
           name="vehiculoForm"
           method={endpoints.vehiculos.nuevo.method}
           action={endpoints.vehiculos.nuevo.action}
           validateForm={ValidateForm}
           onSuccess={handleSuccess}
-          onError={handleError}>
+          onError={handleError}
+        >
           <Row
             className="mb-1"
             style={{
@@ -184,13 +186,15 @@ export default function VehiculoAgregar() {
               marginRight: "20px",
               padding: "10px",
               borderRadius: "10px",
-            }}>
+            }}
+          >
             <h3
               style={{
                 borderBottom: "1px dashed white",
                 marginBottom: "3px",
                 padding: "10px",
-              }}>
+              }}
+            >
               Información del Vehículo
             </h3>
             <Col md="3">
@@ -261,13 +265,15 @@ export default function VehiculoAgregar() {
               border: "1px solid white ",
               padding: "10px",
               borderRadius: "10px",
-            }}>
+            }}
+          >
             <h3
               style={{
                 borderBottom: "1px dashed white",
                 marginBottom: "3px",
                 padding: "10px",
-              }}>
+              }}
+            >
               Informacion Tecnica
             </h3>
             <Col>
@@ -302,13 +308,15 @@ export default function VehiculoAgregar() {
               border: "1px solid white ",
               padding: "10px",
               borderRadius: "10px",
-            }}>
+            }}
+          >
             <h3
               style={{
                 borderBottom: "1px dashed white",
                 marginBottom: "3px",
                 padding: "10px",
-              }}>
+              }}
+            >
               Información de Neumáticos
             </h3>
             <Col md="6">

@@ -1,5 +1,5 @@
 import React from "react";
-import "./css/TableResponsive.css";
+import "../css/TableResponsive.css";
 
 interface TableProps {
   headerTitle?: string[];

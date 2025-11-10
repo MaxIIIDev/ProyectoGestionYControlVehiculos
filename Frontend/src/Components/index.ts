@@ -1,10 +1,10 @@
 // Barrel file to export components as named exports
-import CardGestion from "./CardGestion";
-import CardButton from "./CardButton";
-import CardRowContainer from "./CardRowContainer";
-import CardColContainer from "./CardColContainer";
+import CardGestion from "./Cards/CardGestion";
+import CardButton from "./Cards/CardButton";
+import CardRowContainer from "./Cards/CardRowContainer";
+import CardColContainer from "./Cards/CardColContainer";
 import NavButton from "./NavButton";
-import TableFilterRadios from "./TableFilterRadios";
+import TableFilterRadios from "./Table/TableFilterRadios";
 import SideNavBar from "./SideNavBar";
 import NavButtonPosition from "./NavButtonPosition";
 

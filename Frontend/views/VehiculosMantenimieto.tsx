@@ -1,6 +1,6 @@
-import CardGestion from "../src/Components/CardGestion";
-import CardButton from "../src/Components/CardButton";
-import CardRowContainer from "../src/Components/CardRowContainer";
+import CardGestion from "../src/Components/Cards/CardGestion";
+import CardButton from "../src/Components/Cards/CardButton";
+import CardRowContainer from "../src/Components/Cards/CardRowContainer";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import NavButtonPosition from "../src/Components/NavButtonPosition";
 import { useNavigate } from "react-router-dom";

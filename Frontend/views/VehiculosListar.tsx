@@ -1,6 +1,6 @@
-import TableContainer from "../src/Components/TableContainer";
-import TabFilterRadios from "../src/Components/TableFilterRadios";
-import TableResponsive from "../src/Components/TableResponsive";
+import TableContainer from "../src/Components/Table/TableContainer";
+import TabFilterRadios from "../src/Components/Table/TableFilterRadios";
+import TableResponsive from "../src/Components/Table/TableResponsive";
 import endpoints from "../src/Components/Routes/Enrouters";
 import { useEffect, useState } from "react";
 import NavButtonPosition from "../src/Components/NavButtonPosition";

@@ -1,5 +1,5 @@
-import NavButton from "./NavButton";
-import "./css/FormButtons.css";
+import NavButton from "../NavButton";
+import "../css/FormButtons.css";
 
 interface FormButtonsProps<T> {
   setFormData: React.Dispatch<React.SetStateAction<T>>;
@@ -10,8 +10,7 @@ interface FormButtonsProps<T> {
 export default function FormButtons<T>({
   setFormData,
   initialState,
-  formClear
-
+  formClear,
 }: FormButtonsProps<T>) {
   const formReset = () => {
     setFormData(initialState);
@@ -25,7 +24,7 @@ export default function FormButtons<T>({
         text=" Volver"
       ></NavButton>
 
-      <button type="reset" className="btn-cancel" onClick={formReset} >
+      <button type="reset" className="btn-cancel" onClick={formReset}>
         <i className="bi bi-eraser-fill"></i> Limpiar
       </button>
       <button type="submit" className="btn-submit">
