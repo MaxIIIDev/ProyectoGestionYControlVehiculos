@@ -23,10 +23,20 @@ export default function VehiculosListar() {
   const [showModal, setShowModal] = useState(false);
   const [selectedModelo, setSelectedModelo] = useState<string>("");
   const [selectedPatente, setSelectedPatente] = useState<string>("");
-  const handleRowClick = (id: string, modelo?: string, patente?: string) => {
+  const [selectedEstado, setSelectedEstado] =
+    useState<boolean>(
+      true
+    ); /*ACA HAY Q HACER LA FUNCION DE LOS BOTONES DE ALTA Y BAJA*/
+  const handleRowClick = (
+    id: string,
+    modelo?: string,
+    patente?: string,
+    estadoStr?: string
+  ) => {
     setSelectedId(id);
     setSelectedModelo(modelo || "");
     setSelectedPatente(patente || "");
+    setSelectedEstado(estadoStr === "true");
     setShowModal(true);
   };
   const [data, setData] = useState<any[]>([]);
@@ -44,11 +54,16 @@ export default function VehiculosListar() {
   const tableData = data.map((vehiculo: any) => (
     <tr
       key={vehiculo.idVehiculo}
-      onClick={ModalTableHandler(handleRowClick, ["modelo", "patente"])}
+      onClick={ModalTableHandler(handleRowClick, [
+        "modelo",
+        "patente",
+        "estado",
+      ])}
       style={{ cursor: "pointer" }}
       data-id={vehiculo.idVehiculo}
       data-modelo={vehiculo.modelo}
       data-patente={vehiculo.patente}
+      data-estado={vehiculo.estado}
     >
       <td>{vehiculo.marca}</td>
       <td>{vehiculo.modelo}</td>
@@ -89,6 +104,7 @@ export default function VehiculosListar() {
               selectedId ? parseInt(selectedId) : 0
             )}
           />
+          {/* Aquí puedes agregar Boton de alta/baja usando el boolean estado para definir si da alta o baja */}
         </ModalTable>
       </TableContainer>
       <NavButtonPosition />
