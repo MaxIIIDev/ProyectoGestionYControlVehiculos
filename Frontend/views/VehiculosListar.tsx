@@ -4,6 +4,9 @@ import TableResponsive from "../src/Components/Table/TableResponsive";
 import endpoints from "../src/Components/Routes/Enrouters";
 import { useEffect, useState } from "react";
 import NavButtonPosition from "../src/Components/NavButtonPosition";
+import ModalTableHandler from "../src/Components/Functions/ModalTableHandler";
+import ModalTable from "../src/Components/Table/ModalTable";
+import ButtonEdit from "../src/Components/Table/ModalTableButtonsAll";
 
 const headers = [
   "Marca",
@@ -16,6 +19,16 @@ const headers = [
 const colWidths = ["90px", "100px", "50px", "65px", "200px", "150px"];
 
 export default function VehiculosListar() {
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedModelo, setSelectedModelo] = useState<string>("");
+  const [selectedPatente, setSelectedPatente] = useState<string>("");
+  const handleRowClick = (id: string, modelo?: string, patente?: string) => {
+    setSelectedId(id);
+    setSelectedModelo(modelo || "");
+    setSelectedPatente(patente || "");
+    setShowModal(true);
+  };
   const [data, setData] = useState<any[]>([]);
   useEffect(() => {
     fetch(endpoints.vehiculos.listar.action, {
@@ -29,7 +42,14 @@ export default function VehiculosListar() {
   }, []);
 
   const tableData = data.map((vehiculo: any) => (
-    <tr key={vehiculo.idVehiculo}>
+    <tr
+      key={vehiculo.idVehiculo}
+      onClick={ModalTableHandler(handleRowClick, ["modelo", "patente"])}
+      style={{ cursor: "pointer" }}
+      data-id={vehiculo.idVehiculo}
+      data-modelo={vehiculo.modelo}
+      data-patente={vehiculo.patente}
+    >
       <td>{vehiculo.marca}</td>
       <td>{vehiculo.modelo}</td>
       <td>{vehiculo.anio}</td>
@@ -57,6 +77,18 @@ export default function VehiculosListar() {
           colWidths={colWidths}
           tableData={tableData}
         />
+        <ModalTable
+          show={showModal}
+          title={selectedModelo + " " + selectedPatente}
+        >
+          <ButtonEdit
+            id={selectedId ? selectedId : ""}
+            method={endpoints.vehiculos.buscarPorId.method}
+            endpoint={endpoints.vehiculos.buscarPorId.action(
+              selectedId ? parseInt(selectedId) : 0
+            )}
+          />
+        </ModalTable>
       </TableContainer>
       <NavButtonPosition />
     </>
