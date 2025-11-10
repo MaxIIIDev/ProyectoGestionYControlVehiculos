@@ -2,13 +2,20 @@ interface ModalTableProps {
   title: string;
   children?: React.ReactNode;
   show: boolean;
+  onClose?: () => void;
 }
 
-export default function ModalTable({ title, children, show }: ModalTableProps) {
+export default function ModalTable({
+  title,
+  children,
+  show,
+  onClose,
+}: ModalTableProps) {
   if (!show) return null;
 
   return (
     <div
+      id="modalTable"
       style={{
         position: "fixed",
         top: 0,
@@ -35,7 +42,7 @@ export default function ModalTable({ title, children, show }: ModalTableProps) {
       >
         <h3>{title}</h3>
         <div
-          className="row"
+          className="div-row"
           style={{
             marginTop: "2rem",
             display: "flex",
@@ -44,6 +51,9 @@ export default function ModalTable({ title, children, show }: ModalTableProps) {
           }}
         >
           {children}
+          <button onClick={onClose}>
+            <i className="bi bi-x-circle"></i> Cerrar
+          </button>
         </div>
       </div>
     </div>

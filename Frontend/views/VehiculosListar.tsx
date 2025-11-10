@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import NavButtonPosition from "../src/Components/NavButtonPosition";
 import ModalTableHandler from "../src/Components/Functions/ModalTableHandler";
 import ModalTable from "../src/Components/Table/ModalTable";
-import ButtonEdit from "../src/Components/Table/ModalTableButtonsAll";
+import { ButtonEdit } from "../src/Components/Table/ModalTableButtonsAll";
 
 const headers = [
   "Marca",
@@ -80,6 +80,7 @@ export default function VehiculosListar() {
         <ModalTable
           show={showModal}
           title={selectedModelo + " " + selectedPatente}
+          onClose={() => setShowModal(false)}
         >
           <ButtonEdit
             id={selectedId ? selectedId : ""}

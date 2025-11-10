@@ -1,4 +1,4 @@
-import ModalTableEditHandler from "../Functions/TableButtonsHandler";
+import { ModalTableEditHandler } from "../Functions/TableButtonsHandler";
 
 interface ButtonEditProps {
   id: string;
@@ -6,10 +6,10 @@ interface ButtonEditProps {
   method: string;
 }
 
-export default function ButtonEdit({ endpoint, method }: ButtonEditProps) {
+export function ButtonEdit({ endpoint, method }: ButtonEditProps) {
   return (
     <button onClick={() => ModalTableEditHandler(endpoint, method)}>
-      <i className="icon-edit"></i> Edit
+      <i className="bi bi-pencil"></i> Edit
     </button>
   );
 }
