@@ -1,0 +1,87 @@
+.table-responsive {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #181818;
+  color: #f1f1f1;
+  font-size: 1rem;
+  overflow-x: auto;
+  border-radius: 14px;
+  box-shadow: 24px 32px 48px -8px rgba(0, 0, 0, 0.85),
+    8px 12px 24px -4px rgba(0, 0, 0, 0.55);
+  table-layout: fixed;
+}
+
+.table-responsive th,
+.table-responsive td {
+  padding: 0.75em 1em;
+  border: 1px solid #444;
+}
+/*ESTILO DE LOS ENCABEZADOS EN INTERCALADOS AMARILLO/OCRE*/
+.table-responsive thead th {
+  font-weight: bold;
+  color: #222;
+  background: #ffe066;
+}
+
+.table-responsive thead th:nth-child(even) {
+  background: #ffb84c;
+}
+
+.table-responsive thead th:nth-child(odd) {
+  background: #ffe066;
+}
+/*FIN ESTILO ENCABEZADOS*/
+/*---------------------------------------*/
+/* BORDES REDONDEADOS */
+.table-responsive thead th:first-child {
+  border-top-left-radius: 14px;
+}
+.table-responsive thead th:last-child {
+  border-top-right-radius: 14px;
+}
+
+.table-responsive tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 14px;
+}
+.table-responsive tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 14px;
+}
+/*FIN BORDES REDONDEADOS*/
+/*---------------------------------------*/
+/*FILAS ESTILO STRIPPED EN ESCALA DE GRISES*/
+.table-responsive tbody tr:nth-child(even) {
+  background: #232323;
+}
+
+.table-responsive tbody tr:nth-child(odd) {
+  background: #2d2d2d;
+}
+
+.table-responsive tr:hover {
+  background: #333;
+}
+/*FIN ESTILO STRIPPED*/
+/*---------------------------------------*/
+/*TRANSICIONES Y EFECTOS*/
+.table-responsive tbody tr {
+  transition: background 0.3s, transform 0.25s;
+}
+.table-responsive tbody:hover tr {
+  filter: blur(2px);
+  transition: filter 1s;
+}
+
+.table-responsive tbody tr:hover {
+  filter: none !important;
+  background: #928a60 !important;
+  color: #080808;
+  transform: scale(1.02);
+  z-index: 1;
+  position: relative;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: large;
+  transition: filter 0.2s, background 0.3s, transform 0.25s;
+}
+/*FIN TRANSICIONES Y EFECTOS*/

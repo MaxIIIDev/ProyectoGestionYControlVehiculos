@@ -13,7 +13,7 @@ const headers = [
   "Numero de Chasis",
   "Numero de Motor",
 ];
-const colWidths = ["120px", "120px", "80px", "100px", "150px", "150px"];
+const colWidths = ["90px", "100px", "50px", "65px", "200px", "150px"];
 
 export default function VehiculosListar() {
   const [data, setData] = useState<any[]>([]);
