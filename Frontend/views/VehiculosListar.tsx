@@ -14,6 +14,7 @@ import {
 } from "../types/Vehiculo.schema";
 import { type PaginaResponseType } from "../types/PaginaResponse.Type";
 import z from "zod";
+import { PaginatorForTable } from "../src/Components/Table/Paginator";
 
 const headers = [
   "Marca",
@@ -31,9 +32,13 @@ export default function VehiculosListar() {
   const [showModal, setShowModal] = useState(false);
   const [selectedModelo, setSelectedModelo] = useState<string>("");
   const [selectedPatente, setSelectedPatente] = useState<string>("");
-  const [metadataPage, setMetadataPage] = useState<PaginaResponseType>({
-    totalPaginas: 0,
-    nroPagina: 1,
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [metadataPage, setMetadataPage] = useState<
+    PaginaResponseType<VehiculoSchemaType>
+  >({
+    data: [],
+    totalPaginasCalculadas: 0,
+    paginaActual: 1,
     tamanoPaginas: 10,
   });
   const [selectedEstado, setSelectedEstado] =
@@ -52,28 +57,32 @@ export default function VehiculosListar() {
     setSelectedEstado(estadoStr === "true");
     setShowModal(true);
   };
-  const [data, setData] = useState<VehiculoSchemaType[]>([]);
   useEffect(() => {
-    fetch(endpoints.vehiculos.listar.action, {
-      method: endpoints.vehiculos.listar.method,
-    })
+    fetch(
+      `${endpoints.vehiculos.listar.action}?nroPagina=${currentPage}&tamanoPagina=10`,
+      {
+        method: endpoints.vehiculos.listar.method,
+      }
+    )
       .then((response) => response.json())
-      .then((data) => {
+      .then((apiResponse) => {
+        console.log(apiResponse);
+
         const vehiculosParser = z.array(VehiculoApiParser);
-        const vehiculos: VehiculoSchemaType[] = vehiculosParser.parse(data);
-        setData(vehiculos);
+        const vehiculos: VehiculoSchemaType[] = vehiculosParser.parse(
+          apiResponse.items
+        );
         setMetadataPage({
-          totalPaginas: data.totalPaginas,
-          nroPagina: data.nroPagina,
-          tamanoPaginas: data.tamanoPaginas,
+          data: vehiculos,
+          ...apiResponse,
         });
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, []);
+  }, [currentPage]);
 
-  const tableData = data.map((vehiculo: VehiculoSchemaType) => (
+  const tableData = metadataPage.data.map((vehiculo: VehiculoSchemaType) => (
     <tr
       key={vehiculo.idVehiculo}
       onClick={ModalTableHandler(handleRowClick, [
@@ -138,18 +147,37 @@ export default function VehiculosListar() {
             onChange={(nuevoEstado) => {
               setSelectedEstado(nuevoEstado);
               // Hay que actualizar el estado en la tabla tambien, sino no se ve el cambio hasta ctrl+F5
-              setData((prevData) =>
-                prevData.map((vehiculo) =>
-                  String(vehiculo.idVehiculo) === selectedId
+              setMetadataPage((prevData) => ({
+                ...prevData,
+                data: prevData.data.map((vehiculo) =>
+                  String(vehiculo.idVehiculo) === String(selectedId)
                     ? { ...vehiculo, Estado: nuevoEstado }
                     : vehiculo
-                )
-              );
+                ),
+              }));
               setShowModal(false);
             }}
           />
         </ModalTable>
       </TableContainer>
+      <PaginatorForTable
+        totalCountPages={metadataPage.totalPaginasCalculadas}
+        currentPage={metadataPage.paginaActual}
+        previousPage={() => {
+          if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+          }
+        }}
+        nextPage={() => {
+          if (currentPage < metadataPage.totalPaginasCalculadas) {
+            setCurrentPage(currentPage + 1);
+          }
+        }}
+        onPageChange={(newPage) => {
+          setCurrentPage(newPage);
+        }}
+      />
+      {console.log("Total Paginas: " + metadataPage.totalPaginasCalculadas)}
       <NavButtonPosition />
     </>
   );
