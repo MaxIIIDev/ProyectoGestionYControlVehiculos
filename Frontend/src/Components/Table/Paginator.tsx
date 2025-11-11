@@ -5,6 +5,12 @@ interface PaginatorProps {
   totalCountPages: number;
   currentPage: number;
   onPageChange: (page: number) => void;
+  stylePagination?: React.CSSProperties;
+  stylePaginationItem?: React.CSSProperties;
+  stylePaginationItemPreviousAndNext?: React.CSSProperties;
+  classNamePagination?: string;
+  classNamePaginationItem?: string;
+  classNamePaginationItemPreviousAndNext?: string;
 }
 export const PaginatorForTable = ({
   previousPage,
@@ -12,6 +18,12 @@ export const PaginatorForTable = ({
   totalCountPages,
   currentPage,
   onPageChange,
+  stylePagination,
+  stylePaginationItem,
+  stylePaginationItemPreviousAndNext,
+  classNamePagination,
+  classNamePaginationItem,
+  classNamePaginationItemPreviousAndNext,
 }: PaginatorProps) => {
   const items = [];
   for (let i = 1; i <= totalCountPages; i++) {
@@ -19,16 +31,26 @@ export const PaginatorForTable = ({
       <Pagination.Item
         key={i}
         active={i === currentPage}
-        onClick={() => onPageChange(i)}>
+        onClick={() => onPageChange(i)}
+        style={stylePaginationItem}
+        className={classNamePaginationItem}>
         {i}
       </Pagination.Item>
     );
   }
   return (
-    <Pagination>
-      <Pagination.Prev onClick={previousPage} />
+    <Pagination style={stylePagination} className={classNamePagination}>
+      <Pagination.Prev
+        onClick={previousPage}
+        style={stylePaginationItemPreviousAndNext}
+        className={classNamePaginationItemPreviousAndNext}
+      />
       {items}
-      <Pagination.Next onClick={nextPage} />
+      <Pagination.Next
+        onClick={nextPage}
+        style={stylePaginationItemPreviousAndNext}
+        className={classNamePaginationItemPreviousAndNext}
+      />
     </Pagination>
   );
 };

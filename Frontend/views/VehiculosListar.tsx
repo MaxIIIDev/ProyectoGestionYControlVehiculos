@@ -161,6 +161,8 @@ export default function VehiculosListar() {
         </ModalTable>
       </TableContainer>
       <PaginatorForTable
+        classNamePagination="mt-3"
+        stylePaginationItem={{ backgroundColor: "black", color: "white" }}
         totalCountPages={metadataPage.totalPaginasCalculadas}
         currentPage={metadataPage.paginaActual}
         previousPage={() => {
@@ -177,7 +179,7 @@ export default function VehiculosListar() {
           setCurrentPage(newPage);
         }}
       />
-      {console.log("Total Paginas: " + metadataPage.totalPaginasCalculadas)}
+
       <NavButtonPosition />
     </>
   );
