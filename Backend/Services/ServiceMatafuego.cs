@@ -16,7 +16,7 @@ namespace Backend.Services
         }
 
         // GET TODO MATAFUEGOS
-        public async Task<List<Matafuego>> GetAllAsync(int nroPagina, int tamanoPagina)
+        public async Task<PagedResponse<Matafuego>> GetAllAsync(int nroPagina, int tamanoPagina)
         {
             IQueryable<Matafuego> query = _context.Matafuegos;
             int totalRegistrosMatafuego = await query.CountAsync();
@@ -25,7 +25,12 @@ namespace Backend.Services
                 .Skip((nroPagina - 1) * tamanoPagina)
                 .Take(tamanoPagina)
                 .ToListAsync();
-            return matafuegos;
+            return new PagedResponse<Matafuego>(
+                matafuegos,
+                totalRegistrosMatafuego,
+                nroPagina,
+                tamanoPagina
+            );
         }
 
         // MATAFUEGO POR ID

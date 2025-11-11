@@ -1,8 +1,6 @@
-
-
 public class PagedResponse<T>
 {
-    public List<T> Items { get; set; } 
+    public List<T> Items { get; set; }
 
     public int PaginaActual { get; set; }
     public int TamanoPaginas { get; set; }

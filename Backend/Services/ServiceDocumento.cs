@@ -22,7 +22,7 @@ namespace Backend.Services
         }
 
         // GET TODO DOCUMENTOS
-        public async Task<List<Documento>> GetAllAsync(int nroPagina, int tamanoPagina)
+        public async Task<PagedResponse<Documento>> GetAllAsync(int nroPagina, int tamanoPagina)
         {
             IQueryable<Documento> query = _context.Documentos;
             int totalRegistrosDocumento = await query.CountAsync();
@@ -31,7 +31,12 @@ namespace Backend.Services
                 .Skip((nroPagina - 1) * tamanoPagina)
                 .Take(tamanoPagina)
                 .ToListAsync();
-            return documentos;
+            return new PagedResponse<Documento>(
+                documentos,
+                totalRegistrosDocumento,
+                nroPagina,
+                tamanoPagina
+            );
         }
 
         // DOCUMENTO POR ID

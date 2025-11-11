@@ -24,7 +24,10 @@ public class ControllerMatafuego : ControllerBase
         [FromQuery] int tamanoPagina = 10
     )
     {
-        var matafuegos = await _serviceMatafuego.GetAllAsync(numeroPagina, tamanoPagina);
+        PagedResponse<Matafuego> matafuegos = await _serviceMatafuego.GetAllAsync(
+            numeroPagina,
+            tamanoPagina
+        );
         return Ok(matafuegos);
     }
 

@@ -26,7 +26,8 @@ public class ControllerRegistroKilometraje : ControllerBase
         [FromQuery] int tamanoPagina = 10
     )
     {
-        var registros = await _serviceRegistroKilometraje.GetAllAsync(numeroPagina, tamanoPagina);
+        PagedResponse<RegistroKilometraje>? registros =
+            await _serviceRegistroKilometraje.GetAllAsync(numeroPagina, tamanoPagina);
         return Ok(registros);
     }
 

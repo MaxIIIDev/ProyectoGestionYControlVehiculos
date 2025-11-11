@@ -16,7 +16,7 @@ namespace Backend.Services
         }
 
         // GET TODO NEUMATICOS
-        public async Task<List<Neumatico>> GetAllAsync(int nroPagina, int tamanoPagina)
+        public async Task<PagedResponse<Neumatico>> GetAllAsync(int nroPagina, int tamanoPagina)
         {
             IQueryable<Neumatico> query = _context.Neumaticos;
             int totalRegistrosNeumatico = await query.CountAsync();
@@ -25,7 +25,12 @@ namespace Backend.Services
                 .Skip((nroPagina - 1) * tamanoPagina)
                 .Take(tamanoPagina)
                 .ToListAsync();
-            return neumaticos;
+            return new PagedResponse<Neumatico>(
+                neumaticos,
+                totalRegistrosNeumatico,
+                nroPagina,
+                tamanoPagina
+            );
         }
 
         // NEUMATICO POR ID

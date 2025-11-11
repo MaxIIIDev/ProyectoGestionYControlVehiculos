@@ -23,7 +23,10 @@ public class ControllerDocumento : ControllerBase
         [FromQuery] int tamanoPagina = 10
     )
     {
-        var documentos = await _serviceDocumento.GetAllAsync(numeroPagina, tamanoPagina);
+        PagedResponse<Documento> documentos = await _serviceDocumento.GetAllAsync(
+            numeroPagina,
+            tamanoPagina
+        );
         return Ok(documentos);
     }
 

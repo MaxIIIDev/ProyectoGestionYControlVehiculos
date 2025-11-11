@@ -24,7 +24,10 @@ public class ControllerChecklistDiario : ControllerBase
         [FromQuery] int tamanoPagina = 10
     )
     {
-        var checklists = await _serviceChecklistDiario.GetAllAsync(numeroPagina, tamanoPagina);
+        PagedResponse<ChecklistDiario>? checklists = await _serviceChecklistDiario.GetAllAsync(
+            numeroPagina,
+            tamanoPagina
+        );
         return Ok(checklists);
     }
 

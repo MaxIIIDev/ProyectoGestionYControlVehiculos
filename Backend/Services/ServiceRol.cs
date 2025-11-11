@@ -16,7 +16,7 @@ namespace Backend.Services
         }
 
         // GET TODO ROLES
-        public async Task<List<Rol>> GetAllAsync(int numeroPagina, int tamanoPagina)
+        public async Task<PagedResponse<Rol>> GetAllAsync(int numeroPagina, int tamanoPagina)
         {
             IQueryable<Rol> query = _context.Roles;
             int totalRegistrosRol = await query.CountAsync();
@@ -25,7 +25,7 @@ namespace Backend.Services
                 .Skip((numeroPagina - 1) * tamanoPagina)
                 .Take(tamanoPagina)
                 .ToListAsync();
-            return roles;
+            return new PagedResponse<Rol>(roles, totalRegistrosRol, numeroPagina, tamanoPagina);
         }
 
         // ROL POR ID

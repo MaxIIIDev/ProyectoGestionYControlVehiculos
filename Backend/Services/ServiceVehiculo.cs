@@ -16,7 +16,7 @@ namespace Backend.Services
         }
 
         // GET TODO VEHICULOS
-        public async Task<List<Vehiculo>> GetAllAsync(int nroPagina, int tamanoPagina)
+        public async Task<PagedResponse<Vehiculo>> GetAllAsync(int nroPagina, int tamanoPagina)
         {
             IQueryable<Vehiculo> query = _context.Vehiculos;
             int totalRegistrosVehiculo = await query.CountAsync();
@@ -25,7 +25,12 @@ namespace Backend.Services
                 .Skip((nroPagina - 1) * tamanoPagina)
                 .Take(tamanoPagina)
                 .ToListAsync();
-            return vehiculos;
+            return new PagedResponse<Vehiculo>(
+                vehiculos,
+                totalRegistrosVehiculo,
+                nroPagina,
+                tamanoPagina
+            );
         }
 
         // VEHICULO POR ID

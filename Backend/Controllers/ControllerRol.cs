@@ -23,7 +23,7 @@ public class ControllerRol : ControllerBase
         [FromQuery] int tamanoPagina = 10
     )
     {
-        var roles = await _serviceRol.GetAllAsync(numeroPagina, tamanoPagina);
+        PagedResponse<Rol> roles = await _serviceRol.GetAllAsync(numeroPagina, tamanoPagina);
         return Ok(roles);
     }
 

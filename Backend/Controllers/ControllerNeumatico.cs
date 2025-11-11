@@ -23,7 +23,10 @@ public class ControllerNeumatico : ControllerBase
         [FromQuery] int tamanoPagina = 10
     )
     {
-        var neumaticos = await _serviceNeumatico.GetAllAsync(numeroPagina, tamanoPagina);
+        PagedResponse<Neumatico> neumaticos = await _serviceNeumatico.GetAllAsync(
+            numeroPagina,
+            tamanoPagina
+        );
         return Ok(neumaticos);
     }
 

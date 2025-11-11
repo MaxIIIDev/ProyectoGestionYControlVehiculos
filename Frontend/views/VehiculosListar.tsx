@@ -12,6 +12,7 @@ import {
   VehiculoApiParser,
   type VehiculoSchemaType,
 } from "../types/Vehiculo.schema";
+import { type PaginaResponseType } from "../types/PaginaResponse.Type";
 import z from "zod";
 
 const headers = [
@@ -30,6 +31,11 @@ export default function VehiculosListar() {
   const [showModal, setShowModal] = useState(false);
   const [selectedModelo, setSelectedModelo] = useState<string>("");
   const [selectedPatente, setSelectedPatente] = useState<string>("");
+  const [metadataPage, setMetadataPage] = useState<PaginaResponseType>({
+    totalPaginas: 0,
+    nroPagina: 1,
+    tamanoPaginas: 10,
+  });
   const [selectedEstado, setSelectedEstado] =
     useState<boolean>(
       true
@@ -56,6 +62,11 @@ export default function VehiculosListar() {
         const vehiculosParser = z.array(VehiculoApiParser);
         const vehiculos: VehiculoSchemaType[] = vehiculosParser.parse(data);
         setData(vehiculos);
+        setMetadataPage({
+          totalPaginas: data.totalPaginas,
+          nroPagina: data.nroPagina,
+          tamanoPaginas: data.tamanoPaginas,
+        });
       })
       .catch((error) => {
         console.error("Error fetching data:", error);

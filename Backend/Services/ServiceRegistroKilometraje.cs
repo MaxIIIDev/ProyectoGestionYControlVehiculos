@@ -23,7 +23,10 @@ namespace Backend.Services
         }
 
         // GET TODO REGISTROS KILOMETRAJE
-        public async Task<List<RegistroKilometraje>> GetAllAsync(int nroPagina, int tamanoPagina)
+        public async Task<PagedResponse<RegistroKilometraje>> GetAllAsync(
+            int nroPagina,
+            int tamanoPagina
+        )
         {
             IQueryable<RegistroKilometraje> query = _context.RegistrosKilometraje;
             int totalRegistrosRegistroKilometraje = await query.CountAsync();
@@ -32,7 +35,12 @@ namespace Backend.Services
                 .Skip((nroPagina - 1) * tamanoPagina)
                 .Take(tamanoPagina)
                 .ToListAsync();
-            return registrosKilometraje;
+            return new PagedResponse<RegistroKilometraje>(
+                registrosKilometraje,
+                totalRegistrosRegistroKilometraje,
+                nroPagina,
+                tamanoPagina
+            );
         }
 
         // REGISTRO KILOMETRAJE POR ID
