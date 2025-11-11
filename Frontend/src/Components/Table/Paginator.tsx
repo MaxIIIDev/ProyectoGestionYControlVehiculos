@@ -1,16 +1,11 @@
 import { Pagination } from "react-bootstrap";
+import "../css/Paginator.css";
 interface PaginatorProps {
   previousPage: () => void;
   nextPage: () => void;
   totalCountPages: number;
   currentPage: number;
   onPageChange: (page: number) => void;
-  stylePagination?: React.CSSProperties;
-  stylePaginationItem?: React.CSSProperties;
-  stylePaginationItemPreviousAndNext?: React.CSSProperties;
-  classNamePagination?: string;
-  classNamePaginationItem?: string;
-  classNamePaginationItemPreviousAndNext?: string;
 }
 export const PaginatorForTable = ({
   previousPage,
@@ -18,12 +13,6 @@ export const PaginatorForTable = ({
   totalCountPages,
   currentPage,
   onPageChange,
-  stylePagination,
-  stylePaginationItem,
-  stylePaginationItemPreviousAndNext,
-  classNamePagination,
-  classNamePaginationItem,
-  classNamePaginationItemPreviousAndNext,
 }: PaginatorProps) => {
   const items = [];
   for (let i = 1; i <= totalCountPages; i++) {
@@ -32,25 +21,26 @@ export const PaginatorForTable = ({
         key={i}
         active={i === currentPage}
         onClick={() => onPageChange(i)}
-        style={stylePaginationItem}
-        className={classNamePaginationItem}>
+        className={"pagination-item"}
+      >
         {i}
       </Pagination.Item>
     );
   }
   return (
-    <Pagination style={stylePagination} className={classNamePagination}>
-      <Pagination.Prev
-        onClick={previousPage}
-        style={stylePaginationItemPreviousAndNext}
-        className={classNamePaginationItemPreviousAndNext}
-      />
-      {items}
-      <Pagination.Next
-        onClick={nextPage}
-        style={stylePaginationItemPreviousAndNext}
-        className={classNamePaginationItemPreviousAndNext}
-      />
-    </Pagination>
+    <div className="pagination-container">
+      <Pagination className={"pagination-core"}>
+        <Pagination.Prev
+          onClick={previousPage}
+          className={"pagination-item-previous"}
+        >
+          <i className="bi bi-chevron-left"></i>
+        </Pagination.Prev>
+        {items}
+        <Pagination.Next onClick={nextPage} className={"pagination-item-next"}>
+          <i className="bi bi-chevron-right"></i>
+        </Pagination.Next>
+      </Pagination>
+    </div>
   );
 };

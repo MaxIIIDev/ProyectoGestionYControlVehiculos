@@ -94,7 +94,8 @@ export default function VehiculosListar() {
       data-id={vehiculo.idVehiculo}
       data-modelo={vehiculo.Modelo}
       data-patente={vehiculo.Patente}
-      data-estado={vehiculo.Estado}>
+      data-estado={vehiculo.Estado}
+    >
       <td>{vehiculo.Marca}</td>
       <td>{vehiculo.Modelo}</td>
       <td>{vehiculo.Anio}</td>
@@ -126,7 +127,8 @@ export default function VehiculosListar() {
         <ModalTable
           show={showModal}
           title={selectedModelo + " " + selectedPatente}
-          onClose={() => setShowModal(false)}>
+          onClose={() => setShowModal(false)}
+        >
           <ButtonEdit
             id={selectedId ? selectedId : ""}
             method={endpoints.vehiculos.buscarPorId.method}
@@ -161,8 +163,6 @@ export default function VehiculosListar() {
         </ModalTable>
       </TableContainer>
       <PaginatorForTable
-        classNamePagination="mt-3"
-        stylePaginationItem={{ backgroundColor: "black", color: "white" }}
         totalCountPages={metadataPage.totalPaginasCalculadas}
         currentPage={metadataPage.paginaActual}
         previousPage={() => {

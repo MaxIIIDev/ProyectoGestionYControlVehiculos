@@ -1,0 +1,88 @@
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  top: 4rem;
+}
+
+.pagination-core {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #1818185a;
+  border-radius: 16px;
+  border: black 1px solid;
+  box-shadow: 6px 12px 20px 0 rgb(0, 0, 0), 0 1.5px 6px 0 rgb(0, 0, 0);
+  padding: 0.5em 1.5em;
+  margin: 1.5em 0;
+  width: fit-content;
+  gap: 15%;
+}
+
+.page-item {
+  margin: 0 0.18em;
+}
+
+.page-link {
+  background: linear-gradient(135deg, #ffe066 60%, #ffb84c 100%);
+  color: #181818;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.1em;
+  box-shadow: 0 2px 8px rgba(255, 224, 102, 0.18);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.15s;
+  outline: none;
+  min-width: 2.5em;
+  min-height: 2.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-item-previous .page-link,
+.page-item-next .page-link {
+  background: linear-gradient(135deg, #232323 60%, #ffe066 100%);
+  color: #ffe066;
+  font-size: 1.2em;
+  box-shadow: 0 2px 8px rgba(255, 224, 102, 0.1);
+}
+
+.page-link:hover,
+.page-item-previous .page-link:hover,
+.page-item-next .page-link:hover {
+  background: linear-gradient(135deg, #fffbe6 60%, #ffe066 100%);
+  color: #222;
+  box-shadow: 0 4px 16px 0 rgba(255, 224, 102, 0.25),
+    0 1.5px 6px 0 rgba(0, 0, 0, 0.18);
+  transform: scale(1.08);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.page-item.active .page-link,
+.page-item.active .page-link:hover {
+  background: linear-gradient(135deg, #ffb84c 60%, #ffe066 100%);
+  color: #181818;
+  box-shadow: 0 4px 24px 0 #ffe06699, 0 1.5px 6px 0 #ffb84c99;
+  border: 2px solid #181818;
+  transform: scale(1.13);
+  z-index: 2;
+}
+
+.page-item.disabled .page-link,
+.page-item.disabled .page-link:hover {
+  background: #444;
+  color: #bbb;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.page-link:focus,
+.page-link:active,
+.page-link:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
