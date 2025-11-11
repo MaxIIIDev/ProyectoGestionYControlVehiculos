@@ -1,5 +1,6 @@
 import { z } from "zod";
 export const VehiculoSchema = z.object({
+  idVehiculo: z.int32().optional(),
   Marca: z
     .string()
     .trim()
@@ -48,5 +49,42 @@ export const VehiculoSchema = z.object({
     .max(50, {
       message: "El número de motor no puede tener más de 50 caracteres",
     }),
+  Estado: z.boolean().optional(),
+});
+const ApiVehiculoSchema = z.object({
+  idVehiculo: z.number(),
+  marca: z.string(),
+  modelo: z.string(),
+  anio: z.number(),
+  patente: z.string(),
+  color: z.string(),
+  cantidadNeumaticos: z.number(),
+  cantidadAuxilios: z.number(),
+  numeroChasis: z.string(),
+  numeroMotor: z.string(),
+  estado: z.boolean(),
+
+  idMatafuego: z.number().nullable().optional(),
+  matafuego: z.any().nullable().optional(),
+  documentos: z.array(z.any()).nullable().optional(),
+  checklistsDiarios: z.array(z.any()).nullable().optional(),
+  registrosKilometraje: z.array(z.any()).nullable().optional(),
+  services: z.array(z.any()).nullable().optional(),
+});
+export const VehiculoApiParser = ApiVehiculoSchema.transform((apiData) => {
+  const vehiculoFormed: VehiculoSchemaType = {
+    idVehiculo: apiData.idVehiculo,
+    Marca: apiData.marca,
+    Modelo: apiData.modelo,
+    Anio: apiData.anio,
+    Patente: apiData.patente,
+    Color: apiData.color,
+    NumeroChasis: apiData.numeroChasis,
+    NumeroMotor: apiData.numeroMotor,
+    CantidadNeumaticos: apiData.cantidadNeumaticos,
+    CantidadAuxilios: apiData.cantidadAuxilios,
+    Estado: apiData.estado,
+  };
+  return vehiculoFormed;
 });
 export type VehiculoSchemaType = z.infer<typeof VehiculoSchema>;

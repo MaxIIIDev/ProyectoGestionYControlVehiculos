@@ -8,6 +8,11 @@ import ModalTableHandler from "../src/Components/Functions/ModalTableHandler";
 import ModalTable from "../src/Components/Table/ModalTable";
 import { ButtonEdit } from "../src/Components/Table/ModalTableButtonsAll";
 import AltaBajaLogica from "../src/Components/Table/AltaBajaLogica";
+import {
+  VehiculoApiParser,
+  type VehiculoSchemaType,
+} from "../types/Vehiculo.schema";
+import z from "zod";
 
 const headers = [
   "Marca",
@@ -16,8 +21,9 @@ const headers = [
   "Patente",
   "Numero de Chasis",
   "Numero de Motor",
+  "Estado",
 ];
-const colWidths = ["90px", "100px", "50px", "65px", "200px", "150px"];
+const colWidths = ["90px", "100px", "50px", "65px", "200px", "150px", "70px"];
 
 export default function VehiculosListar() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -40,19 +46,23 @@ export default function VehiculosListar() {
     setSelectedEstado(estadoStr === "true");
     setShowModal(true);
   };
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<VehiculoSchemaType[]>([]);
   useEffect(() => {
     fetch(endpoints.vehiculos.listar.action, {
       method: endpoints.vehiculos.listar.method,
     })
       .then((response) => response.json())
-      .then((data) => setData(data))
+      .then((data) => {
+        const vehiculosParser = z.array(VehiculoApiParser);
+        const vehiculos: VehiculoSchemaType[] = vehiculosParser.parse(data);
+        setData(vehiculos);
+      })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
   }, []);
 
-  const tableData = data.map((vehiculo: any) => (
+  const tableData = data.map((vehiculo: VehiculoSchemaType) => (
     <tr
       key={vehiculo.idVehiculo}
       onClick={ModalTableHandler(handleRowClick, [
@@ -60,18 +70,18 @@ export default function VehiculosListar() {
         "patente",
         "estado",
       ])}
-      style={{ cursor: "pointer" }}
+      style={{ cursor: "pointer", textAlign: "center" }}
       data-id={vehiculo.idVehiculo}
-      data-modelo={vehiculo.modelo}
-      data-patente={vehiculo.patente}
-      data-estado={vehiculo.estado}
-    >
-      <td>{vehiculo.marca}</td>
-      <td>{vehiculo.modelo}</td>
-      <td>{vehiculo.anio}</td>
-      <td>{vehiculo.patente}</td>
-      <td>{vehiculo.numeroChasis}</td>
-      <td>{vehiculo.numeroMotor}</td>
+      data-modelo={vehiculo.Modelo}
+      data-patente={vehiculo.Patente}
+      data-estado={vehiculo.Estado}>
+      <td>{vehiculo.Marca}</td>
+      <td>{vehiculo.Modelo}</td>
+      <td>{vehiculo.Anio}</td>
+      <td>{vehiculo.Patente}</td>
+      <td>{vehiculo.NumeroChasis}</td>
+      <td>{vehiculo.NumeroMotor}</td>
+      <td>{vehiculo.Estado ? "Activo" : "Inactivo"}</td>
     </tr>
   ));
 
@@ -96,8 +106,7 @@ export default function VehiculosListar() {
         <ModalTable
           show={showModal}
           title={selectedModelo + " " + selectedPatente}
-          onClose={() => setShowModal(false)}
-        >
+          onClose={() => setShowModal(false)}>
           <ButtonEdit
             id={selectedId ? selectedId : ""}
             method={endpoints.vehiculos.buscarPorId.method}
@@ -121,7 +130,7 @@ export default function VehiculosListar() {
               setData((prevData) =>
                 prevData.map((vehiculo) =>
                   String(vehiculo.idVehiculo) === selectedId
-                    ? { ...vehiculo, estado: nuevoEstado }
+                    ? { ...vehiculo, Estado: nuevoEstado }
                     : vehiculo
                 )
               );
