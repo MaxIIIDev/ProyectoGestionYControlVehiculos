@@ -16,9 +16,16 @@ namespace Backend.Services
         }
 
         // GET TODO PERSONAS
-        public async Task<List<Persona>> GetAllAsync()
+        public async Task<List<Persona>> GetAllAsync(int nroPagina, int tamanoPagina)
         {
-            return await _context.Personas.ToListAsync();
+            IQueryable<Persona> query = _context.Personas;
+            int totalRegistrosPersona = await query.CountAsync();
+            List<Persona>? personas = await query
+                .OrderBy(p => p.IdPersona)
+                .Skip((nroPagina - 1) * tamanoPagina)
+                .Take(tamanoPagina)
+                .ToListAsync();
+            return personas;
         }
 
         // PERSONA POR ID

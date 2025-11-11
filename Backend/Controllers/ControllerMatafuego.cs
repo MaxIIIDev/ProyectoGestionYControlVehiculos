@@ -19,9 +19,12 @@ public class ControllerMatafuego : ControllerBase
 
     // GET TODOS LOS MATAFUEGOS
     [HttpGet]
-    public async Task<IActionResult> GetAllMatafuegos()
+    public async Task<IActionResult> GetAllMatafuegos(
+        [FromQuery] int numeroPagina = 1,
+        [FromQuery] int tamanoPagina = 10
+    )
     {
-        var matafuegos = await _serviceMatafuego.GetAllAsync();
+        var matafuegos = await _serviceMatafuego.GetAllAsync(numeroPagina, tamanoPagina);
         return Ok(matafuegos);
     }
 

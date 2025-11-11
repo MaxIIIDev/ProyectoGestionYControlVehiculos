@@ -21,9 +21,12 @@ public class ControllerPosicionNeumatico : ControllerBase
 
     // GET TODAS LAS POSICIONES DE NEUMATICOS
     [HttpGet]
-    public async Task<IActionResult> GetAllPosicionesNeumaticos()
+    public async Task<IActionResult> GetAllPosicionesNeumaticos(
+        [FromQuery] int numeroPagina = 1,
+        [FromQuery] int tamanoPagina = 10
+    )
     {
-        var posiciones = await _servicePosicionNeumatico.GetAllAsync();
+        var posiciones = await _servicePosicionNeumatico.GetAllAsync(numeroPagina, tamanoPagina);
         return Ok(posiciones);
     }
 

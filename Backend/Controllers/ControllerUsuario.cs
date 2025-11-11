@@ -18,9 +18,12 @@ public class ControllerUsuario : ControllerBase
 
     // GET TODOS LOS USUARIOS
     [HttpGet]
-    public async Task<IActionResult> GetAllUsuarios()
+    public async Task<IActionResult> GetAllUsuarios(
+        [FromQuery] int numeroPagina = 1,
+        [FromQuery] int tamanoPagina = 10
+    )
     {
-        var usuarios = await _serviceUsuario.GetAllAsync();
+        var usuarios = await _serviceUsuario.GetAllAsync(numeroPagina, tamanoPagina);
         return Ok(usuarios);
     }
 

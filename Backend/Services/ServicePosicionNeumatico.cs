@@ -16,9 +16,16 @@ namespace Backend.Services
         }
 
         // GET TODO POSICIONES NEUMATICOS
-        public async Task<List<PosicionNeumatico>> GetAllAsync()
+        public async Task<List<PosicionNeumatico>> GetAllAsync(int nroPagina, int tamanoPagina)
         {
-            return await _context.PosicionesNeumaticos.ToListAsync();
+            IQueryable<PosicionNeumatico> query = _context.PosicionesNeumaticos;
+            int totalRegistrosPosicionNeumatico = await query.CountAsync();
+            List<PosicionNeumatico>? posicionesNeumaticos = await query
+                .OrderBy(p => p.IdPosicionNeumatico)
+                .Skip((nroPagina - 1) * tamanoPagina)
+                .Take(tamanoPagina)
+                .ToListAsync();
+            return posicionesNeumaticos;
         }
 
         // POSICION NEUMATICO POR ID

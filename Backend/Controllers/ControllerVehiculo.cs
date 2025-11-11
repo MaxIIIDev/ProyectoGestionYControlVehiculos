@@ -18,9 +18,12 @@ public class ControllerVehiculo : ControllerBase
 
     // GET TODOS LOS VEHICULOS
     [HttpGet]
-    public async Task<IActionResult> GetAllVehiculos()
+    public async Task<IActionResult> GetAllVehiculos(
+        [FromQuery] int nroPagina = 1,
+        [FromQuery] int tamanoPagina = 10
+    )
     {
-        var vehiculos = await _serviceVehiculo.GetAllAsync();
+        var vehiculos = await _serviceVehiculo.GetAllAsync(nroPagina, tamanoPagina);
         return Ok(vehiculos);
     }
 

@@ -18,9 +18,12 @@ public class ControllerService : ControllerBase
 
     // GET TODOS LOS SERVICIOS
     [HttpGet]
-    public async Task<IActionResult> GetAllServices()
+    public async Task<IActionResult> GetAllServices(
+        [FromQuery] int numeroPagina = 1,
+        [FromQuery] int tamanoPagina = 10
+    )
     {
-        var services = await _serviceService.GetAllAsync();
+        var services = await _serviceService.GetAllAsync(numeroPagina, tamanoPagina);
         return Ok(services);
     }
 

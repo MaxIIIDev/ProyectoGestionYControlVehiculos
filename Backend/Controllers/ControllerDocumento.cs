@@ -18,9 +18,12 @@ public class ControllerDocumento : ControllerBase
 
     // GET TODOS LOS DOCUMENTOS
     [HttpGet]
-    public async Task<IActionResult> GetAllDocumentos()
+    public async Task<IActionResult> GetAllDocumentos(
+        [FromQuery] int numeroPagina = 1,
+        [FromQuery] int tamanoPagina = 10
+    )
     {
-        var documentos = await _serviceDocumento.GetAllAsync();
+        var documentos = await _serviceDocumento.GetAllAsync(numeroPagina, tamanoPagina);
         return Ok(documentos);
     }
 

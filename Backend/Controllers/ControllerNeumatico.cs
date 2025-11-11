@@ -18,9 +18,12 @@ public class ControllerNeumatico : ControllerBase
 
     // GET TODOS LOS NEUMATICOS
     [HttpGet]
-    public async Task<IActionResult> GetAllNeumaticos()
+    public async Task<IActionResult> GetAllNeumaticos(
+        [FromQuery] int numeroPagina = 1,
+        [FromQuery] int tamanoPagina = 10
+    )
     {
-        var neumaticos = await _serviceNeumatico.GetAllAsync();
+        var neumaticos = await _serviceNeumatico.GetAllAsync(numeroPagina, tamanoPagina);
         return Ok(neumaticos);
     }
 

@@ -17,11 +17,13 @@ namespace Backend.Services
         {
             return await _context.MensajesChats.ToListAsync();
         }
+
         // MENSAJE CHAT POR ID
         public async Task<MensajeChat?> GetByIdAsync(int id)
         {
             return await _context.MensajesChats.FindAsync(id);
         }
+
         // NUEVO MENSAJE CHAT
         public async Task<MensajeChat> AddAsync(MensajeChat mensajeChat)
         {
@@ -29,12 +31,14 @@ namespace Backend.Services
             await _context.SaveChangesAsync();
             return mensajeChat;
         }
+
         // UPDATE MENSAJE CHAT
         public async Task<bool> UpdateAsync(MensajeChat mensajeChat)
         {
             _context.MensajesChats.Update(mensajeChat);
             return await _context.SaveChangesAsync() > 0;
         }
+
         // ELIMINAR MENSAJE CHAT
         public async Task<bool> DeleteAsync(int id)
         {
@@ -45,6 +49,7 @@ namespace Backend.Services
             _context.MensajesChats.Remove(mensajeChat);
             return await _context.SaveChangesAsync() > 0;
         }
+
         // BAJA LOGICA MENSAJE CHAT
         public async Task<bool> SoftDeleteAsync(int id)
         {
@@ -56,6 +61,7 @@ namespace Backend.Services
             _context.MensajesChats.Update(mensajeChat);
             return await _context.SaveChangesAsync() > 0;
         }
+
         // ALTA LOGICA MENSAJE CHAT
         public async Task<bool> RestoreAsync(int id)
         {

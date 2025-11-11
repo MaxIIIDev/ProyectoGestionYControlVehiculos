@@ -16,9 +16,16 @@ namespace Backend.Services
         }
 
         // GET TODO ROLES
-        public async Task<List<Rol>> GetAllAsync()
+        public async Task<List<Rol>> GetAllAsync(int numeroPagina, int tamanoPagina)
         {
-            return await _context.Roles.ToListAsync();
+            IQueryable<Rol> query = _context.Roles;
+            int totalRegistrosRol = await query.CountAsync();
+            List<Rol>? roles = await query
+                .OrderBy(r => r.IdRol)
+                .Skip((numeroPagina - 1) * tamanoPagina)
+                .Take(tamanoPagina)
+                .ToListAsync();
+            return roles;
         }
 
         // ROL POR ID
@@ -26,6 +33,7 @@ namespace Backend.Services
         {
             return await _context.Roles.FindAsync(id);
         }
+
         // NUEVO ROL
         public async Task<Rol> AddAsync(Rol rol)
         {
@@ -33,6 +41,7 @@ namespace Backend.Services
             await _context.SaveChangesAsync();
             return rol;
         }
+
         // UPDATE ROL
         public async Task UpdateAsync(int id, UpdateRolDto rolDto)
         {
@@ -44,6 +53,7 @@ namespace Backend.Services
             _context.Roles.Update(rolFinded);
             await _context.SaveChangesAsync();
         }
+
         // ELIMINAR ROL
         public async Task<bool> DeleteAsync(int id)
         {

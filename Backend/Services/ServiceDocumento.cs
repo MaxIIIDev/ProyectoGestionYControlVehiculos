@@ -22,9 +22,16 @@ namespace Backend.Services
         }
 
         // GET TODO DOCUMENTOS
-        public async Task<List<Documento>> GetAllAsync()
+        public async Task<List<Documento>> GetAllAsync(int nroPagina, int tamanoPagina)
         {
-            return await _context.Documentos.ToListAsync();
+            IQueryable<Documento> query = _context.Documentos;
+            int totalRegistrosDocumento = await query.CountAsync();
+            List<Documento>? documentos = await query
+                .OrderBy(d => d.IdDocumento)
+                .Skip((nroPagina - 1) * tamanoPagina)
+                .Take(tamanoPagina)
+                .ToListAsync();
+            return documentos;
         }
 
         // DOCUMENTO POR ID

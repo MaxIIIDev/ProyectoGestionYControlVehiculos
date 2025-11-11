@@ -16,9 +16,16 @@ namespace Backend.Services
         }
 
         // GET TODO MATAFUEGOS
-        public async Task<List<Matafuego>> GetAllAsync()
+        public async Task<List<Matafuego>> GetAllAsync(int nroPagina, int tamanoPagina)
         {
-            return await _context.Matafuegos.ToListAsync();
+            IQueryable<Matafuego> query = _context.Matafuegos;
+            int totalRegistrosMatafuego = await query.CountAsync();
+            List<Matafuego>? matafuegos = await query
+                .OrderBy(m => m.IdMatafuego)
+                .Skip((nroPagina - 1) * tamanoPagina)
+                .Take(tamanoPagina)
+                .ToListAsync();
+            return matafuegos;
         }
 
         // MATAFUEGO POR ID

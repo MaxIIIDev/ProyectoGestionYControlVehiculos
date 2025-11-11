@@ -21,9 +21,12 @@ public class ControllerRegistroKilometraje : ControllerBase
 
     // GET TODO REGISTROS KILOMETRAJE
     [HttpGet]
-    public async Task<IActionResult> GetAllRegistrosKilometraje()
+    public async Task<IActionResult> GetAllRegistrosKilometraje(
+        [FromQuery] int numeroPagina = 1,
+        [FromQuery] int tamanoPagina = 10
+    )
     {
-        var registros = await _serviceRegistroKilometraje.GetAllAsync();
+        var registros = await _serviceRegistroKilometraje.GetAllAsync(numeroPagina, tamanoPagina);
         return Ok(registros);
     }
 

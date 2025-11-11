@@ -16,9 +16,16 @@ namespace Backend.Services
         }
 
         // GET TODO CHECKLISTDIARIOS
-        public async Task<List<ChecklistDiario>> GetAllAsync()
+        public async Task<List<ChecklistDiario>> GetAllAsync(int nroPagina, int tamanoPagina)
         {
-            return await _context.ChecklistsDiarios.ToListAsync();
+            IQueryable<ChecklistDiario> query = _context.ChecklistsDiarios;
+            int totalRegistrosChecklistDiario = await query.CountAsync();
+            List<ChecklistDiario>? checklistDiarios = await query
+                .OrderBy(c => c.IdChecklistDiario)
+                .Skip((nroPagina - 1) * tamanoPagina)
+                .Take(tamanoPagina)
+                .ToListAsync();
+            return checklistDiarios;
         }
 
         // CHECKLISTDIARIO POR ID

@@ -16,9 +16,16 @@ namespace Backend.Services
         }
 
         // GET TODO USUARIOS
-        public async Task<List<Usuario>> GetAllAsync()
+        public async Task<List<Usuario>> GetAllAsync(int nroPagina, int tamanoPagina)
         {
-            return await _context.Usuarios.ToListAsync();
+            IQueryable<Usuario> query = _context.Usuarios;
+            int totalRegistrosUsuario = await query.CountAsync();
+            List<Usuario>? usuarios = await query
+                .OrderBy(u => u.IdUsuario)
+                .Skip((nroPagina - 1) * tamanoPagina)
+                .Take(tamanoPagina)
+                .ToListAsync();
+            return usuarios;
         }
 
         // USUARIO POR ID

@@ -16,9 +16,16 @@ namespace Backend.Services
         }
 
         // GET TODO VEHICULOS
-        public async Task<List<Vehiculo>> GetAllAsync()
+        public async Task<List<Vehiculo>> GetAllAsync(int nroPagina, int tamanoPagina)
         {
-            return await _context.Vehiculos.ToListAsync();
+            IQueryable<Vehiculo> query = _context.Vehiculos;
+            int totalRegistrosVehiculo = await query.CountAsync();
+            List<Vehiculo>? vehiculos = await query
+                .OrderBy(v => v.IdVehiculo)
+                .Skip((nroPagina - 1) * tamanoPagina)
+                .Take(tamanoPagina)
+                .ToListAsync();
+            return vehiculos;
         }
 
         // VEHICULO POR ID

@@ -18,9 +18,12 @@ public class ControllerRol : ControllerBase
 
     // GET TODOS LOS ROLES
     [HttpGet]
-    public async Task<IActionResult> GetAllRoles()
+    public async Task<IActionResult> GetAllRoles(
+        [FromQuery] int numeroPagina = 1,
+        [FromQuery] int tamanoPagina = 10
+    )
     {
-        var roles = await _serviceRol.GetAllAsync();
+        var roles = await _serviceRol.GetAllAsync(numeroPagina, tamanoPagina);
         return Ok(roles);
     }
 

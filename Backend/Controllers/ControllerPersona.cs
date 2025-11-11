@@ -18,9 +18,12 @@ public class ControllerPersona : ControllerBase
 
     // GET TODAS LAS PERSONAS
     [HttpGet]
-    public async Task<IActionResult> GetAllPersonas()
+    public async Task<IActionResult> GetAllPersonas(
+        [FromQuery] int numeroPagina = 1,
+        [FromQuery] int tamanoPagina = 10
+    )
     {
-        var personas = await _servicePersona.GetAllAsync();
+        var personas = await _servicePersona.GetAllAsync(numeroPagina, tamanoPagina);
         return Ok(personas);
     }
 

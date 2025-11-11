@@ -16,9 +16,16 @@ namespace Backend.Services
         }
 
         // GET TODO SERVICIOS
-        public async Task<List<Service>> GetAllAsync()
+        public async Task<List<Service>> GetAllAsync(int nroPagina, int tamanoPagina)
         {
-            return await _context.Services.ToListAsync();
+            IQueryable<Service> query = _context.Services;
+            int totalRegistrosService = await query.CountAsync();
+            List<Service>? services = await query
+                .OrderBy(s => s.IdService)
+                .Skip((nroPagina - 1) * tamanoPagina)
+                .Take(tamanoPagina)
+                .ToListAsync();
+            return services;
         }
 
         // SERVICIO POR ID

@@ -19,9 +19,12 @@ public class ControllerChecklistDiario : ControllerBase
 
     // GET TODOS LOS CHECKLISTS DIARIOS
     [HttpGet]
-    public async Task<IActionResult> GetAllChecklistsDiarios()
+    public async Task<IActionResult> GetAllChecklistsDiarios(
+        [FromQuery] int numeroPagina = 1,
+        [FromQuery] int tamanoPagina = 10
+    )
     {
-        var checklists = await _serviceChecklistDiario.GetAllAsync();
+        var checklists = await _serviceChecklistDiario.GetAllAsync(numeroPagina, tamanoPagina);
         return Ok(checklists);
     }
 
