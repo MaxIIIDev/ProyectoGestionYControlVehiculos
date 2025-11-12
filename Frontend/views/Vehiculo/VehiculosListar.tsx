@@ -1,20 +1,20 @@
-import TableContainer from "../src/Components/Table/TableContainer";
-import TabFilterRadios from "../src/Components/Table/TableFilterRadios";
-import TableResponsive from "../src/Components/Table/TableResponsive";
-import endpoints from "../src/Components/Routes/Enrouters";
+import TableContainer from "../../src/Components/Table/TableContainer";
+import TabFilterRadios from "../../src/Components/Table/TableFilterRadios";
+import TableResponsive from "../../src/Components/Table/TableResponsive";
+import endpoints from "../../src/Components/Routes/Enrouters";
 import { useEffect, useState } from "react";
-import NavButtonPosition from "../src/Components/NavButtonPosition";
-import ModalTableHandler from "../src/Components/Functions/ModalTableHandler";
-import ModalTable from "../src/Components/Table/ModalTable";
-import { ButtonEdit } from "../src/Components/Table/ModalTableButtonsAll";
-import AltaBajaLogica from "../src/Components/Table/AltaBajaLogica";
+import NavButtonPosition from "../../src/Components/NavButtonPosition";
+import ModalTableHandler from "../../src/Components/Functions/ModalTableHandler";
+import ModalTable from "../../src/Components/Table/ModalTable";
+import { ButtonEdit } from "../../src/Components/Table/ModalTableButtonsAll";
+import AltaBajaLogica from "../../src/Components/Table/AltaBajaLogica";
 import {
   VehiculoApiParser,
   type VehiculoSchemaType,
-} from "../types/Vehiculo.schema";
-import { type PaginaResponseType } from "../types/PaginaResponse.Type";
+} from "../../types/Vehiculo.schema";
+import { type PaginaResponseType } from "../../types/PaginaResponse.Type";
 import z from "zod";
-import { PaginatorForTable } from "../src/Components/Table/Paginator";
+import { PaginatorForTable } from "../../src/Components/Table/Paginator";
 
 const headers = [
   "Marca",

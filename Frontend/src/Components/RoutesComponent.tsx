@@ -1,13 +1,13 @@
 import { Col } from "react-bootstrap";
 import { Routes, Route } from "react-router-dom";
-import VehiculosGestion from "../../views/VehiculosGestion";
+import VehiculosGestion from "../../views/Vehiculo/VehiculosGestion";
 import VehiculosKilometros from "../../views/VehiculosKilometros";
-import KilometrosListar from "../../views/VehiculosListar";
 import VehiculosMantenimiento from "../../views/VehiculosMantenimieto";
-import VehiculosListar from "../../views/VehiculosListar";
-import VehiculosAgregar from "../../views/VehiculosAgregar";
+import VehiculosListar from "../../views/Vehiculo/VehiculosListar";
+import VehiculosAgregar from "../../views/Vehiculo/VehiculosAgregar";
 import Matafuegos from "../../views/Matafuegos";
 import Neumaticos from "../../views/Neumaticos";
+import KilometrosListar from "../../views/VehiculosKilometros";
 
 export default function RoutesComponent() {
   return (
