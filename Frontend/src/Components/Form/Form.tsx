@@ -40,8 +40,7 @@ export default function Form({
       method={method}
       action={action}
       target={target}
-      onSubmit={onSubmit(onSuccess!, onError!, validateForm)}
-    >
+      onSubmit={onSubmit(onSuccess!, onError!, validateForm, action, method)}>
       {children}
     </form>
   );

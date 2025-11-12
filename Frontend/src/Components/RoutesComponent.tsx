@@ -8,6 +8,8 @@ import VehiculosAgregar from "../../views/Vehiculo/VehiculosAgregar";
 import Matafuegos from "../../views/Matafuegos";
 import Neumaticos from "../../views/Neumaticos";
 import KilometrosListar from "../../views/VehiculosKilometros";
+import VehiculosAcualizar from "../../views/Vehiculo/VehiculosActualizar";
+import { endpointFront } from "./Routes/Enrouters";
 
 export default function RoutesComponent() {
   return (
@@ -25,14 +27,42 @@ export default function RoutesComponent() {
             </>
           }
         />
-        <Route path="/VehiculosGestion" element={<VehiculosGestion />} />
-        <Route path="/ControlKilometraje" element={<VehiculosKilometros />} />
-        <Route path="/KilometrosListar" element={<KilometrosListar />} />
-        <Route path="/Mantenimiento" element={<VehiculosMantenimiento />} />
-        <Route path="/Vehiculos/Listar" element={<VehiculosListar />} />
-        <Route path="/Vehiculos/Nuevo" element={<VehiculosAgregar />} />
-        <Route path="/Matafuegos" element={<Matafuegos />} />
-        <Route path="/Neumaticos" element={<Neumaticos />} />
+        <Route
+          path={endpointFront.vehiculos.gestion.action}
+          element={<VehiculosGestion />}
+        />
+        <Route
+          path={endpointFront.controlKilometraje.gestion.action}
+          element={<VehiculosKilometros />}
+        />
+        <Route
+          path={endpointFront.controlKilometraje.listar.action}
+          element={<KilometrosListar />}
+        />
+        <Route
+          path={endpointFront.mantenimiento.gestion.action}
+          element={<VehiculosMantenimiento />}
+        />
+        <Route
+          path={endpointFront.vehiculos.listar.action}
+          element={<VehiculosListar />}
+        />
+        <Route
+          path={endpointFront.vehiculos.nuevo.action}
+          element={<VehiculosAgregar />}
+        />
+        <Route
+          path={endpointFront.vehiculos.actualizar.action}
+          element={<VehiculosAcualizar />}
+        />
+        <Route
+          path={endpointFront.matafuegos.gestion.action}
+          element={<Matafuegos />}
+        />
+        <Route
+          path={endpointFront.neumaticos.gestion.action}
+          element={<Neumaticos />}
+        />
       </Routes>
     </Col>
   );

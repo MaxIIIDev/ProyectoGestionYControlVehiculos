@@ -1,7 +1,9 @@
 export const onSubmit = (
   onSuccess: () => void,
   onError: (error: unknown) => void,
-  validateForm: () => boolean
+  validateForm: () => boolean,
+  action: string,
+  method: string
 ) => {
   return (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -9,8 +11,8 @@ export const onSubmit = (
       if (onError) onError(new Error("Formulario inválido"));
       return;
     }
-    fetch(e.currentTarget.action, {
-      method: e.currentTarget.method,
+    fetch(action, {
+      method: method,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(Object.fromEntries(new FormData(e.currentTarget))),
     })
@@ -34,7 +36,12 @@ export const onSubmit = (
             throw new Error(errorMessage);
           });
         }
-        return response.json();
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          return response.json();
+        } else {
+          return null;
+        }
       })
       .then((data) => {
         console.log("Success:", data);

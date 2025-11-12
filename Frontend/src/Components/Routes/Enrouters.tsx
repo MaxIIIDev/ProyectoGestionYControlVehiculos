@@ -1,6 +1,6 @@
 const API_ROUTE = "http://localhost:5097/api";
 
-export const endpoints = {
+export const endpointsAPI = {
   vehiculos: {
     nuevo: { action: `${API_ROUTE}/Vehiculos`, method: "POST" },
     listar: { action: `${API_ROUTE}/Vehiculos`, method: "GET" },
@@ -26,5 +26,27 @@ export const endpoints = {
     },
   },
 };
-
-export default endpoints;
+export const endpointFront = {
+  vehiculos: {
+    listar: { action: "/Vehiculos/Listar" },
+    nuevo: { action: "/Vehiculos/Nuevo" },
+    actualizar: { action: "/Vehiculos/Actualizar/:id" },
+    gestion: { action: "/VehiculosGestion" },
+  },
+  mantenimiento: {
+    listar: { action: "/Mantenimiento/Listar" },
+    nuevo: { action: "/Mantenimiento/Nuevo" },
+    gestion: { action: "/Mantenimiento" },
+  },
+  controlKilometraje: {
+    listar: { action: "/KilometrosListar" },
+    gestion: { action: "/ControlKilometraje" },
+  },
+  matafuegos: {
+    gestion: { action: "/Matafuegos" },
+  },
+  neumaticos: {
+    gestion: { action: "/Neumaticos" },
+  },
+};
+export default endpointsAPI;

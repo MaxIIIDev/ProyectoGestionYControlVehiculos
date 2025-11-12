@@ -6,7 +6,7 @@ import FormButtons from "../../src/Components/Form/FormButtons";
 import Form from "../../src/Components/Form/Form";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { endpoints } from "../../src/Components/Routes/Enrouters";
+import { endpointsAPI } from "../../src/Components/Routes/Enrouters";
 import {
   VehiculoSchema,
   type VehiculoSchemaType,
@@ -14,6 +14,7 @@ import {
 import { formatZodErrors } from "../../src/Utils/Validation.utils";
 
 export default function VehiculoAgregar() {
+  const navigate = useNavigate();
   const initialState: VehiculoSchemaType = {
     Marca: "",
     Modelo: "",
@@ -148,7 +149,6 @@ export default function VehiculoAgregar() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const navigate = useNavigate();
   return (
     <>
       <FormCard
@@ -171,8 +171,8 @@ export default function VehiculoAgregar() {
         }}>
         <Form
           name="vehiculoForm"
-          method={endpoints.vehiculos.nuevo.method}
-          action={endpoints.vehiculos.nuevo.action}
+          method={endpointsAPI.vehiculos.nuevo.method}
+          action={endpointsAPI.vehiculos.nuevo.action}
           validateForm={ValidateForm}
           onSuccess={handleSuccess}
           onError={handleError}>
