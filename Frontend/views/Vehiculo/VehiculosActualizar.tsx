@@ -32,7 +32,8 @@ export default function VehiculoAgregar() {
   };
   const { id } = useParams();
   if (!id?.match("^[0-9]+$")) navigate(endpointFront.vehiculos.listar.action);
-
+  const [originalData, setOriginalData] =
+    useState<VehiculoSchemaType>(initialState);
   const [formData, setFormData] = useState<VehiculoSchemaType>(initialState);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   useEffect(() => {
@@ -46,7 +47,7 @@ export default function VehiculoAgregar() {
         );
         if (!responseFromApi.ok) throw new Error(await responseFromApi.text());
         const data = VehiculoApiParser.parse(await responseFromApi.json());
-
+        setOriginalData(data);
         setFormData(data);
       } catch (error) {
         handleError(error);
@@ -81,10 +82,14 @@ export default function VehiculoAgregar() {
           : String(errorMessage),
       icon: "error",
       confirmButtonText: "Aceptar",
+      showCancelButton: true,
+      cancelButtonText: "Aceptar y volver al inicio",
     }).then((result) => {
       if (result.isConfirmed) {
-        navigate(endpointFront.vehiculos.listar.action);
+        setFormData(originalData);
+        return;
       }
+      if (result.isDismissed) navigate(endpointFront.vehiculos.listar.action);
     });
   };
   const ValidateForm = (): boolean => {

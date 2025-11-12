@@ -27,6 +27,9 @@ export const endpointsAPI = {
   },
 };
 export const endpointFront = {
+  home: {
+    action: "/",
+  },
   vehiculos: {
     listar: { action: "/Vehiculos/Listar" },
     nuevo: { action: "/Vehiculos/Nuevo" },

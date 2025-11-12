@@ -1,11 +1,14 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { endpointFront } from "./Routes/Enrouters";
 
 export default function TopNavBar() {
   return (
     <Navbar bg="dark" variant="dark" expand="lg" className="px-3">
-      <Navbar.Brand href="#home">Eco Group S.R.L.</Navbar.Brand>
+      <Navbar.Brand href={endpointFront.home.action}>
+        Eco Group S.R.L.
+      </Navbar.Brand>
       <Navbar.Toggle aria-controls="top-navbar-nav" />
       <Navbar.Collapse id="top-navbar-nav">
         <Nav className="me-auto"></Nav>
