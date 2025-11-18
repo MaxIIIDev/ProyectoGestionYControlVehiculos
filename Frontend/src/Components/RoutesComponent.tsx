@@ -2,6 +2,7 @@ import { Col } from "react-bootstrap";
 import { Routes, Route } from "react-router-dom";
 import VehiculosGestion from "../../views/Vehiculo/VehiculosGestion";
 import VehiculosKilometros from "../../views/VehiculosKilometros";
+import { AgregarRegistroKilometraje } from "../../views/RegistrosKilometraje/AgregarRegistroKilometraje";
 import VehiculosMantenimiento from "../../views/VehiculosMantenimieto";
 import VehiculosListar from "../../views/Vehiculo/VehiculosListar";
 import VehiculosAgregar from "../../views/Vehiculo/VehiculosAgregar";
@@ -35,6 +36,10 @@ export default function RoutesComponent() {
         <Route
           path={endpointFront.controlKilometraje.gestion.action}
           element={<VehiculosKilometros />}
+        />
+        <Route
+          path={endpointFront.controlKilometraje.nuevo.action}
+          element={<AgregarRegistroKilometraje />}
         />
         <Route
           path={endpointFront.controlKilometraje.listar.action}
