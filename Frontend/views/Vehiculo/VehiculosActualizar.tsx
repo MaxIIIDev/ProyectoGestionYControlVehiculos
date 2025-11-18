@@ -16,6 +16,7 @@ import {
   type VehiculoSchemaType,
 } from "../../types/Vehiculo.schema";
 import { formatZodErrors } from "../../src/Utils/Validation.utils";
+import { getErrorMessage } from "../../src/Utils/Errors.utils";
 
 export default function VehiculoAgregar() {
   const navigate = useNavigate();
@@ -73,13 +74,11 @@ export default function VehiculoAgregar() {
       }
     });
   };
+
   const handleError = (errorMessage: unknown) => {
     Swal.fire({
       title: "Error al actualizar el vehículo",
-      text:
-        errorMessage instanceof Error
-          ? errorMessage.message
-          : String(errorMessage),
+      text: getErrorMessage(errorMessage, "vehiculo"),
       icon: "error",
       confirmButtonText: "Aceptar",
       showCancelButton: true,

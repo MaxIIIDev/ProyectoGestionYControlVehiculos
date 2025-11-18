@@ -1,11 +1,9 @@
-export function ModalTableEditHandler(endpoint: string, method: string) {
-  fetch(endpoint, { method })
-    .then((res) => res.json())
-    .then((data) => {
-      // MAX, ACA TENEMOS Q MANEJAR LA RESPUESTA CON EL TEMA DE LOS ERRORES Y ESE MAMBO
-      console.log(data);
-    })
-    .catch((err) => {
-      console.error("Error:", err);
-    });
+import { useNavigate } from "react-router-dom";
+
+export function useModalTableEditHandler() {
+  const navigate = useNavigate();
+
+  return (endpoint: string) => {
+    navigate(endpoint);
+  };
 }

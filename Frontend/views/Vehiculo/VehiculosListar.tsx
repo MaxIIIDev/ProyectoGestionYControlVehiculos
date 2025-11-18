@@ -1,7 +1,7 @@
 import TableContainer from "../../src/Components/Table/TableContainer";
 import TabFilterRadios from "../../src/Components/Table/TableFilterRadios";
 import TableResponsive from "../../src/Components/Table/TableResponsive";
-import endpoints from "../../src/Components/Routes/Enrouters";
+
 import { useEffect, useState } from "react";
 import NavButtonPosition from "../../src/Components/NavButtonPosition";
 import ModalTableHandler from "../../src/Components/Functions/ModalTableHandler";
@@ -15,6 +15,9 @@ import {
 import { type PaginaResponseType } from "../../types/PaginaResponse.Type";
 import z from "zod";
 import { PaginatorForTable } from "../../src/Components/Table/Paginator";
+import endpointsAPI, {
+  endpointFront,
+} from "../../src/Components/Routes/Enrouters";
 
 const headers = [
   "Marca",
@@ -59,9 +62,9 @@ export default function VehiculosListar() {
   };
   useEffect(() => {
     fetch(
-      `${endpoints.vehiculos.listar.action}?nroPagina=${currentPage}&tamanoPagina=10`,
+      `${endpointsAPI.vehiculos.listar.action}?nroPagina=${currentPage}&tamanoPagina=10`,
       {
-        method: endpoints.vehiculos.listar.method,
+        method: endpointsAPI.vehiculos.listar.method,
       }
     )
       .then((response) => response.json())
@@ -94,8 +97,7 @@ export default function VehiculosListar() {
       data-id={vehiculo.idVehiculo}
       data-modelo={vehiculo.Modelo}
       data-patente={vehiculo.Patente}
-      data-estado={vehiculo.Estado}
-    >
+      data-estado={vehiculo.Estado}>
       <td>{vehiculo.Marca}</td>
       <td>{vehiculo.Modelo}</td>
       <td>{vehiculo.Anio}</td>
@@ -127,23 +129,21 @@ export default function VehiculosListar() {
         <ModalTable
           show={showModal}
           title={selectedModelo + " " + selectedPatente}
-          onClose={() => setShowModal(false)}
-        >
+          onClose={() => setShowModal(false)}>
           <ButtonEdit
-            id={selectedId ? selectedId : ""}
-            method={endpoints.vehiculos.buscarPorId.method}
-            endpoint={endpoints.vehiculos.buscarPorId.action(
+            id={selectedId ? selectedId : "0"}
+            endpoint={endpointFront.vehiculos.actualizar.action(
               selectedId ? parseInt(selectedId) : 0
             )}
           />
           <AltaBajaLogica
             estado={selectedEstado}
-            methodAlta={endpoints.vehiculos.altaLogica.method}
-            endpointBaja={endpoints.vehiculos.bajaLogica.action(
+            methodAlta={endpointsAPI.vehiculos.altaLogica.method}
+            endpointBaja={endpointsAPI.vehiculos.bajaLogica.action(
               selectedId ? parseInt(selectedId) : 0
             )}
-            methodBaja={endpoints.vehiculos.bajaLogica.method}
-            endpointAlta={endpoints.vehiculos.altaLogica.action(
+            methodBaja={endpointsAPI.vehiculos.bajaLogica.method}
+            endpointAlta={endpointsAPI.vehiculos.altaLogica.action(
               selectedId ? parseInt(selectedId) : 0
             )}
             onChange={(nuevoEstado) => {

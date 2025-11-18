@@ -33,7 +33,12 @@ export const endpointFront = {
   vehiculos: {
     listar: { action: "/Vehiculos/Listar" },
     nuevo: { action: "/Vehiculos/Nuevo" },
-    actualizar: { action: "/Vehiculos/Actualizar/:id" },
+    actualizar: {
+      action: (id: number) => {
+        return "/Vehiculos/Actualizar/" + id;
+      },
+      endpoint: "/Vehiculos/Actualizar/:id",
+    },
     gestion: { action: "/VehiculosGestion" },
   },
   mantenimiento: {

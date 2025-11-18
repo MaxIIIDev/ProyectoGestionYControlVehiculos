@@ -52,7 +52,7 @@ export default function RoutesComponent() {
           element={<VehiculosAgregar />}
         />
         <Route
-          path={endpointFront.vehiculos.actualizar.action}
+          path={endpointFront.vehiculos.actualizar.endpoint}
           element={<VehiculosAcualizar />}
         />
         <Route
