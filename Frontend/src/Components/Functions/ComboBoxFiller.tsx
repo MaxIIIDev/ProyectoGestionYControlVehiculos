@@ -1,4 +1,8 @@
-export function TexfieldBrowser(action: string, method: string, body: any) {
+export default function ComboBoxFiller(
+  action: string,
+  method: string,
+  body: any
+) {
   return fetch(action, {
     method: method,
     headers: { "Contett-Type": "application/json" },
