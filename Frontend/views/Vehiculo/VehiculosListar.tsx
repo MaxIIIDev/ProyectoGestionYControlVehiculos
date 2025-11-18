@@ -33,6 +33,7 @@ const colWidths = ["90px", "100px", "50px", "65px", "200px", "150px", "70px"];
 export default function VehiculosListar() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [selectedMarca, setSelectedMarca] = useState<string>("");
   const [selectedModelo, setSelectedModelo] = useState<string>("");
   const [selectedPatente, setSelectedPatente] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -50,11 +51,13 @@ export default function VehiculosListar() {
     ); /*ACA HAY Q HACER LA FUNCION DE LOS BOTONES DE ALTA Y BAJA*/
   const handleRowClick = (
     id: string,
+    marca?: string,
     modelo?: string,
     patente?: string,
     estadoStr?: string
   ) => {
     setSelectedId(id);
+    setSelectedMarca(marca || "");
     setSelectedModelo(modelo || "");
     setSelectedPatente(patente || "");
     setSelectedEstado(estadoStr === "true");
@@ -89,12 +92,14 @@ export default function VehiculosListar() {
     <tr
       key={vehiculo.idVehiculo}
       onClick={ModalTableHandler(handleRowClick, [
+        "marca",
         "modelo",
         "patente",
         "estado",
       ])}
       style={{ cursor: "pointer", textAlign: "center" }}
       data-id={vehiculo.idVehiculo}
+      data-marca={vehiculo.Marca}
       data-modelo={vehiculo.Modelo}
       data-patente={vehiculo.Patente}
       data-estado={vehiculo.Estado}>
@@ -128,7 +133,14 @@ export default function VehiculosListar() {
         />
         <ModalTable
           show={showModal}
-          title={selectedModelo + " " + selectedPatente}
+          title={
+            selectedMarca +
+            " " +
+            selectedModelo +
+            " - " +
+            "Patente: " +
+            selectedPatente
+          }
           onClose={() => setShowModal(false)}>
           <ButtonEdit
             id={selectedId ? selectedId : "0"}
