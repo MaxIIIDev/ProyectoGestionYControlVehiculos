@@ -1,11 +1,13 @@
 import Form from "../../src/Components/Form/Form";
 import FormCard from "../../src/Components/Form/FormCard";
 import FormInput from "../../src/Components/Form/FormInput";
-import endpointsAPI from "../../src/Components/Routes/Enrouters";
+import endpointsAPI, {
+  endpointFront,
+} from "../../src/Components/Routes/Enrouters";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getErrorMessage } from "../../src/Utils/Errors.utils";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ControlKilometrajeSchema,
   type ControlKilometrajeSchemaType,
@@ -13,11 +15,20 @@ import {
 import { formatZodErrors } from "../../src/Utils/Validation.utils";
 import FormButtons from "../../src/Components/Form/FormButtons";
 
-export const AgregarRegistroKilometraje = () => {
+export default function ActualizarRegistroKilometraje() {
   const navigate = useNavigate();
+  const { id } = useParams();
+  if (!id?.match("^[0-9]+$"))
+    navigate(endpointFront.controlKilometraje.listar.action);
+
   const initialState: ControlKilometrajeSchemaType = {
+    IdVehiculo: 0,
+    IdControlKilometraje: parseInt(id!),
     KilometrajeActual: 0,
   };
+  const [initialFormData, setInitialFormData] =
+    useState<ControlKilometrajeSchemaType>(initialState);
+
   const [formData, setFormData] =
     useState<ControlKilometrajeSchemaType>(initialState);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -25,6 +36,26 @@ export const AgregarRegistroKilometraje = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const responseFromApi = await fetch(
+          endpointsAPI.controlKilometraje.buscarPorId.action(parseInt(id!)),
+          {
+            method: endpointsAPI.controlKilometraje.buscarPorId.method,
+          }
+        );
+        if (!responseFromApi.ok) throw new Error(await responseFromApi.text());
+        const data = await responseFromApi.json();
+        setInitialFormData(data);
+        setFormData(data);
+      } catch (error) {
+        handleError(error);
+      }
+    };
+    fetchData();
+  }, [id]);
+
   const ValidateForm = (): boolean => {
     const validateFromZod = ControlKilometrajeSchema.safeParse(formData);
     if (!validateFromZod.success) {
@@ -39,6 +70,7 @@ export const AgregarRegistroKilometraje = () => {
   const formCleanTextErrors = () => {
     setErrors({});
   };
+
   const handleSuccess = () => {
     Swal.fire({
       title: "Kilometraje registrado con éxito",
@@ -100,7 +132,7 @@ export const AgregarRegistroKilometraje = () => {
                 required={true}
                 error={errors.KilometrajeActual}></FormInput>
               <FormButtons
-                initialState={initialState}
+                initialState={initialFormData}
                 setFormData={setFormData}
                 formClear={formCleanTextErrors}></FormButtons>
             </Form>
@@ -109,4 +141,4 @@ export const AgregarRegistroKilometraje = () => {
       }
     </div>
   );
-};
+}

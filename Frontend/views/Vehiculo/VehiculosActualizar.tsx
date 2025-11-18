@@ -70,15 +70,15 @@ export default function VehiculoAgregar() {
       if (result.isConfirmed) {
         return;
       } else {
-        navigate(endpointFront.vehiculos.listar.action);
+        navigate(endpointFront.controlKilometraje.listar.action);
       }
     });
   };
 
   const handleError = (errorMessage: unknown) => {
     Swal.fire({
-      title: "Error al actualizar el vehículo",
-      text: getErrorMessage(errorMessage, "vehiculo"),
+      title: "Error al actualizar el Control de Kilometraje",
+      text: getErrorMessage(errorMessage, "Control de Kilometraje"),
       icon: "error",
       confirmButtonText: "Aceptar",
       showCancelButton: true,
@@ -88,7 +88,8 @@ export default function VehiculoAgregar() {
         setFormData(originalData);
         return;
       }
-      if (result.isDismissed) navigate(endpointFront.vehiculos.listar.action);
+      if (result.isDismissed)
+        navigate(endpointFront.controlKilometraje.listar.action);
     });
   };
   const ValidateForm = (): boolean => {

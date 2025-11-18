@@ -37,6 +37,10 @@ export const endpointsAPI = {
       action: (id: number) => `${API_ROUTE}/registro-kilometraje/${id}`,
       method: "PUT",
     },
+    buscarPorId: {
+      action: (id: number) => `${API_ROUTE}/registro-kilometraje/${id}`,
+      method: "GET",
+    },
   },
 };
 export const endpointFront = {
@@ -64,6 +68,12 @@ export const endpointFront = {
     listar: { action: "/KilometrosListar" },
     gestion: { action: "/ControlKilometraje" },
     nuevo: { action: "/RegistroKilometraje/Nuevo" },
+    actualizar: {
+      action: (id: number) => {
+        return "/RegistroKilometraje/Actualizar/" + id;
+      },
+      endpoint: "/RegistroKilometraje/Actualizar/:id",
+    },
   },
   matafuegos: {
     gestion: { action: "/Matafuegos" },

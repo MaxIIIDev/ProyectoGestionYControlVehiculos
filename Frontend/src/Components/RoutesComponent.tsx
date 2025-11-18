@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import VehiculosGestion from "../../views/Vehiculo/VehiculosGestion";
 import VehiculosKilometros from "../../views/VehiculosKilometros";
 import { AgregarRegistroKilometraje } from "../../views/RegistrosKilometraje/AgregarRegistroKilometraje";
+import ActualizarRegistroKilometraje from "../../views/RegistrosKilometraje/ActualizarRegistroKilometraje";
 import VehiculosMantenimiento from "../../views/VehiculosMantenimieto";
 import VehiculosListar from "../../views/Vehiculo/VehiculosListar";
 import VehiculosAgregar from "../../views/Vehiculo/VehiculosAgregar";
@@ -40,6 +41,10 @@ export default function RoutesComponent() {
         <Route
           path={endpointFront.controlKilometraje.nuevo.action}
           element={<AgregarRegistroKilometraje />}
+        />
+        <Route
+          path={endpointFront.controlKilometraje.actualizar.endpoint}
+          element={<ActualizarRegistroKilometraje />}
         />
         <Route
           path={endpointFront.controlKilometraje.listar.action}

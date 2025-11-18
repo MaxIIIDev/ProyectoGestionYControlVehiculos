@@ -1,6 +1,11 @@
 import { z } from "zod";
 
 export const ControlKilometrajeSchema = z.object({
+  IdControlKilometraje: z
+    .number()
+    .int()
+    .min(1, { error: "El ID del control de kilometraje debe ser mayor a 0" })
+    .optional(),
   IdVehiculo: z
     .number()
     .int()
