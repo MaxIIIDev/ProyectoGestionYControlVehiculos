@@ -24,6 +24,11 @@ export const endpointsAPI = {
       action: (id: number) => `${API_ROUTE}/Vehiculos/${id}`,
       method: "GET",
     },
+    buscarPorPatente: {
+      action: (patente: string) =>
+        `${API_ROUTE}/Vehiculos/buscarPorPatente/${patente}`,
+      method: "GET",
+    },
   },
   controlKilometraje: {
     nuevo: { action: `${API_ROUTE}/registro-kilometraje`, method: "POST" },
@@ -48,6 +53,7 @@ export const endpointFront = {
       endpoint: "/Vehiculos/Actualizar/:id",
     },
     gestion: { action: "/VehiculosGestion" },
+    documentos: { action: "/Vehiculos/Documentacion" },
   },
   mantenimiento: {
     listar: { action: "/Mantenimiento/Listar" },

@@ -10,6 +10,7 @@ import Matafuegos from "../../views/Matafuegos";
 import Neumaticos from "../../views/Neumaticos";
 import KilometrosListar from "../../views/VehiculosKilometros";
 import VehiculosAcualizar from "../../views/Vehiculo/VehiculosActualizar";
+import VehiculosDocumentos from "../../views/VehiculosDocumentos";
 import { endpointFront } from "./Routes/Enrouters";
 
 export default function RoutesComponent() {
@@ -67,6 +68,10 @@ export default function RoutesComponent() {
         <Route
           path={endpointFront.neumaticos.gestion.action}
           element={<Neumaticos />}
+        />
+        <Route
+          path={endpointFront.vehiculos.documentos.action}
+          element={<VehiculosDocumentos />}
         />
       </Routes>
     </Col>
