@@ -4,13 +4,14 @@ import Select from "react-select";
 interface Option {
   label: string;
   value: string;
+  original: { [key: string]: string };
 }
 
 interface ComboBoxBrowserProps {
   apiUrl: string;
   apiMethod?: string;
   onSelect?: (option: string) => void;
-  onEntitySelect?: (entity: any) => void;
+  onEntitySelect?: (entity: { [key: string]: string }) => void;
   defaultOption?: string;
   name?: string;
   placeholder?: string;
@@ -42,11 +43,13 @@ const ComboBoxBrowser: React.FC<ComboBoxBrowserProps> = ({
         .then((data) => {
           console.log("Respuesta de la API:", data);
           // Trae un array directamente
-          const opts = (Array.isArray(data) ? data : []).map((v: any) => ({
-            value: v.patente,
-            label: v.patente,
-            original: v,
-          }));
+          const opts = (Array.isArray(data) ? data : []).map(
+            (v: { [key: string]: string }) => ({
+              value: v.patente,
+              label: v.patente,
+              original: v,
+            })
+          );
           setOptions(opts);
         });
     }, 300);
@@ -63,7 +66,7 @@ const ComboBoxBrowser: React.FC<ComboBoxBrowserProps> = ({
       onChange={(opt) => {
         setSelected(opt as Option);
         if (onSelect) onSelect((opt as Option)?.value || "");
-        if (onEntitySelect) onEntitySelect((opt as any)?.original || null);
+        if (onEntitySelect) onEntitySelect((opt as Option)?.original || null);
       }}
       isClearable
       isSearchable
