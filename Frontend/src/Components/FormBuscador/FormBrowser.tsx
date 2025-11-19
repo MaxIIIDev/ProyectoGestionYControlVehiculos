@@ -33,7 +33,10 @@ export default function FormBrowser({
       setLoading(true);
       fetch(relatedApiUrl(ent), { method: relatedApiMethod })
         .then((res) => res.json())
-        .then((data) => setRelated(Array.isArray(data) ? data : []))
+        .then((data) => {
+          console.log("Respuesta documentos por vehículo:", data);
+          setRelated(Array.isArray(data) ? data : []);
+        })
         .finally(() => setLoading(false));
     }
   };
@@ -48,7 +51,6 @@ export default function FormBrowser({
       />
       {entity && (
         <div style={{ marginTop: 16 }}>
-          <strong>Datos de {entityLabel}:</strong>
           {renderEntity ? (
             renderEntity(entity)
           ) : (
@@ -59,7 +61,6 @@ export default function FormBrowser({
       {loading && <div>Cargando datos relacionados...</div>}
       {related.length > 0 && (
         <div style={{ marginTop: 16 }}>
-          <strong>Datos relacionados:</strong>
           {renderRelated ? (
             renderRelated(related)
           ) : (
