@@ -61,7 +61,7 @@ namespace Backend.Services
                 throw new KeyNotFoundException("Documento con id " + id + " no encontrada");
             if (
                 docFinded.IdVehiculo != documento.IdVehiculo
-                && await _serviceVehiculo.GetByIdAsync(documento.IdVehiculo) is null
+                && await _serviceVehiculo.GetByIdAsync(documento.IdVehiculo ?? 0) is null
             )
                 throw new KeyNotFoundException(
                     "Vehiculo con id " + documento.IdVehiculo + " no encontrado"

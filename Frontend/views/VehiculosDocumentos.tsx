@@ -12,13 +12,14 @@ export default function VehiculosDocumentos() {
         relatedApiUrl={(vehicle) =>
           Enrouters.documentos.buscarPorVehiculoId.action(vehicle.idVehiculo)
         }
-        relatedApiMethod="GET"
-        entityLabel="Vehículo"
+        relatedApiMethod={Enrouters.documentos.buscarPorVehiculoId.method}
+        entityLabel="Vehiculo"
         defaultOption="Buscar vehículo por patente"
         renderEntity={(vehicle) => (
           <div>
             <p>
               <strong>Patente:</strong> {vehicle.patente}
+              <strong>Marca:</strong> {vehicle.marca}
             </p>
           </div>
         )}
