@@ -99,7 +99,7 @@ const ComboBoxBrowser: React.FC<ComboBoxBrowserProps> = ({
           // Trae un array directamente
           const opts = (Array.isArray(data) ? data : []).map(
             (v: { [key: string]: string }) => ({
-              value: v.patente,
+              value: v.idVehiculo,
               label: v.patente,
               original: v,
             })
