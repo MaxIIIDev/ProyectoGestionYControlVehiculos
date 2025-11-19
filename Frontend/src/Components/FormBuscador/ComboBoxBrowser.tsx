@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 
 interface Option {
-  value: string;
   label: string;
+  value: string;
 }
 
 interface ComboBoxBrowserProps {
@@ -40,10 +40,12 @@ const ComboBoxBrowser: React.FC<ComboBoxBrowserProps> = ({
         .then((data) => {
           console.log("Respuesta de la API:", data);
           // Trae un array directamente
-          const opts = (Array.isArray(data) ? data : []).map((v: any) => ({
-            value: v.patente,
-            label: v.patente,
-          }));
+          const opts = (Array.isArray(data) ? data : []).map(
+            (v: { [key: string]: string }) => ({
+              value: v.idVehiculo,
+              label: v.patente,
+            })
+          );
           setOptions(opts);
         });
     }, 300);

@@ -6,7 +6,10 @@ import NavButtonPosition from "../src/Components/NavButtonPosition";
 import { Button } from "react-bootstrap";
 
 export default function VehiculosDocumentos() {
-  const [patente, setPatente] = useState<string>("");
+  const [idVehiculo, setIdVehiculo] = useState<string>("");
+  const mostrar = () => {
+    console.log(idVehiculo);
+  };
   return (
     <>
       <h2>Documentos de Vehículos</h2>
@@ -15,11 +18,11 @@ export default function VehiculosDocumentos() {
         apiMethod={endpointsAPI.vehiculos.buscarPorPatenteLike.method}
         name="patente"
         placeholder="Buscador por Patente"
-        onSelect={(value) => setPatente(value)}
+        onSelect={(value) => setIdVehiculo(value)}
         defaultOption="Buscador por Patente"
       />
-      {patente && (
-        <Button type="submit" className="mt-3">
+      {idVehiculo && (
+        <Button type="submit" className="mt-3" onClick={mostrar}>
           Buscar
         </Button>
       )}

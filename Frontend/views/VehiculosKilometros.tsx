@@ -4,6 +4,7 @@ import CardRowContainer from "../src/Components/Cards/CardRowContainer";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import NavButtonPosition from "../src/Components/NavButtonPosition";
 import { useNavigate } from "react-router-dom";
+import { endpointFront } from "../src/Components/Routes/Enrouters";
 
 export default function KilometrosListar() {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ export default function KilometrosListar() {
               iconClass="bi bi-plus-circle"
               text=" Agregar Control"
               onClick={() => {
-                navigate("/Kilometros/Nuevo");
+                navigate(endpointFront.controlKilometraje.nuevo.action);
               }}
             />
           }
@@ -34,7 +35,7 @@ export default function KilometrosListar() {
               iconClass="bi bi-card-list"
               text=" Listar Registros de Kilometraje"
               onClick={() => {
-                navigate("/Kilometros/Listar");
+                navigate(endpointFront.controlKilometraje.listar.action);
               }}
             />
           }

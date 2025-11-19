@@ -12,6 +12,7 @@ interface FormInputProps {
   style?: React.CSSProperties;
   required: boolean;
   error?: string;
+  disabled?: boolean;
 }
 
 export default function FormInput({
@@ -25,6 +26,7 @@ export default function FormInput({
   required,
   style,
   error,
+  disabled,
 }: FormInputProps) {
   return (
     <Form.Group className="mb-3" controlId={name}>
@@ -39,11 +41,11 @@ export default function FormInput({
         required={required}
         style={style}
         isInvalid={!!error}
+        disabled={disabled}
       />
       <Form.Control.Feedback
         type="invalid"
-        className=" mx-2 px-1 fs-6 text-start"
-      >
+        className=" mx-2 px-1 fs-6 text-start">
         {error}
       </Form.Control.Feedback>
     </Form.Group>
