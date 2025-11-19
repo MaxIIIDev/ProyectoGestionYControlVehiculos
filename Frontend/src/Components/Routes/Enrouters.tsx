@@ -47,6 +47,27 @@ export const endpointsAPI = {
       method: "GET",
     },
   },
+  documentos: {
+    nuevo: { action: `${API_ROUTE}/Documentos`, method: "POST" },
+    listar: { action: `${API_ROUTE}/Documentos`, method: "GET" },
+    editar: {
+      action: (id: number) => `${API_ROUTE}/Documentos/${id}`,
+      method: "PUT",
+    },
+    eliminar: {
+      action: (id: number) => `${API_ROUTE}/Documentos/${id}`,
+      method: "DELETE",
+    },
+    buscarPorId: {
+      action: (id: number) => `${API_ROUTE}/Documentos/${id}`,
+      method: "GET",
+    },
+    buscarPorVehiculoId: {
+      action: (vehiculoId: number) =>
+        `${API_ROUTE}/Documentos/vehiculo/${vehiculoId}`,
+      method: "GET",
+    },
+  },
 };
 export const endpointFront = {
   home: {

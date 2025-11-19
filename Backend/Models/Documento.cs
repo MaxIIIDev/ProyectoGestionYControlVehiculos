@@ -8,23 +8,25 @@ namespace Backend.Models
         string tipo,
         DateOnly? fechaEmision,
         DateOnly? fechaVencimiento,
-        int vehiculoId,
+        int? IdVehiculo,
+        int? IdMatafuego,
         bool estado
     )
     {
         [Key]
         public int IdDocumento { get; set; }
         public string Tipo { get; set; } = tipo;
-        public List<string>? UrlArchivos { get; set; }
+        public string? UrlArchivos { get; set; }
         public DateOnly? FechaEmision { get; set; } = fechaEmision;
         public DateOnly? FechaVencimiento { get; set; } = fechaVencimiento;
 
-        [ForeignKey("Vehiculo")]
-        public int IdVehiculo { get; set; } = vehiculoId;
-        public Vehiculo? Vehiculo { get; set; } = null!;
+        public int? IdVehiculo { get; set; } = IdVehiculo;
+
+        public int? IdMatafuego { get; set; } = IdMatafuego;
+
         public bool Estado { get; set; } = estado;
 
         public Documento()
-            : this(default!, default, default, default, true) { }
+            : this(default!, default, default, default, default, true) { }
     }
 }

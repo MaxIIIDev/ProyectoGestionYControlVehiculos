@@ -61,7 +61,7 @@ namespace Backend.Services
                 throw new KeyNotFoundException("Documento con id " + id + " no encontrada");
             if (
                 docFinded.IdVehiculo != documento.IdVehiculo
-                && await _serviceVehiculo.GetByIdAsync(documento.IdVehiculo) is null
+                && await _serviceVehiculo.GetByIdAsync(documento.IdVehiculo ?? 0) is null
             )
                 throw new KeyNotFoundException(
                     "Vehiculo con id " + documento.IdVehiculo + " no encontrado"
@@ -104,6 +104,12 @@ namespace Backend.Services
             documento.Estado = true;
             _context.Documentos.Update(documento);
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        // GET DOCUMENTOS POR VEHICULO ID
+        public async Task<List<Documento>> GetByVehiculoIdAsync(int IdVehiculo)
+        {
+            return await _context.Documentos.Where(d => d.IdVehiculo == IdVehiculo).ToListAsync();
         }
     }
 
