@@ -8,7 +8,7 @@ public class CreateDocumentoDto
     [MinLength(3, ErrorMessage = "El campo {0} debe tener mínimo {1} caracteres")]
     [MaxLength(50, ErrorMessage = "El campo {0} debe tener máximo {1} caracteres")]
     public string? Tipo { get; set; }
-    public List<string>? UrlArchivos { get; set; }
+    public string? UrlArchivos { get; set; }
 
     [Required(ErrorMessage = "El campo {0} es requerido")]
     [Range(

@@ -113,5 +113,13 @@ public class ControllerDocumento : ControllerBase
         }
         return NoContent();
     }
+
+    // GET DOCUMENTOS POR VEHICULO ID
+    [HttpGet("vehiculo/{IdVehiculo}")]
+    public async Task<IActionResult> GetDocumentosByVehiculoId(int IdVehiculo)
+    {
+        var documentos = await _serviceDocumento.GetByVehiculoIdAsync(IdVehiculo);
+        return Ok(documentos);
+    }
     // HAY Q VER COMO APLICAR LO DE LOS PATHS Y LO DE ARCHIVOS ACA
 }

@@ -10,6 +10,7 @@ interface ComboBoxBrowserProps {
   apiUrl: string;
   apiMethod?: string;
   onSelect?: (option: string) => void;
+  onEntitySelect?: (entity: any) => void;
   defaultOption?: string;
   name?: string;
   placeholder?: string;
@@ -19,6 +20,7 @@ const ComboBoxBrowser: React.FC<ComboBoxBrowserProps> = ({
   apiUrl,
   apiMethod,
   onSelect,
+  onEntitySelect,
   defaultOption,
   name,
   placeholder,
@@ -43,6 +45,7 @@ const ComboBoxBrowser: React.FC<ComboBoxBrowserProps> = ({
           const opts = (Array.isArray(data) ? data : []).map((v: any) => ({
             value: v.patente,
             label: v.patente,
+            original: v,
           }));
           setOptions(opts);
         });
@@ -60,6 +63,7 @@ const ComboBoxBrowser: React.FC<ComboBoxBrowserProps> = ({
       onChange={(opt) => {
         setSelected(opt as Option);
         if (onSelect) onSelect((opt as Option)?.value || "");
+        if (onEntitySelect) onEntitySelect((opt as any)?.original || null);
       }}
       isClearable
       isSearchable

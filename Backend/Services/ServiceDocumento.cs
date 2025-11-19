@@ -105,6 +105,12 @@ namespace Backend.Services
             _context.Documentos.Update(documento);
             return await _context.SaveChangesAsync() > 0;
         }
+
+        // GET DOCUMENTOS POR VEHICULO ID
+        public async Task<List<Documento>> GetByVehiculoIdAsync(int IdVehiculo)
+        {
+            return await _context.Documentos.Where(d => d.IdVehiculo == IdVehiculo).ToListAsync();
+        }
     }
 
     // AL DE CREACION HAY Q COLOCARLE LA LOGICA DE CREACION DE CARPETAS Y RENOMBRAMIENTO DE ARCHIVOS Y LA CREACION DEL URLPATH

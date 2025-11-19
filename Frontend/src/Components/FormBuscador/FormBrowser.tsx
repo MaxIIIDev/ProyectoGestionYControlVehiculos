@@ -1,23 +1,77 @@
-import type { ReactNode } from "react";
+import { useState } from "react";
+import ComboBoxBrowser from "./ComboBoxBrowser";
 
-interface FormProps {
-  children?: ReactNode;
-  name: string;
-  method: string;
-  action: string;
-  target?: string;
+interface FormBrowserProps {
+  searchApiUrl: string; // endpoint base para buscar entidades
+  searchApiMethod?: string;
+  relatedApiUrl: (entity: any) => string; // función que recibe la entidad y devuelve el endpoint de datos relacionados
+  relatedApiMethod?: string;
+  entityLabel?: string;
+  renderEntity?: (entity: any) => React.ReactNode;
+  renderRelated?: (related: any[]) => React.ReactNode;
+  defaultOption?: string;
 }
 
-export default function Form({
-  children,
-  name,
-  method,
-  action,
-  target,
-}: FormProps) {
+export default function FormBrowser({
+  searchApiUrl,
+  searchApiMethod,
+  relatedApiUrl,
+  relatedApiMethod,
+  entityLabel,
+  renderEntity,
+  renderRelated,
+  defaultOption = `Buscar ${entityLabel || "..."}`,
+}: FormBrowserProps) {
+  const [entity, setEntity] = useState<any>(null);
+  const [related, setRelated] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleEntitySelect = (ent: any) => {
+    setEntity(ent);
+    setRelated([]);
+    if (ent) {
+      setLoading(true);
+      fetch(relatedApiUrl(ent), { method: relatedApiMethod })
+        .then((res) => res.json())
+        .then((data) => setRelated(Array.isArray(data) ? data : []))
+        .finally(() => setLoading(false));
+    }
+  };
+
   return (
-    <form name={name} method={method} action={action} target={target}>
-      {children}
+    <form>
+      <ComboBoxBrowser
+        apiUrl={searchApiUrl}
+        apiMethod={searchApiMethod}
+        defaultOption={defaultOption}
+        onEntitySelect={handleEntitySelect}
+      />
+      {entity && (
+        <div style={{ marginTop: 16 }}>
+          <strong>Datos de {entityLabel}:</strong>
+          {renderEntity ? (
+            renderEntity(entity)
+          ) : (
+            <pre>{JSON.stringify(entity, null, 2)}</pre>
+          )}
+        </div>
+      )}
+      {loading && <div>Cargando datos relacionados...</div>}
+      {related.length > 0 && (
+        <div style={{ marginTop: 16 }}>
+          <strong>Datos relacionados:</strong>
+          {renderRelated ? (
+            renderRelated(related)
+          ) : (
+            <pre>{JSON.stringify(related, null, 2)}</pre>
+          )}
+        </div>
+      )}
+      {entity && !loading && related.length === 0 && (
+        <div style={{ marginTop: 16 }}>
+          No hay datos relacionados para esta entidad.
+        </div>
+      )}
     </form>
   );
 }
