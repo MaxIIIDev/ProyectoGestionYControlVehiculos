@@ -45,6 +45,14 @@ namespace Backend.Services
             return await _context.Vehiculos.FirstOrDefaultAsync(v => v.Patente == patente);
         }
 
+        // GET VEHICULO POR PATENTE %LIKE%
+        public async Task<List<Vehiculo>> GetByPatenteLikeAsync(string patente)
+        {
+            return await _context
+                .Vehiculos.Where(v => EF.Functions.Like(v.Patente, $"%{patente}%"))
+                .ToListAsync();
+        }
+
         // GET VEHICULO POR NUMERO DE MOTOR
         public async Task<Vehiculo?> GetByNumeroMotorAsync(string numeroMotor)
         {

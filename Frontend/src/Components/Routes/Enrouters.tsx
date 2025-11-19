@@ -29,6 +29,11 @@ export const endpointsAPI = {
         `${API_ROUTE}/Vehiculos/buscarPorPatente/${patente}`,
       method: "GET",
     },
+    buscarPorPatenteLike: {
+      action: (patente: string) =>
+        `${API_ROUTE}/Vehiculos/buscarPorPatenteLike/${patente}`,
+      method: "GET",
+    },
   },
   controlKilometraje: {
     nuevo: { action: `${API_ROUTE}/registro-kilometraje`, method: "POST" },

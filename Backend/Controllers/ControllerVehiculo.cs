@@ -138,4 +138,16 @@ public class ControllerVehiculo : ControllerBase
         }
         return Ok(vehiculo);
     }
+
+    //BUSCAR VEHICULO POR PATENTE LIKE
+    [HttpGet("buscarPorPatenteLike/{patente}")]
+    public async Task<IActionResult> GetVehiculoByPatenteLike(string patente)
+    {
+        var vehiculos = await _serviceVehiculo.GetByPatenteLikeAsync(patente);
+        if (vehiculos == null || vehiculos.Count == 0)
+        {
+            return NotFound();
+        }
+        return Ok(vehiculos);
+    }
 }
