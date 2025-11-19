@@ -143,14 +143,25 @@ export const AgregarRegistroKilometraje = () => {
               value={formData.KilometrajeActual}
               onChange={handleChange}
               required={true}
-              error={
-                errors.KilometrajeActual
-                  ? errors.KilometrajeActual
-                  : !desbloquearSegundoFormulario
-                  ? "Debe Seleccionar un Vehiculo para desbloquear esta sección"
-                  : ""
-              }
+              error={errors.KilometrajeActual}
               disabled={!desbloquearSegundoFormulario}></FormInput>
+            {!desbloquearSegundoFormulario && (
+              <div
+                className="mt-1"
+                style={{
+                  color: "#ffc506ff",
+                  fontSize: "0.9em",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "5px",
+                  paddingLeft: "10px",
+                }}>
+                <i className="bi bi-info-circle"></i>
+                <span>
+                  Seleccione un vehículo arriba para habilitar este campo.
+                </span>
+              </div>
+            )}
             <FormButtons
               initialState={initialState}
               setFormData={setFormData}
