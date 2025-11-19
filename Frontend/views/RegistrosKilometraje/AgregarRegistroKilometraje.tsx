@@ -22,14 +22,14 @@ export const AgregarRegistroKilometraje = () => {
   const [formData, setFormData] =
     useState<ControlKilometrajeSchemaType>(initialState);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [idVehiculo, setIdVehiculo] = useState<number>(0);
-
+  const [Vehiculo, setVehiculo] = useState<{ [key: string]: string }>();
+  console.log(Vehiculo);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
   const desbloquearSegundoFormulario: boolean =
-    idVehiculo != null && idVehiculo > 0 ? true : false;
+    Vehiculo != null && parseInt(Vehiculo.idVehiculo) > 0 ? true : false;
   const ValidateForm = (): boolean => {
     const validateFromZod = ControlKilometrajeSchema.safeParse(formData);
     if (!validateFromZod.success) {
@@ -72,11 +72,15 @@ export const AgregarRegistroKilometraje = () => {
     <div
       style={{
         display: "flex",
-        justifyContent: "center",
+        justifyContent: "start",
         alignItems: "center",
+        flexDirection: "column",
+        padding: "20px",
+        width: "100%",
+        height: "100%",
       }}>
       <FormCard
-        title="Registrar Kilometraje"
+        title="Buscar Vehiculo"
         classNameCard="mb-1 bg-dark text-white  rounded-5 "
         classNameHeader="fs-1 text-white text-center border-0 rounded-5"
         styleCard={{
@@ -88,10 +92,29 @@ export const AgregarRegistroKilometraje = () => {
         <ComboBoxBrowser
           apiUrl={endpointsAPI.vehiculos.buscarPorPatenteLike.action("")}
           apiMethod={endpointsAPI.vehiculos.buscarPorPatenteLike.method}
-          onSelect={(value: string) => setIdVehiculo(parseInt(value))}
+          onEntitySelect={(value: { [key: string]: string }) => {
+            setVehiculo(value);
+            setFormData({
+              ...formData,
+              IdVehiculo: parseInt(value.idVehiculo),
+            });
+          }}
           defaultOption="Buscador por Patente"
           name="patente"
           placeholder="Buscador por Patente"></ComboBoxBrowser>
+        {Vehiculo && desbloquearSegundoFormulario && (
+          <h5
+            style={{
+              color: "white",
+              marginTop: "10px",
+              fontSize: "15px",
+              textAlign: "start",
+            }}
+            hidden={!desbloquearSegundoFormulario}>
+            Seleccionado: {Vehiculo!.marca} {Vehiculo!.modelo} -{" "}
+            {Vehiculo!.patente}
+          </h5>
+        )}
       </FormCard>
       <FormCard
         title="Registrar Kilometraje"
@@ -100,6 +123,7 @@ export const AgregarRegistroKilometraje = () => {
         styleCard={{
           maxWidth: "50%",
           padding: "20px",
+          marginTop: "1px",
         }}
         styleHeader={{ fontFamily: "serif" }}
         classNameBody="fs-5 p-1">
@@ -121,6 +145,23 @@ export const AgregarRegistroKilometraje = () => {
               required={true}
               error={errors.KilometrajeActual}
               disabled={!desbloquearSegundoFormulario}></FormInput>
+            {!desbloquearSegundoFormulario && (
+              <div
+                className="mt-1"
+                style={{
+                  color: "#ffc506ff",
+                  fontSize: "0.9em",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "5px",
+                  paddingLeft: "10px",
+                }}>
+                <i className="bi bi-info-circle"></i>
+                <span>
+                  Seleccione un vehículo arriba para habilitar este campo.
+                </span>
+              </div>
+            )}
             <FormButtons
               initialState={initialState}
               setFormData={setFormData}
