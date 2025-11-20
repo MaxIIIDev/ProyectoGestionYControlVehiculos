@@ -59,18 +59,13 @@ export default function FormBrowser({
         </div>
       )}
       {loading && <div>Cargando datos relacionados...</div>}
-      {related.length > 0 && (
+      {entity && !loading && (
         <div style={{ marginTop: 16 }}>
           {renderRelated ? (
             renderRelated(related)
           ) : (
             <pre>{JSON.stringify(related, null, 2)}</pre>
           )}
-        </div>
-      )}
-      {entity && !loading && related.length === 0 && (
-        <div style={{ marginTop: 16 }}>
-          No hay datos relacionados para esta entidad.
         </div>
       )}
     </form>

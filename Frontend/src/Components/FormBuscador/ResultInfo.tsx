@@ -9,14 +9,14 @@ export default function ResultInfo({ title, info }: ResultInfoProps) {
   return (
     <div className="result-info-container">
       <h5 className="result-info-title">{title}</h5>
-      <ul className="result-info-list">
+      <div className="result-info-row">
         {info.map((item, index) => (
-          <li key={index}>
+          <span className="result-info-item" key={index}>
             <span className="result-info-label">{item.label}:</span>{" "}
             {item.value}
-          </li>
+          </span>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
