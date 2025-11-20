@@ -9,10 +9,12 @@ interface Documento {
 
 interface DocumentosVehiculosHandlerProps {
   docs: Documento[];
+  onCargar?: (tipo: string) => void;
 }
 
 export default function DocumentosVehiculosHandler({
   docs,
+  onCargar,
 }: DocumentosVehiculosHandlerProps) {
   // Tipos requeridos
   const tiposRequeridos = [
@@ -106,7 +108,11 @@ export default function DocumentosVehiculosHandler({
               <span>
                 <strong>{req.label}:</strong> No cargada
               </span>
-              <Button variant="success" size="sm">
+              <Button
+                variant="success"
+                size="sm"
+                onClick={() => onCargar && onCargar(req.tipo)}
+              >
                 Cargar
               </Button>
             </div>

@@ -4,8 +4,25 @@ import ResultInfo from "../src/Components/FormBuscador/ResultInfo";
 import NavButtonPosition from "../src/Components/NavButtonPosition";
 import Enrouters from "../src/Components/Routes/Enrouters";
 import DocumentosHandler from "../src/Components/FormBuscador/DocumentosVehiculosHandler";
+import ContainerCargador from "../src/Components/CargadorDeArchivos/ContainerCargador";
+import { useState } from "react";
 
 export default function VehiculosDocumentos() {
+  const [showCargador, setShowCargador] = useState(false);
+  const [idVehiculo, setIdVehiculo] = useState<number | null>(null);
+  const [tipoDoc, setTipoDoc] = useState<string>("");
+  const entity = "Vehiculo";
+
+  const handleVehiculoSelect = (vehiculo: any) => {
+    console.log("Vehículo seleccionado:", vehiculo);
+    setIdVehiculo(vehiculo.idVehiculo);
+  };
+
+  const handleCargar = (tipo: string) => {
+    setTipoDoc(tipo);
+    setShowCargador(true);
+  };
+
   return (
     <>
       <GeneralContainer title="Gestión de Documentos de Vehículos">
@@ -16,11 +33,12 @@ export default function VehiculosDocumentos() {
             Enrouters.documentos.buscarPorVehiculoId.action(vehicle.idVehiculo)
           }
           relatedApiMethod={Enrouters.documentos.buscarPorVehiculoId.method}
-          entityLabel="Vehiculo"
+          entityLabel={entity}
           defaultOption="Buscar vehículo por patente"
+          onEntitySelect={handleVehiculoSelect}
           renderEntity={(vehicle) => (
             <ResultInfo
-              title="Vehículo"
+              title={entity}
               info={[
                 { label: "Marca", value: vehicle.marca },
                 { label: "Modelo", value: vehicle.modelo },
@@ -29,9 +47,18 @@ export default function VehiculosDocumentos() {
               ]}
             />
           )}
-          renderRelated={(docs) => <DocumentosHandler docs={docs} />}
+          renderRelated={(docs) => (
+            <DocumentosHandler docs={docs} onCargar={handleCargar} />
+          )}
         />
         <NavButtonPosition />
+        <ContainerCargador
+          show={showCargador}
+          onHide={() => setShowCargador(false)}
+          idVehiculo={idVehiculo || undefined}
+          tipoDocumento={tipoDoc}
+          entityLabel={entity}
+        />
       </GeneralContainer>
     </>
   );

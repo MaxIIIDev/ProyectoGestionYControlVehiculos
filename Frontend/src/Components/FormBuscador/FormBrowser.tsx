@@ -10,6 +10,7 @@ interface FormBrowserProps {
   renderEntity?: (entity: any) => React.ReactNode;
   renderRelated?: (related: any[]) => React.ReactNode;
   defaultOption?: string;
+  onEntitySelect?: (entity: any) => void;
 }
 
 export default function FormBrowser({
@@ -20,6 +21,7 @@ export default function FormBrowser({
   entityLabel,
   renderEntity,
   renderRelated,
+  onEntitySelect,
   defaultOption = `Buscar ${entityLabel || "..."}`,
 }: FormBrowserProps) {
   const [entity, setEntity] = useState<any>(null);
@@ -29,12 +31,12 @@ export default function FormBrowser({
   const handleEntitySelect = (ent: any) => {
     setEntity(ent);
     setRelated([]);
+    if (onEntitySelect) onEntitySelect(ent); // <-- AGREGA ESTA LÍNEA
     if (ent) {
       setLoading(true);
       fetch(relatedApiUrl(ent), { method: relatedApiMethod })
         .then((res) => res.json())
         .then((data) => {
-          console.log("Respuesta documentos por vehículo:", data);
           setRelated(Array.isArray(data) ? data : []);
         })
         .finally(() => setLoading(false));
