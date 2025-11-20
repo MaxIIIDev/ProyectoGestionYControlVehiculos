@@ -29,9 +29,7 @@ export default function VehiculosDocumentos() {
               ]}
             />
           )}
-          renderRelated={(docs) => (
-            <DocumentosHandler docs={docs} tipo="Documentos de Vehiculos" />
-          )}
+          renderRelated={(docs) => <DocumentosHandler docs={docs} />}
         />
         <NavButtonPosition />
       </GeneralContainer>

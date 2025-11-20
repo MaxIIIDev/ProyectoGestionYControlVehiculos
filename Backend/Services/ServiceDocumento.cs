@@ -46,8 +46,36 @@ namespace Backend.Services
         }
 
         // NUEVO DOCUMENTO
-        public async Task<Documento> AddAsync(Documento documento)
+        public async Task<Documento> AddAsync(
+            Documento documento,
+            string tipoEntidad,
+            IFormFile archivo,
+            string tipoDoc,
+            string codigoEntidad
+        )
         {
+            string directorioGeneral = AppDomain.CurrentDomain.BaseDirectory;
+            string rutaBase = Path.Combine(
+                directorioGeneral,
+                "Nova-SLUG",
+                "Documentos",
+                tipoEntidad,
+                codigoEntidad
+            );
+            {
+                Directory.CreateDirectory(rutaBase);
+            }
+            int count = Directory.GetFiles(rutaBase).Length + 1;
+            string extension = Path.GetExtension(archivo.FileName);
+            string nombreArchivo = $"{tipoDoc}_{codigoEntidad}_{count}{extension}";
+            string rutaCompleta = Path.Combine(rutaBase, nombreArchivo);
+
+            using (var stream = new FileStream(rutaCompleta, FileMode.Create))
+            {
+                await archivo.CopyToAsync(stream);
+            }
+
+            documento.UrlArchivos = rutaCompleta.Replace("\\", "/");
             _context.Documentos.Add(documento);
             await _context.SaveChangesAsync();
             return documento;
@@ -111,7 +139,24 @@ namespace Backend.Services
         {
             return await _context.Documentos.Where(d => d.IdVehiculo == IdVehiculo).ToListAsync();
         }
-    }
 
-    // AL DE CREACION HAY Q COLOCARLE LA LOGICA DE CREACION DE CARPETAS Y RENOMBRAMIENTO DE ARCHIVOS Y LA CREACION DEL URLPATH
+        //ESTOS METODOS SON PARA LA CREACION DE LAS RUTAS DE ALMACENAMIENTO Y NOMBRES DE ARCHIVOS
+        public async Task<string?> GetPatenteByVehiculoId(int? idVehiculo)
+        {
+            if (idVehiculo == null)
+                return null;
+            var vehiculo = await _context.Vehiculos.FindAsync(idVehiculo);
+            return vehiculo?.Patente;
+        }
+
+        public async Task<string?> GetNumeroSerieByMatafuegoId(int? idMatafuego)
+        {
+            if (idMatafuego == null)
+                return null;
+            var matafuego = await _context.Matafuegos.FindAsync(idMatafuego);
+            return matafuego?.IdMatafuego.ToString();
+        }
+
+        // AL DE CREACION HAY Q COLOCARLE LA LOGICA DE CREACION DE CARPETAS Y RENOMBRAMIENTO DE ARCHIVOS Y LA CREACION DEL URLPATH
+    }
 }

@@ -44,10 +44,45 @@ public class ControllerDocumento : ControllerBase
 
     // POST NUEVO DOCUMENTO
     [HttpPost]
-    public async Task<IActionResult> AddDocumento([FromBody] CreateDocumentoDto documentoDto)
+    public async Task<IActionResult> AddDocumento([FromForm] CreateDocumentoDto dto)
     {
-        Documento documento = mapper.Map<Documento>(documentoDto);
-        var newDocumento = await _serviceDocumento.AddAsync(documento);
+        if (dto.Archivo == null || dto.Archivo.Length == 0)
+            return BadRequest("Debe adjuntar un archivo.");
+
+        Documento documento = mapper.Map<Documento>(dto);
+
+        // Determinar tipoEntidad y codigoEntidad
+        string tipoEntidad,
+            codigoEntidad;
+        if (documento.IdVehiculo != null)
+        {
+            tipoEntidad = "Vehiculos";
+            codigoEntidad =
+                await _serviceDocumento.GetPatenteByVehiculoId(documento.IdVehiculo)
+                ?? "Desconocido";
+        }
+        else if (documento.IdMatafuego != null)
+        {
+            tipoEntidad = "Matafuegos";
+            codigoEntidad =
+                await _serviceDocumento.GetNumeroSerieByMatafuegoId(documento.IdMatafuego)
+                ?? "Desconocido";
+        }
+        else
+        {
+            return BadRequest("Debe asociar el documento a un vehículo o matafuego.");
+        }
+
+        string tipoDoc = documento.Tipo ?? "Otro";
+
+        var newDocumento = await _serviceDocumento.AddAsync(
+            documento,
+            tipoEntidad,
+            dto.Archivo,
+            tipoDoc,
+            codigoEntidad
+        );
+
         return CreatedAtAction(
             nameof(GetDocumentoById),
             new { id = newDocumento.IdDocumento },

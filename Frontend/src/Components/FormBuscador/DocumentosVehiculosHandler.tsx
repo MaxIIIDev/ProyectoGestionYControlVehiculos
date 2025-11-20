@@ -1,6 +1,6 @@
 import { Button } from "react-bootstrap";
 
-interface DocumentosVehiculosHandlerProps {
+interface Documento {
   idDocumento?: number;
   tipo?: string;
   fechaVencimiento?: string;
@@ -8,7 +8,7 @@ interface DocumentosVehiculosHandlerProps {
 }
 
 interface DocumentosVehiculosHandlerProps {
-  docs: DocumentosVehiculosHandlerProps[];
+  docs: Documento[];
 }
 
 export default function DocumentosVehiculosHandler({
@@ -29,39 +29,57 @@ export default function DocumentosVehiculosHandler({
     <div className="d-flex flex-column gap-2">
       {/* Documentos existentes */}
       {docs.length !== 0 &&
-        docs.map((doc: any, idx: number) => (
-          <div
-            key={doc.idDocumento ?? idx}
-            className="d-flex align-items-center border rounded p-2 gap-3 justify-content-between"
-          >
-            <div className="d-flex flex-column">
-              <span>
-                <strong>{doc.tipo}</strong>
-              </span>
-              <span>
-                <strong>Vencimiento:</strong> {doc.fechaVencimiento}
-              </span>
+        docs.map((doc: any, idx: number) => {
+          let vencido = false;
+          if (doc.fechaVencimiento) {
+            const fechaVenc = new Date(doc.fechaVencimiento);
+            const hoy = new Date();
+            vencido = fechaVenc < hoy;
+          }
+          return (
+            <div
+              key={doc.idDocumento ?? idx}
+              className="d-flex align-items-center border rounded p-2 gap-3 justify-content-between"
+            >
+              <div className="d-flex flex-column">
+                <span>
+                  <strong>{doc.tipo}</strong>
+                </span>
+                <span>
+                  <strong>Vencimiento:</strong> {doc.fechaVencimiento}
+                </span>
+              </div>
+              <div>
+                {vencido && (
+                  <span className="text-danger">
+                    Documento vencido:
+                    <Button variant="success" size="sm" className="ms-2">
+                      Cargar Nuevo
+                    </Button>
+                  </span>
+                )}
+              </div>
+              <div className="d-flex gap-3">
+                <Button
+                  variant="primary"
+                  href={doc.urlDocumento}
+                  target="_blank"
+                  size="sm"
+                >
+                  Abrir
+                </Button>
+                <Button
+                  variant="primary"
+                  href={doc.urlDocumento}
+                  target="_blank"
+                  size="sm"
+                >
+                  Ir a Ubicación
+                </Button>
+              </div>
             </div>
-            <div className="d-flex gap-3">
-              <Button
-                variant="primary"
-                href={doc.urlDocumento}
-                target="_blank"
-                size="sm"
-              >
-                Abrir
-              </Button>
-              <Button
-                variant="primary"
-                href={doc.urlDocumento}
-                target="_blank"
-                size="sm"
-              >
-                Ir a Ubicación
-              </Button>
-            </div>
-          </div>
-        ))}
+          );
+        })}
 
       {/* Documentos requeridos no presentes */}
       {docs.length > 0
