@@ -31,7 +31,7 @@ export default function FormBrowser({
   const handleEntitySelect = (ent: any) => {
     setEntity(ent);
     setRelated([]);
-    if (onEntitySelect) onEntitySelect(ent); // <-- AGREGA ESTA LÍNEA
+    if (onEntitySelect) onEntitySelect(ent);
     if (ent) {
       setLoading(true);
       fetch(relatedApiUrl(ent), { method: relatedApiMethod })
