@@ -55,7 +55,12 @@ export default function DocumentosVehiculosHandler({
                 {vencido && (
                   <span className="text-danger">
                     Documento vencido:
-                    <Button variant="success" size="sm" className="ms-2">
+                    <Button
+                      variant="success"
+                      size="sm"
+                      className="ms-2"
+                      onClick={() => onCargar && onCargar(doc.tipo)}
+                    >
                       Cargar Nuevo
                     </Button>
                   </span>
@@ -63,9 +68,11 @@ export default function DocumentosVehiculosHandler({
               </div>
               <div className="d-flex gap-3">
                 <Button
+                  as="a"
                   variant="primary"
-                  href={doc.urlDocumento}
+                  href={doc.urlArchivos}
                   target="_blank"
+                  rel="noopener noreferrer"
                   size="sm"
                 >
                   Abrir
@@ -94,7 +101,11 @@ export default function DocumentosVehiculosHandler({
                 <span>
                   <strong>{req.label}:</strong> No cargada
                 </span>
-                <Button variant="success" size="sm">
+                <Button
+                  variant="success"
+                  size="sm"
+                  onClick={() => onCargar && onCargar(req.tipo)}
+                >
                   Cargar
                 </Button>
               </div>
@@ -123,7 +134,11 @@ export default function DocumentosVehiculosHandler({
         <span>
           <strong>Agregar documentación adicional</strong>
         </span>
-        <Button variant="secondary" size="sm">
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => onCargar && onCargar("")}
+        >
           Agregar
         </Button>
       </div>

@@ -26,18 +26,21 @@ export default function ContainerCargador({
   const [archivo, setArchivo] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [nombreDocumento, setNombreDocumento] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
-    if (!tipoDocumento || !fechaEmision || !fechaVencimiento || !archivo) {
+    const tipo = tipoDocumento || nombreDocumento;
+
+    if (!tipo || !fechaEmision || !fechaVencimiento || !archivo) {
       setError("Todos los campos son obligatorios.");
       return;
     }
 
     const formData = new FormData();
-    formData.append("Tipo", tipoDocumento);
+    formData.append("Tipo", tipo);
     formData.append("FechaEmision", fechaEmision);
     formData.append("FechaVencimiento", fechaVencimiento);
     formData.append("Archivo", archivo);
@@ -75,7 +78,22 @@ export default function ContainerCargador({
           {error && <Alert variant="danger">{error}</Alert>}
           <Form.Group className="mb-3">
             <Form.Label>Tipo de documento</Form.Label>
-            <Form.Control type="text" value={tipoDocumento} disabled readOnly />
+            {!tipoDocumento ? (
+              <Form.Control
+                type="text"
+                value={nombreDocumento}
+                onChange={(e) => setNombreDocumento(e.target.value)}
+                placeholder="Nombre del documento"
+                required
+              />
+            ) : (
+              <Form.Control
+                type="text"
+                value={tipoDocumento}
+                disabled
+                readOnly
+              />
+            )}
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Fecha de emisión</Form.Label>
