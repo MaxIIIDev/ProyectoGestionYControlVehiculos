@@ -185,7 +185,7 @@ public class ControllerDocumento : ControllerBase
             _ => "application/octet-stream",
         };
 
-        // Usar el nombre real del archivo si lo tienes, si no, "archivo"
+        // Usar el nombre real del archivo, si no, "archivo"
         var nombreArchivo = Path.GetFileName(documento.UrlArchivos) ?? "archivo";
 
         return File(archivo, mimeType, nombreArchivo);
