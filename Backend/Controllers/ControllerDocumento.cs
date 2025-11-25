@@ -162,12 +162,33 @@ public class ControllerDocumento : ControllerBase
     public async Task<IActionResult> GetArchivoByDocumentoId(int id)
     {
         var archivo = await _serviceDocumento.GetFileStreamByDocumentoId(id);
-        if (archivo == null)
+        var documento = await _serviceDocumento.GetByIdAsync(id);
+
+        if (archivo == null || documento == null)
         {
             return NotFound("Archivo no encontrado para el documento con id: " + id);
         }
 
-        return File(archivo, "application/octet-stream", "archivo");
+        // Obtener la extensión del archivo
+        var extension = Path.GetExtension(documento.UrlArchivos)?.ToLower();
+
+        // Determinar el tipo de archivo según la extensión
+        string mimeType = extension switch
+        {
+            ".pdf" => "application/pdf",
+            ".jpg" or ".jpeg" => "image/jpeg",
+            ".png" => "image/png",
+            ".doc" => "application/msword",
+            ".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            ".xls" => "application/vnd.ms-excel",
+            ".xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            _ => "application/octet-stream",
+        };
+
+        // Usar el nombre real del archivo si lo tienes, si no, "archivo"
+        var nombreArchivo = Path.GetFileName(documento.UrlArchivos) ?? "archivo";
+
+        return File(archivo, mimeType, nombreArchivo);
     }
     // HAY Q VER COMO APLICAR LO DE LOS PATHS Y LO DE ARCHIVOS ACA
 }

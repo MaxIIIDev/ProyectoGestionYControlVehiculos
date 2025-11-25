@@ -28,12 +28,13 @@ export default function DocumentosVehiculosHandler({
   const tieneTipo = (tipo: string) =>
     docs.some((doc: any) => doc.tipo?.toLowerCase() === tipo.toLowerCase());
   // Funcion para cargar el documento y abrirlo en una nueva pestaña
-  const openDocument = async () => {
-    const url = await fetch(
-      Enrouters.documentos.cargarDocumento.action(Documento.idDocumento!),
+  const openDocument = async (idDocumento: number) => {
+    const response = await fetch(
+      Enrouters.documentos.cargarDocumento.action(idDocumento),
       { method: Enrouters.documentos.cargarDocumento.method }
-    ).toString();
-    console.log("Abriendo documento en URL:", url);
+    );
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
