@@ -1,4 +1,5 @@
 import { Button } from "react-bootstrap";
+import Enrouters from "../Routes/Enrouters";
 
 interface Documento {
   idDocumento?: number;
@@ -19,13 +20,22 @@ export default function DocumentosVehiculosHandler({
   // Tipos requeridos
   const tiposRequeridos = [
     { tipo: "Tarjeta Verde", label: "Tarjeta Verde" },
-    { tipo: "Frente Poliza", label: "Frente Póliza" },
-    { tipo: "Titulo", label: "Título" },
+    { tipo: "Frente Poliza", label: "Frente PPoliza" },
+    { tipo: "Titulo", label: "Titulo" },
   ];
 
   // Verifica si existen los documentos requeridos
   const tieneTipo = (tipo: string) =>
     docs.some((doc: any) => doc.tipo?.toLowerCase() === tipo.toLowerCase());
+  // Funcion para cargar el documento y abrirlo en una nueva pestaña
+  const openDocument = async () => {
+    const url = await fetch(
+      Enrouters.documentos.cargarDocumento.action(Documento.idDocumento!),
+      { method: Enrouters.documentos.cargarDocumento.method }
+    ).toString();
+    console.log("Abriendo documento en URL:", url);
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <div className="d-flex flex-column gap-2">
@@ -70,10 +80,11 @@ export default function DocumentosVehiculosHandler({
                 <Button
                   as="a"
                   variant="primary"
-                  href={doc.urlArchivos}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  size="sm"
+                  onClick={() => {
+                    if (doc.idDocumento) {
+                      openDocument(doc.idDocumento);
+                    }
+                  }}
                 >
                   Abrir
                 </Button>

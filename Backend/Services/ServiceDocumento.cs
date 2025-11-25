@@ -55,6 +55,7 @@ namespace Backend.Services
         )
         {
             string directorioGeneral = AppDomain.CurrentDomain.BaseDirectory;
+            Console.WriteLine("Directorio General: " + directorioGeneral);
             string rutaBase = Path.Combine(
                 directorioGeneral,
                 "Nova-SLUG",
@@ -75,7 +76,7 @@ namespace Backend.Services
                 await archivo.CopyToAsync(stream);
             }
 
-            documento.UrlArchivos = rutaCompleta.Replace("\\", "/");
+            documento.UrlArchivos = rutaCompleta.Replace("\\", "//");
             _context.Documentos.Add(documento);
             await _context.SaveChangesAsync();
             return documento;
@@ -155,6 +156,24 @@ namespace Backend.Services
                 return null;
             var matafuego = await _context.Matafuegos.FindAsync(idMatafuego);
             return matafuego?.IdMatafuego.ToString();
+        }
+
+        // ENDPOINT PARA BUSCAR EL ARCHIVO DE UN DOCUMENTO Y ABRIRLO EN EL NAVEGADOR
+        public async Task<FileStream?> GetFileStreamByDocumentoId(int idDocumento)
+        {
+            var documento = await _context.Documentos.FindAsync(idDocumento);
+            if (documento == null || string.IsNullOrEmpty(documento.UrlArchivos))
+            {
+                return null;
+            }
+
+            string filePath = documento.UrlArchivos.Replace("/", "\\");
+            if (!File.Exists(filePath))
+            {
+                return null;
+            }
+
+            return new FileStream(filePath, FileMode.Open, FileAccess.Read);
         }
 
         // AL DE CREACION HAY Q COLOCARLE LA LOGICA DE CREACION DE CARPETAS Y RENOMBRAMIENTO DE ARCHIVOS Y LA CREACION DEL URLPATH

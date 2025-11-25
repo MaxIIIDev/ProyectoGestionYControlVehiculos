@@ -67,6 +67,11 @@ export const endpointsAPI = {
         `${API_ROUTE}/Documentos/vehiculo/${vehiculoId}`,
       method: "GET",
     },
+    cargarDocumento: {
+      action: (documentoId: number) =>
+        `${API_ROUTE}/Documentos/archivo/${documentoId}`,
+      method: "GET",
+    },
   },
 };
 export const endpointFront = {

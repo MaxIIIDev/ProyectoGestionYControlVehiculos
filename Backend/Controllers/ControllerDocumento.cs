@@ -156,5 +156,18 @@ public class ControllerDocumento : ControllerBase
         var documentos = await _serviceDocumento.GetByVehiculoIdAsync(IdVehiculo);
         return Ok(documentos);
     }
+
+    // GET ARCHIVO POR DOCUMENTO ID
+    [HttpGet("archivo/{id}")]
+    public async Task<IActionResult> GetArchivoByDocumentoId(int id)
+    {
+        var archivo = await _serviceDocumento.GetFileStreamByDocumentoId(id);
+        if (archivo == null)
+        {
+            return NotFound("Archivo no encontrado para el documento con id: " + id);
+        }
+
+        return File(archivo, "application/octet-stream", "archivo");
+    }
     // HAY Q VER COMO APLICAR LO DE LOS PATHS Y LO DE ARCHIVOS ACA
 }
