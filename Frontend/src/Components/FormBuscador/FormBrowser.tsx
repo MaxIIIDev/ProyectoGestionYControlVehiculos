@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ComboBoxBrowser from "./ComboBoxBrowser";
 
 interface FormBrowserProps {
@@ -11,8 +11,11 @@ interface FormBrowserProps {
   renderRelated?: (related: any[]) => React.ReactNode;
   defaultOption?: string;
   onEntitySelect?: (entity: any) => void;
+  refresh?: number;
 }
-
+export interface FormBrowserRef {
+  refresh: () => void;
+}
 export default function FormBrowser({
   searchApiUrl,
   searchApiMethod,
@@ -23,26 +26,29 @@ export default function FormBrowser({
   renderRelated,
   onEntitySelect,
   defaultOption = `Buscar ${entityLabel || "..."}`,
+  refresh = 0,
 }: FormBrowserProps) {
   const [entity, setEntity] = useState<any>(null);
   const [related, setRelated] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-
-  const handleEntitySelect = (ent: any) => {
-    setEntity(ent);
-    setRelated([]);
-    if (onEntitySelect) onEntitySelect(ent);
-    if (ent) {
+  useEffect(() => {
+    if (entity) {
       setLoading(true);
-      fetch(relatedApiUrl(ent), { method: relatedApiMethod })
+      fetch(relatedApiUrl(entity), { method: relatedApiMethod })
         .then((res) => res.json())
         .then((data) => {
           setRelated(Array.isArray(data) ? data : []);
         })
         .finally(() => setLoading(false));
+    } else {
+      setRelated([]);
     }
-  };
+  }, [entity, refresh]);
 
+  const handleEntitySelect = (ent: any) => {
+    setEntity(ent);
+    if (onEntitySelect) onEntitySelect(ent);
+  };
   return (
     <form>
       <ComboBoxBrowser

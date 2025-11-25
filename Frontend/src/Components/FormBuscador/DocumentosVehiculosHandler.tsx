@@ -23,10 +23,13 @@ export default function DocumentosVehiculosHandler({
     { tipo: "Frente Poliza", label: "Frente PPoliza" },
     { tipo: "Titulo", label: "Titulo" },
   ];
+  console.log("DOCS: " + docs.forEach((doc) => console.log(doc)));
 
   // Verifica si existen los documentos requeridos
   const tieneTipo = (tipo: string) =>
-    docs.some((doc: any) => doc.tipo?.toLowerCase() === tipo.toLowerCase());
+    docs.some(
+      (doc: Documento) => doc.tipo?.toLowerCase() === tipo.toLowerCase()
+    );
   // Funcion para cargar el documento y abrirlo en una nueva pestaña
   const openDocument = async (idDocumento: number) => {
     const response = await fetch(
@@ -42,7 +45,7 @@ export default function DocumentosVehiculosHandler({
     <div className="d-flex flex-column gap-2">
       {/* Documentos existentes */}
       {docs.length !== 0 &&
-        docs.map((doc: any, idx: number) => {
+        docs.map((doc: Documento, idx: number) => {
           let vencido = false;
           if (doc.fechaVencimiento) {
             const fechaVenc = new Date(doc.fechaVencimiento);
@@ -52,8 +55,7 @@ export default function DocumentosVehiculosHandler({
           return (
             <div
               key={doc.idDocumento ?? idx}
-              className="d-flex align-items-center border rounded p-2 gap-3 justify-content-between"
-            >
+              className="d-flex align-items-center border rounded p-2 gap-3 justify-content-between">
               <div className="d-flex flex-column">
                 <span>
                   <strong>{doc.tipo}</strong>
@@ -70,8 +72,7 @@ export default function DocumentosVehiculosHandler({
                       variant="success"
                       size="sm"
                       className="ms-2"
-                      onClick={() => onCargar && onCargar(doc.tipo)}
-                    >
+                      onClick={() => onCargar && onCargar(doc.tipo!)}>
                       Cargar Nuevo
                     </Button>
                   </span>
@@ -85,16 +86,14 @@ export default function DocumentosVehiculosHandler({
                     if (doc.idDocumento) {
                       openDocument(doc.idDocumento);
                     }
-                  }}
-                >
+                  }}>
                   Abrir
                 </Button>
                 <Button
                   variant="primary"
                   href={doc.urlDocumento}
                   target="_blank"
-                  size="sm"
-                >
+                  size="sm">
                   Ir a Ubicación
                 </Button>
               </div>
@@ -108,16 +107,14 @@ export default function DocumentosVehiculosHandler({
             !tieneTipo(req.tipo) ? (
               <div
                 key={req.tipo}
-                className="d-flex align-items-center border rounded p-2 gap-3 bg-light text-secondary justify-content-between"
-              >
+                className="d-flex align-items-center border rounded p-2 gap-3 bg-light text-secondary justify-content-between">
                 <span>
                   <strong>{req.label}:</strong> No cargada
                 </span>
                 <Button
                   variant="success"
                   size="sm"
-                  onClick={() => onCargar && onCargar(req.tipo)}
-                >
+                  onClick={() => onCargar && onCargar(req.tipo)}>
                   Cargar
                 </Button>
               </div>
@@ -126,16 +123,14 @@ export default function DocumentosVehiculosHandler({
         : tiposRequeridos.map((req) => (
             <div
               key={req.tipo}
-              className="d-flex align-items-center border rounded p-2 gap-3 bg-light text-secondary justify-content-between"
-            >
+              className="d-flex align-items-center border rounded p-2 gap-3 bg-light text-secondary justify-content-between">
               <span>
                 <strong>{req.label}:</strong> No cargada
               </span>
               <Button
                 variant="success"
                 size="sm"
-                onClick={() => onCargar && onCargar(req.tipo)}
-              >
+                onClick={() => onCargar && onCargar(req.tipo)}>
                 Cargar
               </Button>
             </div>
@@ -149,8 +144,7 @@ export default function DocumentosVehiculosHandler({
         <Button
           variant="secondary"
           size="sm"
-          onClick={() => onCargar && onCargar("")}
-        >
+          onClick={() => onCargar && onCargar("")}>
           Agregar
         </Button>
       </div>

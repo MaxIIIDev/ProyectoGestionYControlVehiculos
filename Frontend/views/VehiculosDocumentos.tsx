@@ -3,7 +3,7 @@ import GeneralContainer from "../src/Components/FormBuscador/GeneralContainer";
 import ResultInfo from "../src/Components/FormBuscador/ResultInfo";
 import NavButtonPosition from "../src/Components/NavButtonPosition";
 import Enrouters from "../src/Components/Routes/Enrouters";
-import DocumentosHandler from "../src/Components/FormBuscador/DocumentosVehiculosHandler";
+import DocumentosVehiculosHandler from "../src/Components/FormBuscador/DocumentosVehiculosHandler";
 import ContainerCargador from "../src/Components/CargadorDeArchivos/ContainerCargador";
 import { useState } from "react";
 
@@ -11,18 +11,21 @@ export default function VehiculosDocumentos() {
   const [showCargador, setShowCargador] = useState(false);
   const [idVehiculo, setIdVehiculo] = useState<number | null>(null);
   const [tipoDoc, setTipoDoc] = useState<string>("");
+  const [refreshKey, setRefreshKey] = useState(0);
+
   const entity = "Vehiculo";
 
   const handleVehiculoSelect = (vehiculo: any) => {
     console.log("Vehículo seleccionado:", vehiculo);
     setIdVehiculo(vehiculo.idVehiculo);
   };
-
+  const handleRefresh = () => {
+    setRefreshKey((prevKey) => prevKey + 1);
+  };
   const handleCargar = (tipo: string) => {
     setTipoDoc(tipo);
     setShowCargador(true);
   };
-
   return (
     <>
       <GeneralContainer title="Gestión de Documentos de Vehículos">
@@ -47,10 +50,12 @@ export default function VehiculosDocumentos() {
               ]}
             />
           )}
-          renderRelated={(docs) => (
-            <DocumentosHandler docs={docs} onCargar={handleCargar} />
+          refresh={refreshKey}
+          renderRelated={(docs: any) => (
+            <DocumentosVehiculosHandler docs={docs} onCargar={handleCargar} />
           )}
         />
+        {/* Hasta aca llegaria lo que seria la pagina, Este bonton seria el volver */}
         <NavButtonPosition />
         <ContainerCargador
           show={showCargador}
@@ -58,6 +63,7 @@ export default function VehiculosDocumentos() {
           idVehiculo={idVehiculo || undefined}
           tipoDocumento={tipoDoc}
           entityLabel={entity}
+          onSuccess={handleRefresh}
         />
       </GeneralContainer>
     </>
