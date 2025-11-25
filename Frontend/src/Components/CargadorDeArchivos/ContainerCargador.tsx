@@ -10,6 +10,7 @@ interface ContainerCargadorProps {
   tipoDocumento?: string;
   entityLabel?: string;
   onSuccess?: () => void;
+  idDocumentoViejo?: number;
 }
 
 export default function ContainerCargador({
@@ -20,6 +21,7 @@ export default function ContainerCargador({
   tipoDocumento = "",
   entityLabel = "",
   onSuccess,
+  idDocumentoViejo,
 }: ContainerCargadorProps) {
   const [fechaEmision, setFechaEmision] = useState("");
   const [fechaVencimiento, setFechaVencimiento] = useState("");
@@ -51,6 +53,20 @@ export default function ContainerCargador({
     setLoading(true);
     console.log([...formData.entries()]);
     try {
+      if (idDocumentoViejo && idDocumentoViejo > 0) {
+        const responseFromApiLogicalDelete = await fetch(
+          Enrouters.documentos.eliminar.action(idDocumentoViejo),
+          {
+            method: Enrouters.documentos.eliminar.method,
+          }
+        );
+        if (!responseFromApiLogicalDelete.ok) {
+          const data = await responseFromApiLogicalDelete.json();
+          throw new Error(
+            data?.message || "Error al eliminar el documento viejo"
+          );
+        }
+      }
       const res = await fetch(Enrouters.documentos.nuevo.action, {
         method: Enrouters.documentos.nuevo.method,
         body: formData,

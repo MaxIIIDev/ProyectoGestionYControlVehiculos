@@ -6,24 +6,29 @@ import Enrouters from "../src/Components/Routes/Enrouters";
 import DocumentosVehiculosHandler from "../src/Components/FormBuscador/DocumentosVehiculosHandler";
 import ContainerCargador from "../src/Components/CargadorDeArchivos/ContainerCargador";
 import { useState } from "react";
+import type { VehiculoSchemaType } from "../types/Vehiculo.schema";
 
 export default function VehiculosDocumentos() {
   const [showCargador, setShowCargador] = useState(false);
   const [idVehiculo, setIdVehiculo] = useState<number | null>(null);
   const [tipoDoc, setTipoDoc] = useState<string>("");
   const [refreshKey, setRefreshKey] = useState(0);
-
+  const [idDocumentoViejo, setIdDocumentoViejo] = useState<number>(0);
   const entity = "Vehiculo";
 
-  const handleVehiculoSelect = (vehiculo: any) => {
+  const handleVehiculoSelect = (vehiculo: {
+    [key: string]: string | number;
+  }) => {
     console.log("Vehículo seleccionado:", vehiculo);
-    setIdVehiculo(vehiculo.idVehiculo);
+    setIdVehiculo(parseInt(vehiculo.idVehiculo.toString()));
   };
   const handleRefresh = () => {
     setRefreshKey((prevKey) => prevKey + 1);
   };
-  const handleCargar = (tipo: string) => {
+  const handleCargar = (tipo: string, idDocumentoViejoFromParams?: number) => {
     setTipoDoc(tipo);
+    if (idDocumentoViejoFromParams)
+      setIdDocumentoViejo(idDocumentoViejoFromParams);
     setShowCargador(true);
   };
   return (
@@ -32,8 +37,8 @@ export default function VehiculosDocumentos() {
         <FormBrowser
           searchApiUrl={Enrouters.vehiculos.buscarPorPatenteLike.action("")}
           searchApiMethod={Enrouters.vehiculos.buscarPorPatenteLike.method}
-          relatedApiUrl={(vehicle) =>
-            Enrouters.documentos.buscarPorVehiculoId.action(vehicle.idVehiculo)
+          relatedApiUrl={(vehicle: VehiculoSchemaType) =>
+            Enrouters.documentos.buscarPorVehiculoId.action(vehicle.idVehiculo!)
           }
           relatedApiMethod={Enrouters.documentos.buscarPorVehiculoId.method}
           entityLabel={entity}
@@ -51,7 +56,7 @@ export default function VehiculosDocumentos() {
             />
           )}
           refresh={refreshKey}
-          renderRelated={(docs: any) => (
+          renderRelated={(docs) => (
             <DocumentosVehiculosHandler docs={docs} onCargar={handleCargar} />
           )}
         />
@@ -64,6 +69,7 @@ export default function VehiculosDocumentos() {
           tipoDocumento={tipoDoc}
           entityLabel={entity}
           onSuccess={handleRefresh}
+          idDocumentoViejo={idDocumentoViejo}
         />
       </GeneralContainer>
     </>

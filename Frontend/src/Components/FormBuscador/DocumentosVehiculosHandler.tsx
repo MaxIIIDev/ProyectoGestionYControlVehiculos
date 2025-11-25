@@ -10,7 +10,7 @@ interface Documento {
 
 interface DocumentosVehiculosHandlerProps {
   docs: Documento[];
-  onCargar?: (tipo: string) => void;
+  onCargar?: (tipo: string, idDocumentoViejo?: number) => void;
 }
 
 export default function DocumentosVehiculosHandler({
@@ -72,7 +72,9 @@ export default function DocumentosVehiculosHandler({
                       variant="success"
                       size="sm"
                       className="ms-2"
-                      onClick={() => onCargar && onCargar(doc.tipo!)}>
+                      onClick={() =>
+                        onCargar && onCargar(doc.tipo!, doc.idDocumento)
+                      }>
                       Cargar Nuevo
                     </Button>
                   </span>
