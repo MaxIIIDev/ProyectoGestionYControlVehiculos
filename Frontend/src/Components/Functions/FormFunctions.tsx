@@ -19,6 +19,7 @@ export const onSubmit = (
       .then((response) => {
         if (!response.ok) {
           return response.json().then((errorBody) => {
+            console.log("Error:", errorBody);
             let errorMessage = "Error en la respuesta del servidor";
             if (errorBody.errors) {
               const errorKeys = Object.keys(errorBody.errors);

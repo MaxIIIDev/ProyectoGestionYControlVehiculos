@@ -2,7 +2,7 @@ import { Form } from "react-bootstrap";
 import "../css/FormInput.css";
 
 interface FormInputProps {
-  label: string;
+  label?: string;
   placeholder?: string;
   type: string;
   name: string;

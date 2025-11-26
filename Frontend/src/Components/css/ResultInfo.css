@@ -37,6 +37,7 @@
   border-radius: 20px;
   background-color: #d7dbdf;
   box-shadow: inset 2px 4px 6px 0 rgba(0, 0, 0, 1);
+  text-align: center;
 }
 
 .result-info-item {

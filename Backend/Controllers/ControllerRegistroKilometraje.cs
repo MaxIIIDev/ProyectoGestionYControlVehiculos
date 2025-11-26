@@ -43,6 +43,24 @@ public class ControllerRegistroKilometraje : ControllerBase
         return Ok(registro);
     }
 
+    [HttpGet("latest/{idVehiculo}")]
+    public async Task<IActionResult> GetLatestRegistroKilometrajeByVehiculoId(int idVehiculo)
+    {
+        if (idVehiculo <= 0)
+        {
+            return BadRequest("El id debe ser mayor a 0");
+        }
+        RegistroKilometraje? registroFinded =
+            await _serviceRegistroKilometraje.GetLatestRegistroKilometrajeByVehiculoIdAsync(
+                idVehiculo
+            );
+        if (registroFinded == null)
+        {
+            return NotFound("El vehiculo no tiene registros de kilometraje registrados.");
+        }
+        return Ok(registroFinded);
+    }
+
     // POST NUEVO REGISTRO KILOMETRAJE
     [HttpPost]
     public async Task<IActionResult> AddRegistroKilometraje(
@@ -50,18 +68,30 @@ public class ControllerRegistroKilometraje : ControllerBase
     )
     {
         RegistroKilometraje registroKilometraje = mapper.Map<RegistroKilometraje>(createDto);
+
         try
         {
             var newRegistro = await _serviceRegistroKilometraje.AddAsync(registroKilometraje);
             return CreatedAtAction(
                 nameof(GetRegistroKilometrajeById),
                 new { id = newRegistro.IdRegistroKilometraje },
-                newRegistro
+                new
+                {
+                    IdRegistroKilometraje = newRegistro.IdRegistroKilometraje,
+                    Kilometraje = newRegistro.Kilometraje,
+                    FechaRegistro = newRegistro.FechaRegistro,
+                    Estado = newRegistro.Estado,
+                    IdVehiculo = newRegistro.IdVehiculo,
+                }
             );
         }
         catch (KeyNotFoundException ex)
         {
-            return NotFound(new { mensaje = ex.Message });
+            return NotFound(new { Message = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { Message = ex.Message });
         }
     }
 
@@ -89,7 +119,7 @@ public class ControllerRegistroKilometraje : ControllerBase
         }
         catch (KeyNotFoundException ex)
         {
-            return NotFound(new { mensaje = ex.Message });
+            return NotFound(new { Message = ex.Message });
         }
     }
 

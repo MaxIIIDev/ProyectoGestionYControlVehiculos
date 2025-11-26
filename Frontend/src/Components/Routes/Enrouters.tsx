@@ -37,6 +37,11 @@ export const endpointsAPI = {
   },
   controlKilometraje: {
     nuevo: { action: `${API_ROUTE}/registro-kilometraje`, method: "POST" },
+    buscarUltimoRegistroPorVehiculoId: {
+      action: (vehiculoId: number) =>
+        `${API_ROUTE}/registro-kilometraje/latest/${vehiculoId}`,
+      method: "GET",
+    },
     listar: { action: `${API_ROUTE}/registro-kilometraje`, method: "GET" },
     editar: {
       action: (id: number) => `${API_ROUTE}/registro-kilometraje/${id}`,

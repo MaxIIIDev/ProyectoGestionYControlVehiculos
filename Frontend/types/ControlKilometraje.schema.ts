@@ -11,7 +11,7 @@ export const ControlKilometrajeSchema = z.object({
     .int()
     .min(1, { error: "El ID del vehículo debe ser mayor a 0" })
     .optional(),
-  KilometrajeActual: z.coerce
+  Kilometraje: z.coerce
     .number()
     .min(0, { error: "El kilometraje actual debe ser al menos 0" }),
   FechaRegistro: z.date({ error: "La fecha es inválida" }).optional(),

@@ -49,6 +49,15 @@ namespace Backend.Services
             return await _context.RegistrosKilometraje.FindAsync(id);
         }
 
+        public async Task<RegistroKilometraje?> GetLatestRegistroKilometrajeByVehiculoIdAsync(
+            int idVehiculo
+        )
+        {
+            return await _context
+                .RegistrosKilometraje.OrderByDescending(register => register.FechaRegistro)
+                .FirstOrDefaultAsync(r => r.IdVehiculo == idVehiculo);
+        }
+
         // NUEVO REGISTRO KILOMETRAJE
         public async Task<RegistroKilometraje> AddAsync(RegistroKilometraje registroKilometraje)
         {
@@ -56,6 +65,14 @@ namespace Backend.Services
                 throw new KeyNotFoundException(
                     "Vehiculo con id " + registroKilometraje.IdVehiculo + " no encontrado"
                 );
+            if (
+                await GetLatestRegistroKilometrajeByVehiculoIdAsync(registroKilometraje.IdVehiculo)
+                    is (RegistroKilometraje registroFinded)
+                && registroKilometraje.Kilometraje <= registroFinded.Kilometraje
+            )
+            {
+                throw new InvalidOperationException("El registro no puede ser menor al anterior");
+            }
             _context.RegistrosKilometraje.Add(registroKilometraje);
             await _context.SaveChangesAsync();
             return registroKilometraje;
