@@ -47,7 +47,7 @@ export default function DocumentosVehiculosHandler({
 
   return (
     <div className="d-flex flex-column gap-2">
-      <div className="d-flex flex-row gap-2">
+      <div className="d-flex flex-row gap-2 mb-2">
         <div style={{ width: "15%" }}>
           <span
             className={
