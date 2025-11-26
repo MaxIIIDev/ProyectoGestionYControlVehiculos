@@ -2,6 +2,8 @@ import { Button } from "react-bootstrap";
 import Enrouters from "../Routes/Enrouters";
 import { useState } from "react";
 
+import Switch from "../Styled/StyledSwitch";
+
 interface Documento {
   idDocumento?: number;
   tipo?: string;
@@ -45,23 +47,20 @@ export default function DocumentosVehiculosHandler({
 
   return (
     <div className="d-flex flex-column gap-2">
-      <div className="mb-2">
-        <label className="me-2">
-          <input
-            type="radio"
-            checked={mostrarActivos}
-            onChange={() => setMostrarActivos(true)}
-          />{" "}
-          Activos
-        </label>
-        <label>
-          <input
-            type="radio"
-            checked={!mostrarActivos}
-            onChange={() => setMostrarActivos(false)}
-          />{" "}
-          Inactivos
-        </label>
+      <div className="d-flex flex-row gap-2">
+        <div style={{ width: "15%" }}>
+          <span
+            className={
+              mostrarActivos ? "fw-bold text-success" : "fw-bold text-danger"
+            }
+          >
+            {mostrarActivos ? "Mostrar Activos" : "Mostrar Inactivos"}
+          </span>
+        </div>
+        <Switch
+          checked={mostrarActivos}
+          onChange={() => setMostrarActivos((prev) => !prev)}
+        />
       </div>
       {/* Documentos existentes */}
       {docs.length !== 0 &&
