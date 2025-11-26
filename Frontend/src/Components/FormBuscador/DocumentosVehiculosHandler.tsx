@@ -1,11 +1,13 @@
 import { Button } from "react-bootstrap";
 import Enrouters from "../Routes/Enrouters";
+import { useState } from "react";
 
 interface Documento {
   idDocumento?: number;
   tipo?: string;
   fechaVencimiento?: string;
   urlDocumento?: string;
+  estado?: boolean;
 }
 
 interface DocumentosVehiculosHandlerProps {
@@ -17,10 +19,10 @@ export default function DocumentosVehiculosHandler({
   docs,
   onCargar,
 }: DocumentosVehiculosHandlerProps) {
-  // Tipos requeridos
+  const [mostrarActivos, setMostrarActivos] = useState(true);
   const tiposRequeridos = [
     { tipo: "Tarjeta Verde", label: "Tarjeta Verde" },
-    { tipo: "Frente Poliza", label: "Frente PPoliza" },
+    { tipo: "Frente Poliza", label: "Frente Poliza" },
     { tipo: "Titulo", label: "Titulo" },
   ];
   console.log("DOCS: " + docs.forEach((doc) => console.log(doc)));
@@ -43,113 +45,149 @@ export default function DocumentosVehiculosHandler({
 
   return (
     <div className="d-flex flex-column gap-2">
+      <div className="mb-2">
+        <label className="me-2">
+          <input
+            type="radio"
+            checked={mostrarActivos}
+            onChange={() => setMostrarActivos(true)}
+          />{" "}
+          Activos
+        </label>
+        <label>
+          <input
+            type="radio"
+            checked={!mostrarActivos}
+            onChange={() => setMostrarActivos(false)}
+          />{" "}
+          Inactivos
+        </label>
+      </div>
       {/* Documentos existentes */}
       {docs.length !== 0 &&
-        docs.map((doc: Documento, idx: number) => {
-          let vencido = false;
-          if (doc.fechaVencimiento) {
-            const fechaVenc = new Date(doc.fechaVencimiento);
-            const hoy = new Date();
-            vencido = fechaVenc < hoy;
-          }
-          return (
-            <div
-              key={doc.idDocumento ?? idx}
-              className="d-flex align-items-center border rounded p-2 gap-3 justify-content-between">
-              <div className="d-flex flex-column">
-                <span>
-                  <strong>{doc.tipo}</strong>
-                </span>
-                <span>
-                  <strong>Vencimiento:</strong> {doc.fechaVencimiento}
-                </span>
-              </div>
-              <div>
-                {vencido && (
-                  <span className="text-danger">
-                    Documento vencido:
-                    <Button
-                      variant="success"
-                      size="sm"
-                      className="ms-2"
-                      onClick={() =>
-                        onCargar && onCargar(doc.tipo!, doc.idDocumento)
-                      }>
-                      Cargar Nuevo
-                    </Button>
+        docs
+          .filter((doc) =>
+            mostrarActivos ? doc.estado !== false : doc.estado === false
+          )
+          .map((doc: Documento, idx: number) => {
+            let vencido = false;
+            if (doc.fechaVencimiento) {
+              const fechaVenc = new Date(doc.fechaVencimiento);
+              const hoy = new Date();
+              vencido = fechaVenc <= hoy;
+            }
+            return (
+              <div
+                key={doc.idDocumento ?? idx}
+                className="d-flex align-items-center border rounded p-2 gap-3 justify-content-between"
+              >
+                <div className="d-flex flex-column">
+                  <span>
+                    <strong>{doc.tipo}</strong>
                   </span>
-                )}
+                  <span>
+                    <strong>Vencimiento:</strong> {doc.fechaVencimiento}
+                  </span>
+                </div>
+                <div>
+                  {vencido && (
+                    <span className="text-danger">
+                      DOCUMENTO VENCIDO
+                      {doc.estado !== false && (
+                        <Button
+                          variant="success"
+                          size="sm"
+                          className="ms-2"
+                          onClick={() =>
+                            onCargar && onCargar(doc.tipo!, doc.idDocumento)
+                          }
+                        >
+                          Cargar Nuevo
+                        </Button>
+                      )}
+                    </span>
+                  )}
+                </div>
+                <div className="d-flex gap-3">
+                  <Button
+                    as="a"
+                    variant="primary"
+                    onClick={() => {
+                      if (doc.idDocumento) {
+                        openDocument(doc.idDocumento);
+                      }
+                    }}
+                  >
+                    Abrir
+                  </Button>
+                  <Button
+                    variant="primary"
+                    href={doc.urlDocumento}
+                    target="_blank"
+                    size="sm"
+                  >
+                    Ir a Ubicación
+                  </Button>
+                </div>
               </div>
-              <div className="d-flex gap-3">
-                <Button
-                  as="a"
-                  variant="primary"
-                  onClick={() => {
-                    if (doc.idDocumento) {
-                      openDocument(doc.idDocumento);
-                    }
-                  }}>
-                  Abrir
-                </Button>
-                <Button
-                  variant="primary"
-                  href={doc.urlDocumento}
-                  target="_blank"
-                  size="sm">
-                  Ir a Ubicación
-                </Button>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
 
       {/* Documentos requeridos no presentes */}
-      {docs.length > 0
+      {mostrarActivos && docs.length > 0
         ? tiposRequeridos.map((req) =>
             !tieneTipo(req.tipo) ? (
               <div
                 key={req.tipo}
-                className="d-flex align-items-center border rounded p-2 gap-3 bg-light text-secondary justify-content-between">
+                className="d-flex align-items-center border rounded p-2 gap-3 bg-light text-secondary justify-content-between"
+              >
                 <span>
                   <strong>{req.label}:</strong> No cargada
                 </span>
                 <Button
                   variant="success"
                   size="sm"
-                  onClick={() => onCargar && onCargar(req.tipo)}>
+                  onClick={() => onCargar && onCargar(req.tipo)}
+                >
                   Cargar
                 </Button>
               </div>
             ) : null
           )
-        : tiposRequeridos.map((req) => (
+        : mostrarActivos &&
+          tiposRequeridos.map((req) => (
             <div
               key={req.tipo}
-              className="d-flex align-items-center border rounded p-2 gap-3 bg-light text-secondary justify-content-between">
+              className="d-flex align-items-center border rounded p-2 gap-3 bg-light text-secondary justify-content-between"
+            >
               <span>
                 <strong>{req.label}:</strong> No cargada
               </span>
               <Button
                 variant="success"
                 size="sm"
-                onClick={() => onCargar && onCargar(req.tipo)}>
+                onClick={() => onCargar && onCargar(req.tipo)}
+              >
                 Cargar
               </Button>
             </div>
           ))}
 
       {/* Agregar documentación adicional */}
-      <div className="d-flex align-items-center border rounded p-2 gap-3 bg-light text-secondary justify-content-between">
-        <span>
-          <strong>Agregar documentación adicional</strong>
-        </span>
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={() => onCargar && onCargar("")}>
-          Agregar
-        </Button>
-      </div>
+      {mostrarActivos && (
+        <div className="d-flex align-items-center border rounded p-2 gap-3 bg-light text-secondary justify-content-between">
+          <span>
+            <strong>Agregar documentación adicional</strong>
+          </span>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => onCargar && onCargar("")}
+          >
+            Agregar
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

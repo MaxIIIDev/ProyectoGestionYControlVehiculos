@@ -72,6 +72,11 @@ export const endpointsAPI = {
         `${API_ROUTE}/Documentos/archivo/${documentoId}`,
       method: "GET",
     },
+    bajaLogica: {
+      action: (documentoId: number) =>
+        `${API_ROUTE}/Documentos/baja/${documentoId}`,
+      method: "PATCH",
+    },
   },
 };
 export const endpointFront = {

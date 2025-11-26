@@ -55,9 +55,9 @@ export default function ContainerCargador({
     try {
       if (idDocumentoViejo && idDocumentoViejo > 0) {
         const responseFromApiLogicalDelete = await fetch(
-          Enrouters.documentos.eliminar.action(idDocumentoViejo),
+          Enrouters.documentos.bajaLogica.action(idDocumentoViejo),
           {
-            method: Enrouters.documentos.eliminar.method,
+            method: Enrouters.documentos.bajaLogica.method,
           }
         );
         if (!responseFromApiLogicalDelete.ok) {
