@@ -21,6 +21,7 @@ import endpointsAPI, {
 } from "../../src/Components/Routes/Enrouters";
 
 import ComboBoxBrowser from "../../src/Components/FormBuscador/ComboBoxBrowser";
+import { ParserDatesToStringMessage } from "../../src/Utils/ParserDatesToStringMessage";
 
 const headers = ["Fecha de Registro", "Kilometraje", "Estado"];
 const colWidths = ["100px", "100px", "100px"];
@@ -100,6 +101,9 @@ export default function KilometrosListar() {
       <tr
         key={kilometraje.IdControlKilometraje}
         onClick={ModalTableHandler(handleRowClick, [
+          "marca",
+          "modelo",
+          "patente",
           "fechaRegistro",
           "kilometraje",
           "estado",
@@ -111,8 +115,7 @@ export default function KilometrosListar() {
         data-patente={kilometraje.Patente}
         data-fecharegistro={kilometraje.FechaRegistro}
         data-kilometraje={kilometraje.Kilometraje}
-        data-estado={kilometraje.Estado}
-      >
+        data-estado={kilometraje.Estado}>
         <td>{kilometraje.FechaRegistro.toLocaleDateString()}</td>
         <td>{kilometraje.Kilometraje}</td>
         <td>{kilometraje.Estado ? "Activo" : "Inactivo"}</td>
@@ -134,8 +137,9 @@ export default function KilometrosListar() {
       </div>
       {patenteBuscar && metadataPage.data.length === 0 && (
         <TableContainer
-          title={"No hay registros para la patente seleccionada"}
-        ></TableContainer>
+          title={
+            "No hay registros para la patente seleccionada"
+          }></TableContainer>
       )}
       {patenteBuscar && metadataPage.data.length !== 0 && (
         <TableContainer
@@ -146,8 +150,7 @@ export default function KilometrosListar() {
             metadataPage.data[0].Modelo +
             " - Patente: " +
             metadataPage.data[0].Patente
-          }
-        >
+          }>
           <TableResponsive
             headerTitle={headers}
             colWidths={colWidths}
@@ -156,6 +159,7 @@ export default function KilometrosListar() {
           <ModalTable
             show={showModal}
             title={
+              "Vehiculo: " +
               selectedMarca +
               " " +
               selectedModelo +
@@ -164,19 +168,23 @@ export default function KilometrosListar() {
               selectedPatente +
               " - " +
               "Fecha de Registro: " +
-              selectedFechaRegistro +
+              ParserDatesToStringMessage(new Date(selectedFechaRegistro)) +
               " - " +
               "Kilometraje: " +
-              selectedKilometraje
+              selectedKilometraje +
+              "km"
             }
-            onClose={() => setShowModal(false)}
-          >
-            <ButtonEdit
-              id={selectedId ? selectedId : "0"}
-              endpoint={endpointFront.controlKilometraje.actualizar.action(
-                selectedId ? parseInt(selectedId) : 0
-              )}
-            />
+            onClose={() => setShowModal(false)}>
+            {new Date(Date.now()).toISOString().split("T")[0] ===
+              new Date(selectedFechaRegistro).toISOString().split("T")[0] && (
+              <ButtonEdit
+                id={selectedId ? selectedId : "0"}
+                endpoint={endpointFront.controlKilometraje.actualizar.action(
+                  selectedId ? parseInt(selectedId) : 0
+                )}
+              />
+            )}
+
             <AltaBajaLogica
               estado={selectedEstado}
               methodAlta={endpointsAPI.controlKilometraje.altaLogica.method}
