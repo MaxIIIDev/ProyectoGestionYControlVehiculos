@@ -24,7 +24,9 @@ export const AgregarRegistroKilometraje = () => {
   const [formData, setFormData] =
     useState<ControlKilometrajeSchemaType>(initialState);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [Vehiculo, setVehiculo] = useState<{ [key: string]: string }>();
+  const [Vehiculo, setVehiculo] = useState<{
+    [key: string]: string | number;
+  }>();
   const [latestKm, setLatestKm] = useState<number>(0);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +38,9 @@ export const AgregarRegistroKilometraje = () => {
     setFormData({ ...formData, [name]: valorFinal });
   };
   const desbloquearSegundoFormulario: boolean =
-    Vehiculo != null && parseInt(Vehiculo.idVehiculo) > 0 ? true : false;
+    Vehiculo != null && parseInt(Vehiculo.idVehiculo.toString()) > 0
+      ? true
+      : false;
 
   const ValidateForm = (): boolean => {
     const validateFromZod = ControlKilometrajeSchema.safeParse(formData);
@@ -62,6 +66,12 @@ export const AgregarRegistroKilometraje = () => {
       confirmButtonText: "Aceptar y continuar",
       cancelButtonText: "Aceptar y volver al inicio",
     }).then((result) => {
+      setVehiculo((previousDataFromVehiculo) => ({
+        ...previousDataFromVehiculo,
+        Kilometraje: formData.Kilometraje,
+      }));
+      setLatestKm(formData.Kilometraje);
+      console.log(Vehiculo);
       if (result.isConfirmed) {
         return;
       } else {
@@ -80,7 +90,9 @@ export const AgregarRegistroKilometraje = () => {
       setFormData({
         Kilometraje: latestKm,
         IdVehiculo:
-          Vehiculo && Vehiculo.idVehiculo ? parseInt(Vehiculo.idVehiculo) : 0,
+          Vehiculo && Vehiculo.idVehiculo
+            ? parseInt(Vehiculo.idVehiculo.toString())
+            : 0,
       });
     });
   };
@@ -100,23 +112,25 @@ export const AgregarRegistroKilometraje = () => {
                 .method,
           }
         );
-
-        if (!responseFromApi.ok && responseFromApi.status !== 404) {
+        if (responseFromApi.status === 404) {
+          setFormData((previousData) => ({
+            ...previousData,
+            Kilometraje: 0,
+          }));
+          setLatestKm(0);
+          return;
+        }
+        if (!responseFromApi.ok) {
           throw new Error(await responseFromApi.text());
         }
         const data = await responseFromApi.json();
-        console.log(data);
 
         setFormData({
-          IdVehiculo: data.idVehiculo ? data.idVehiculo : 0,
-          Kilometraje: data.kilometraje ? data.kilometraje : 0,
+          IdVehiculo: data.idVehiculo ?? 0,
+          Kilometraje: data.kilometraje ?? 0,
         });
         setLatestKm(data.kilometraje ?? 0);
-
-        initialState.Kilometraje = data.kilometraje ?? 0;
       } catch (error) {
-        console.log("Error: " + error);
-
         handleError(error);
       }
     };
@@ -207,7 +221,7 @@ export const AgregarRegistroKilometraje = () => {
                 onError={handleError}>
                 <FormInput
                   label="Kilometraje Actual"
-                  type="number"
+                  type="text"
                   name="Kilometraje"
                   placeholder="Kilometraje Actual"
                   value={formData.Kilometraje}
