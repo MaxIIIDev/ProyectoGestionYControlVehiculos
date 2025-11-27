@@ -8,19 +8,22 @@ using Microsoft.AspNetCore.Mvc;
 public class ControllerRegistroKilometraje : ControllerBase
 {
     private readonly ServiceRegistroKilometraje _serviceRegistroKilometraje;
+    private readonly ServiceVehiculo _serviceVehiculo;
     private readonly IMapper mapper;
 
     public ControllerRegistroKilometraje(
         ServiceRegistroKilometraje serviceRegistroKilometraje,
+        ServiceVehiculo serviceVehiculo,
         IMapper mapper
     )
     {
         _serviceRegistroKilometraje = serviceRegistroKilometraje;
+        _serviceVehiculo = serviceVehiculo;
         this.mapper = mapper;
     }
 
-    // GET TODO REGISTROS KILOMETRAJE
-    [HttpGet]
+    // GET TODO REGISTROS KILOMETRAJE <-NO CREO Q SE USE MUCHO, EN REALIDAD NO SE USA
+    /*[HttpGet]
     public async Task<IActionResult> GetAllRegistrosKilometraje(
         [FromQuery] int numeroPagina = 1,
         [FromQuery] int tamanoPagina = 10
@@ -29,7 +32,7 @@ public class ControllerRegistroKilometraje : ControllerBase
         PagedResponse<RegistroKilometraje>? registros =
             await _serviceRegistroKilometraje.GetAllAsync(numeroPagina, tamanoPagina);
         return Ok(registros);
-    }
+    }*/
 
     // GET REGISTRO KILOMETRAJE POR ID
     [HttpGet("{id}")]
@@ -157,6 +160,33 @@ public class ControllerRegistroKilometraje : ControllerBase
             return NotFound();
         }
         return NoContent();
+    }
+
+    //ESTE METODO BUSCA EL VEHICULO POR LA PATENTE Y DEVUELVE SUS REGISTROS DE KILOMETRAJE A PARTIR DE SU ID
+    [HttpGet("listado/{patente}")]
+    public async Task<IActionResult> GetRegistrosPorPatente(string patente)
+    {
+        var vehiculo = await _serviceVehiculo.GetByPatenteAsync(patente);
+
+        if (vehiculo == null)
+        {
+            return NotFound("No se encontró ningún vehículo con la patente proporcionada.");
+        }
+        var registrosKilometraje = await _serviceRegistroKilometraje.GetByVehiculoIdAsync(
+            vehiculo.IdVehiculo
+        );
+        var result = registrosKilometraje.Select(r => new
+        {
+            r.IdRegistroKilometraje,
+            r.IdVehiculo,
+            r.Kilometraje,
+            r.FechaRegistro,
+            r.Estado,
+            Marca = vehiculo.Marca,
+            Modelo = vehiculo.Modelo,
+            Patente = vehiculo.Patente,
+        });
+        return Ok(result);
     }
 
     // ACA DEBERIAMOS TENER UN METODO Q BUSQUE REGISTRO POR PATENTE O SIMILAR

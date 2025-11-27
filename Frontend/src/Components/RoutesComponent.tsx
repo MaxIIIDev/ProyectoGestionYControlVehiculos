@@ -9,7 +9,7 @@ import VehiculosListar from "../../views/Vehiculo/VehiculosListar";
 import VehiculosAgregar from "../../views/Vehiculo/VehiculosAgregar";
 import Matafuegos from "../../views/Matafuegos";
 import Neumaticos from "../../views/Neumaticos";
-import KilometrosListar from "../../views/VehiculosKilometros";
+import KilometrosListar from "../../views/RegistrosKilometraje/KilometrosListar";
 import VehiculosAcualizar from "../../views/Vehiculo/VehiculosActualizar";
 import VehiculosDocumentos from "../../views/VehiculosDocumentos";
 import { endpointFront } from "./Routes/Enrouters";

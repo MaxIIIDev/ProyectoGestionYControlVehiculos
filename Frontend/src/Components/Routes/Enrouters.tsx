@@ -42,7 +42,11 @@ export const endpointsAPI = {
         `${API_ROUTE}/registro-kilometraje/latest/${vehiculoId}`,
       method: "GET",
     },
-    listar: { action: `${API_ROUTE}/registro-kilometraje`, method: "GET" },
+    listar: {
+      action: (patente: string) =>
+        `${API_ROUTE}/registro-kilometraje/listado/${patente}`,
+      method: "GET",
+    },
     editar: {
       action: (id: number) => `${API_ROUTE}/registro-kilometraje/${id}`,
       method: "PUT",
@@ -50,6 +54,14 @@ export const endpointsAPI = {
     buscarPorId: {
       action: (id: number) => `${API_ROUTE}/registro-kilometraje/${id}`,
       method: "GET",
+    },
+    bajaLogica: {
+      action: (id: number) => `${API_ROUTE}/registro-kilometraje/baja/${id}`,
+      method: "PATCH",
+    },
+    altaLogica: {
+      action: (id: number) => `${API_ROUTE}/registro-kilometraje/alta/${id}`,
+      method: "PATCH",
     },
   },
   documentos: {
@@ -84,6 +96,7 @@ export const endpointsAPI = {
     },
   },
 };
+//ENDPOINTS DEL FRONTEND
 export const endpointFront = {
   home: {
     action: "/",

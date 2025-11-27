@@ -4,7 +4,7 @@ import ComboBoxBrowser from "./ComboBoxBrowser";
 interface FormBrowserProps {
   searchApiUrl: string; // endpoint base para buscar entidades
   searchApiMethod?: string;
-  relatedApiUrl: (entity: any) => string; // función que recibe la entidad y devuelve el endpoint de datos relacionados
+  relatedApiUrl?: (entity: any) => string; // función que recibe la entidad y devuelve el endpoint de datos relacionados
   relatedApiMethod?: string;
   entityLabel?: string;
   renderEntity?: (entity: any) => React.ReactNode;
@@ -34,7 +34,9 @@ export default function FormBrowser({
   useEffect(() => {
     if (entity) {
       setLoading(true);
-      fetch(relatedApiUrl(entity), { method: relatedApiMethod })
+      fetch(relatedApiUrl ? relatedApiUrl(entity) : "", {
+        method: relatedApiMethod,
+      })
         .then((res) => res.json())
         .then((data) => {
           setRelated(Array.isArray(data) ? data : []);

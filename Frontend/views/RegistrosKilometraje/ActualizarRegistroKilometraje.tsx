@@ -101,7 +101,8 @@ export default function ActualizarRegistroKilometraje() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-      }}>
+      }}
+    >
       {
         <FormCard
           title="Registrar Kilometraje"
@@ -112,7 +113,8 @@ export default function ActualizarRegistroKilometraje() {
             padding: "20px",
           }}
           styleHeader={{ fontFamily: "serif" }}
-          classNameBody="fs-5 p-1">
+          classNameBody="fs-5 p-1"
+        >
           <div></div>
           {
             <Form
@@ -121,7 +123,8 @@ export default function ActualizarRegistroKilometraje() {
               action={endpointsAPI.controlKilometraje.nuevo.action}
               validateForm={ValidateForm}
               onSuccess={handleSuccess}
-              onError={handleError}>
+              onError={handleError}
+            >
               <FormInput
                 label="Kilometraje Actual"
                 type="number"
@@ -130,11 +133,13 @@ export default function ActualizarRegistroKilometraje() {
                 value={formData.KilometrajeActual}
                 onChange={handleChange}
                 required={true}
-                error={errors.KilometrajeActual}></FormInput>
+                error={errors.KilometrajeActual}
+              ></FormInput>
               <FormButtons
                 initialState={initialFormData}
                 setFormData={setFormData}
-                formClear={formCleanTextErrors}></FormButtons>
+                formClear={formCleanTextErrors}
+              ></FormButtons>
             </Form>
           }
         </FormCard>

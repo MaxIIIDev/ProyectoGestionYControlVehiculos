@@ -131,5 +131,13 @@ namespace Backend.Services
             _context.RegistrosKilometraje.Update(registroKilometraje);
             return await _context.SaveChangesAsync() > 0;
         }
+
+        // GET REGISTROS KILOMETRAJE POR VEHICULO ID
+        public async Task<List<RegistroKilometraje>> GetByVehiculoIdAsync(int IdVehiculo)
+        {
+            return await _context
+                .RegistrosKilometraje.Where(r => r.IdVehiculo == IdVehiculo)
+                .ToListAsync();
+        }
     }
 }
