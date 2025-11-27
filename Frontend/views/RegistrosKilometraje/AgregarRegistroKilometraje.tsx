@@ -221,7 +221,7 @@ export const AgregarRegistroKilometraje = () => {
                 onError={handleError}>
                 <FormInput
                   label="Kilometraje Actual"
-                  type="number"
+                  type="text"
                   name="Kilometraje"
                   placeholder="Kilometraje Actual"
                   value={formData.Kilometraje}
