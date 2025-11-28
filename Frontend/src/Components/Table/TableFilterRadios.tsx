@@ -27,7 +27,7 @@ export default function TabFilterRadios({
   };
 
   return (
-    <div className="filter-switch">
+    <div className="filter-switch text-center">
       {options.map((option, idx) => (
         <React.Fragment key={option.value}>
           <input
