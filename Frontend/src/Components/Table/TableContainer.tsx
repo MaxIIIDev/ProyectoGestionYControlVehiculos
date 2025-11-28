@@ -1,6 +1,6 @@
 interface TableContainerProps {
   children?: React.ReactNode;
-  title: string;
+  title?: string;
 }
 
 export default function TableContainer({

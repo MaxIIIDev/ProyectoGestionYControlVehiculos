@@ -17,23 +17,24 @@
   padding: 0.75em 1em;
   border: 1px solid #444;
 }
-/*ESTILO DE LOS ENCABEZADOS EN INTERCALADOS AMARILLO/OCRE*/
+
+/* ENCABEZADOS EN AZUL PROFESIONAL */
 .table-responsive thead th {
   font-weight: bold;
-  color: #222;
-  background: #ffe066;
+  color: #ffffff;
+  background: #2563eb; /* Azul profesional */
+  border-bottom: 2px solid #1e40af;
 }
 
 .table-responsive thead th:nth-child(even) {
-  background: #ffb84c;
+  background: #1d4ed8; /* Azul más oscuro */
 }
 
 .table-responsive thead th:nth-child(odd) {
-  background: #ffe066;
+  background: #2563eb; /* Azul principal */
 }
-/*FIN ESTILO ENCABEZADOS*/
-/*---------------------------------------*/
-/* BORDES REDONDEADOS */
+
+/* BORDES REDONDEADOS ORIGINALES */
 .table-responsive thead th:first-child {
   border-top-left-radius: 14px;
 }
@@ -47,9 +48,8 @@
 .table-responsive tbody tr:last-child td:last-child {
   border-bottom-right-radius: 14px;
 }
-/*FIN BORDES REDONDEADOS*/
-/*---------------------------------------*/
-/*FILAS ESTILO STRIPPED EN ESCALA DE GRISES*/
+
+/* FILAS STRIPPED ORIGINAL */
 .table-responsive tbody tr:nth-child(even) {
   background: #232323;
 }
@@ -61,9 +61,8 @@
 .table-responsive tr:hover {
   background: #333;
 }
-/*FIN ESTILO STRIPPED*/
-/*---------------------------------------*/
-/*TRANSICIONES Y EFECTOS*/
+
+/* TRANSICIONES Y EFECTOS ANIMADOS ORIGINALES - LOS QUE TE GUSTARON */
 .table-responsive tbody tr {
   transition: background 0.3s, transform 0.25s;
 }
@@ -74,8 +73,8 @@
 
 .table-responsive tbody tr:hover {
   filter: none !important;
-  background: #928a60 !important;
-  color: #080808;
+  background: #3b82f6 !important; /* Azul en hover */
+  color: #ffffff;
   transform: scale(1.02);
   z-index: 1;
   position: relative;
@@ -84,4 +83,72 @@
   font-size: large;
   transition: filter 0.2s, background 0.3s, transform 0.25s;
 }
-/*FIN TRANSICIONES Y EFECTOS*/
+
+/* ANIMACIÓN DE ENTRADA MEJORADA */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.table-responsive tbody tr {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+/* DELAYS ESCALONADOS PARA LAS FILAS */
+.table-responsive tbody tr:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.table-responsive tbody tr:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.table-responsive tbody tr:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.table-responsive tbody tr:nth-child(4) {
+  animation-delay: 0.2s;
+}
+.table-responsive tbody tr:nth-child(5) {
+  animation-delay: 0.25s;
+}
+.table-responsive tbody tr:nth-child(6) {
+  animation-delay: 0.3s;
+}
+.table-responsive tbody tr:nth-child(7) {
+  animation-delay: 0.35s;
+}
+
+/* EFECTO DE RESALTADO EN ESTADO ACTIVO */
+.table-responsive td:last-child {
+  font-weight: 600;
+  color: #10b981; /* Verde para estado activo */
+}
+
+.table-responsive tr:hover td:last-child {
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* SCROLLBAR PERSONALIZADO EN AZUL */
+.table-responsive::-webkit-scrollbar {
+  height: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: #2d2d2d;
+  border-radius: 5px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background: #2563eb;
+  border-radius: 5px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #1d4ed8;
+}

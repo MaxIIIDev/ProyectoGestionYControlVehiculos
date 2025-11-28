@@ -27,8 +27,7 @@ export default function ModalTable({
         alignItems: "center",
         justifyContent: "center",
         zIndex: 9999,
-      }}
-    >
+      }}>
       <div
         style={{
           background: "#fff",
@@ -38,8 +37,8 @@ export default function ModalTable({
           maxWidth: "90vw",
           boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
           textAlign: "center",
-        }}
-      >
+          color: "#000",
+        }}>
         <h3>{title}</h3>
         <div
           className="div-row"
@@ -48,8 +47,7 @@ export default function ModalTable({
             display: "flex",
             gap: "1rem",
             justifyContent: "center",
-          }}
-        >
+          }}>
           {children}
           <button onClick={onClose}>
             <i className="bi bi-x-circle"></i> Cerrar

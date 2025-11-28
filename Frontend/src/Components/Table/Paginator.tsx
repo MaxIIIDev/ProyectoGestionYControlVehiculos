@@ -21,8 +21,7 @@ export const PaginatorForTable = ({
         key={i}
         active={i === currentPage}
         onClick={() => onPageChange(i)}
-        className={"pagination-item"}
-      >
+        className={"pagination-item"}>
         {i}
       </Pagination.Item>
     );
@@ -32,8 +31,7 @@ export const PaginatorForTable = ({
       <Pagination className={"pagination-core"}>
         <Pagination.Prev
           onClick={previousPage}
-          className={"pagination-item-previous"}
-        >
+          className={"pagination-item-previous"}>
           <i className="bi bi-chevron-left"></i>
         </Pagination.Prev>
         {items}

@@ -9,6 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getErrorMessage } from "../../src/Utils/Errors.utils";
 import React, { useEffect, useState } from "react";
 import {
+  ApiControlKilometrajeParser,
   ControlKilometrajeSchema,
   type ControlKilometrajeSchemaType,
 } from "../../types/ControlKilometraje.schema";
@@ -23,8 +24,9 @@ export default function ActualizarRegistroKilometraje() {
 
   const initialState: ControlKilometrajeSchemaType = {
     IdVehiculo: 0,
-    IdControlKilometraje: parseInt(id!),
-    KilometrajeActual: 0,
+    IdRegistroKilometraje: parseInt(id!),
+    Kilometraje: 0,
+    FechaRegistro: new Date(),
   };
   const [initialFormData, setInitialFormData] =
     useState<ControlKilometrajeSchemaType>(initialState);
@@ -47,15 +49,29 @@ export default function ActualizarRegistroKilometraje() {
         );
         if (!responseFromApi.ok) throw new Error(await responseFromApi.text());
         const data = await responseFromApi.json();
-        setInitialFormData(data);
-        setFormData(data);
+        console.log(data);
+
+        const parsedData = ApiControlKilometrajeParser.parse(data);
+        setInitialFormData(parsedData);
+        setFormData(parsedData);
       } catch (error) {
         handleError(error);
       }
     };
     fetchData();
   }, [id]);
-
+  useEffect(() => {
+    console.log("Initial Form Data ");
+    for (const key in initialFormData) {
+      console.log(
+        key + ": " + initialFormData[key as keyof typeof initialFormData]
+      );
+    }
+    console.log("Form Data ");
+    for (const key in formData) {
+      console.log(key + ": " + formData[key as keyof typeof formData]);
+    }
+  }, [initialFormData, formData]);
   const ValidateForm = (): boolean => {
     const validateFromZod = ControlKilometrajeSchema.safeParse(formData);
     if (!validateFromZod.success) {
@@ -101,11 +117,10 @@ export default function ActualizarRegistroKilometraje() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-      }}
-    >
+      }}>
       {
         <FormCard
-          title="Registrar Kilometraje"
+          title="Actualizar Kilometraje"
           classNameCard="mb-1 bg-dark text-white  rounded-5 "
           classNameHeader="fs-1 text-white text-center border-0 rounded-5"
           styleCard={{
@@ -113,33 +128,43 @@ export default function ActualizarRegistroKilometraje() {
             padding: "20px",
           }}
           styleHeader={{ fontFamily: "serif" }}
-          classNameBody="fs-5 p-1"
-        >
+          classNameBody="fs-5 p-1">
           <div></div>
           {
             <Form
               name="vehiculoForm"
-              method={endpointsAPI.controlKilometraje.nuevo.method}
-              action={endpointsAPI.controlKilometraje.nuevo.action}
+              method={endpointsAPI.controlKilometraje.editar.method}
+              action={endpointsAPI.controlKilometraje.editar.action(
+                formData.IdRegistroKilometraje!
+              )}
               validateForm={ValidateForm}
               onSuccess={handleSuccess}
-              onError={handleError}
-            >
+              onError={handleError}>
+              <input
+                type="hidden"
+                name="IdVehiculo"
+                value={formData.IdVehiculo}></input>
+              <input
+                type="hidden"
+                name="FechaRegistro"
+                value={formData.FechaRegistro?.toLocaleDateString("es-AR")
+                  .split("/")
+                  .reverse()
+                  .join("-")}></input>
+
               <FormInput
                 label="Kilometraje Actual"
                 type="number"
-                name="KilometrajeActual"
+                name="Kilometraje"
                 placeholder="Kilometraje Actual"
-                value={formData.KilometrajeActual}
+                value={formData.Kilometraje}
                 onChange={handleChange}
                 required={true}
-                error={errors.KilometrajeActual}
-              ></FormInput>
+                error={errors.Kilometraje}></FormInput>
               <FormButtons
                 initialState={initialFormData}
                 setFormData={setFormData}
-                formClear={formCleanTextErrors}
-              ></FormButtons>
+                formClear={formCleanTextErrors}></FormButtons>
             </Form>
           }
         </FormCard>

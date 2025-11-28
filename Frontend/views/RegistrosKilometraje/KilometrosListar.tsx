@@ -124,116 +124,154 @@ export default function KilometrosListar() {
       </tr>
     )
   );
+
   return (
     <>
-      <div className="my-4 d-flex justify-content-end">
-        <ComboBoxBrowser
-          apiUrl={endpointsAPI.vehiculos.buscarPorPatenteLike.action("")}
-          apiMethod={endpointsAPI.vehiculos.buscarPorPatenteLike.method}
-          onEntitySelect={(vehiculo) => {
-            setPatenteBuscar(vehiculo.patente);
-          }}
-          placeholder="Busqueda por Patente"
-        />
-      </div>
-      {patenteBuscar && metadataPage.data.length === 0 && (
-        <TableContainer
-          title={
-            "No hay registros para la patente seleccionada"
-          }></TableContainer>
-      )}
-      {patenteBuscar && metadataPage.data.length !== 0 && (
-        <TableContainer
-          title={
-            "Listado de Registros: " +
-            metadataPage.data[0].Marca +
-            " " +
-            metadataPage.data[0].Modelo +
-            " - Patente: " +
-            metadataPage.data[0].Patente
-          }>
-          <TableResponsive
-            headerTitle={headers}
-            colWidths={colWidths}
-            tableData={tableData}
+      <FormCard
+        title="Listado de Kilometrajes"
+        classNameCard="bg-dark text-white rounded-5 p-3 "
+        classNameHeader="fs-2 text-center"
+        styleBody={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "20px",
+          alignItems: "center",
+          justifyContent: "center",
+        }}>
+        <FormCard
+          title="Buscar Vehículo por Patente"
+          classNameCard="bg-dark text-white m-3 rounded-5"
+          classNameHeader="fs-4 text-white text-center border-0 rounded-5"
+          classNameBody="fs-5 text-center"
+          styleCard={{ maxWidth: "90%", maxHeight: "90%", padding: "20px" }}>
+          <ComboBoxBrowser
+            apiUrl={endpointsAPI.vehiculos.buscarPorPatenteLike.action("")}
+            apiMethod={endpointsAPI.vehiculos.buscarPorPatenteLike.method}
+            onEntitySelect={(vehiculo) => {
+              console.log("Vehiculo seleccionado:", vehiculo);
+              setPatenteBuscar(vehiculo ? vehiculo.patente : "");
+            }}
+            placeholder="Busqueda por Patente"
           />
-          <ModalTable
-            show={showModal}
+        </FormCard>
+        {patenteBuscar && metadataPage.data.length === 0 && (
+          <FormCard
+            title=""
+            classNameCard="bg-danger text-black  rounded-5 border border-2 border-danger"
+            classNameHeader=" invisible"
+            classNameBody="text-center mb-3">
+            <TableContainer
+              title={
+                "No hay registros para la patente seleccionada"
+              }></TableContainer>
+          </FormCard>
+        )}
+        {patenteBuscar && metadataPage.data.length !== 0 && (
+          <FormCard
             title={
-              "Vehiculo: " +
-              selectedMarca +
+              "Listado de Registros: " +
+              metadataPage.data[0].Marca +
               " " +
-              selectedModelo +
-              " - " +
-              "Patente: " +
-              selectedPatente +
-              " - " +
-              "Fecha de Registro: " +
-              ParserDatesToStringMessage(new Date(selectedFechaRegistro)) +
-              " - " +
-              "Kilometraje: " +
-              selectedKilometraje +
-              "km"
+              metadataPage.data[0].Modelo +
+              " - Patente: " +
+              metadataPage.data[0].Patente
             }
-            onClose={() => setShowModal(false)}>
-            {selectedFechaRegistro &&
-              new Date(Date.now()).toISOString().split("T")[0] ===
-                new Date(selectedFechaRegistro).toISOString().split("T")[0] && (
-                <ButtonEdit
-                  id={selectedId ? selectedId : "0"}
-                  endpoint={endpointFront.controlKilometraje.actualizar.action(
+            classNameCard="bg-dark text-white  rounded-5 "
+            classNameHeader="text-center fs-4 fst-italic font-monospace text- p-3 bg-info bolder border border-2 border-info font-weight-bold text-black "
+            classNameBody="p-4">
+            <TableContainer>
+              <TableResponsive
+                headerTitle={headers}
+                colWidths={colWidths}
+                tableData={tableData}
+              />
+              <ModalTable
+                show={showModal}
+                title={
+                  "Vehiculo: " +
+                  selectedMarca +
+                  " " +
+                  selectedModelo +
+                  " - " +
+                  "Patente: " +
+                  selectedPatente +
+                  " - " +
+                  "Fecha de Registro: " +
+                  ParserDatesToStringMessage(new Date(selectedFechaRegistro)) +
+                  " - " +
+                  "Kilometraje: " +
+                  selectedKilometraje +
+                  "km"
+                }
+                onClose={() => setShowModal(false)}>
+                {selectedFechaRegistro &&
+                  new Date(Date.now())
+                    .toLocaleDateString("es-AR")
+                    .split("/")
+                    .reverse()
+                    .join("-") ===
+                    new Date(selectedFechaRegistro)
+                      .toLocaleDateString("es-AR")
+                      .split("/")
+                      .reverse()
+                      .join("-") && (
+                    <ButtonEdit
+                      id={selectedId ? selectedId : "0"}
+                      endpoint={endpointFront.controlKilometraje.actualizar.action(
+                        selectedId ? parseInt(selectedId) : 0
+                      )}
+                    />
+                  )}
+
+                <AltaBajaLogica
+                  estado={selectedEstado}
+                  methodAlta={endpointsAPI.controlKilometraje.altaLogica.method}
+                  endpointBaja={endpointsAPI.controlKilometraje.bajaLogica.action(
                     selectedId ? parseInt(selectedId) : 0
                   )}
+                  methodBaja={endpointsAPI.controlKilometraje.bajaLogica.method}
+                  endpointAlta={endpointsAPI.controlKilometraje.altaLogica.action(
+                    selectedId ? parseInt(selectedId) : 0
+                  )}
+                  onChange={(nuevoEstado) => {
+                    setSelectedEstado(nuevoEstado);
+                    // Hay que actualizar el estado en la tabla tambien, sino no se ve el cambio hasta ctrl+F5
+                    setMetadataPage((prevData) => ({
+                      ...prevData,
+                      data: prevData.data.map((controlKilometraje) =>
+                        String(controlKilometraje.IdControlKilometraje) ===
+                        String(selectedId)
+                          ? { ...controlKilometraje, Estado: nuevoEstado }
+                          : controlKilometraje
+                      ),
+                    }));
+                    setShowModal(false);
+                  }}
                 />
-              )}
-
-            <AltaBajaLogica
-              estado={selectedEstado}
-              methodAlta={endpointsAPI.controlKilometraje.altaLogica.method}
-              endpointBaja={endpointsAPI.controlKilometraje.bajaLogica.action(
-                selectedId ? parseInt(selectedId) : 0
-              )}
-              methodBaja={endpointsAPI.controlKilometraje.bajaLogica.method}
-              endpointAlta={endpointsAPI.controlKilometraje.altaLogica.action(
-                selectedId ? parseInt(selectedId) : 0
-              )}
-              onChange={(nuevoEstado) => {
-                setSelectedEstado(nuevoEstado);
-                // Hay que actualizar el estado en la tabla tambien, sino no se ve el cambio hasta ctrl+F5
-                setMetadataPage((prevData) => ({
-                  ...prevData,
-                  data: prevData.data.map((controlKilometraje) =>
-                    String(controlKilometraje.IdControlKilometraje) ===
-                    String(selectedId)
-                      ? { ...controlKilometraje, Estado: nuevoEstado }
-                      : controlKilometraje
-                  ),
-                }));
-                setShowModal(false);
+              </ModalTable>
+            </TableContainer>
+            <PaginatorForTable
+              totalCountPages={metadataPage.totalPaginasCalculadas}
+              currentPage={metadataPage.paginaActual}
+              previousPage={() => {
+                if (currentPage > 1) {
+                  setCurrentPage(currentPage - 1);
+                }
+              }}
+              nextPage={() => {
+                if (currentPage < metadataPage.totalPaginasCalculadas) {
+                  setCurrentPage(currentPage + 1);
+                }
+              }}
+              onPageChange={(newPage) => {
+                setCurrentPage(newPage);
               }}
             />
-          </ModalTable>
-        </TableContainer>
-      )}
-      <PaginatorForTable
-        totalCountPages={metadataPage.totalPaginasCalculadas}
-        currentPage={metadataPage.paginaActual}
-        previousPage={() => {
-          if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-          }
-        }}
-        nextPage={() => {
-          if (currentPage < metadataPage.totalPaginasCalculadas) {
-            setCurrentPage(currentPage + 1);
-          }
-        }}
-        onPageChange={(newPage) => {
-          setCurrentPage(newPage);
-        }}
-      />
 
-      <NavButtonPosition />
+            <NavButtonPosition />
+          </FormCard>
+        )}
+      </FormCard>
     </>
   );
 }

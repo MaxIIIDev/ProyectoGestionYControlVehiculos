@@ -137,6 +137,7 @@ namespace Backend.Services
         {
             return await _context
                 .RegistrosKilometraje.Where(r => r.IdVehiculo == IdVehiculo)
+                .OrderByDescending(r => r.IdRegistroKilometraje)
                 .ToListAsync();
         }
     }
