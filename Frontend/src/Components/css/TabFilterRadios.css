@@ -1,6 +1,5 @@
-/* From Uiverse.io by Xtenso */
 .filter-switch {
-  border: 2px solid #ffc000;
+  border: 2px solid #444;
   border-radius: 30px;
   position: relative;
   display: flex;
@@ -9,10 +8,20 @@
   width: fit-content;
   padding: 0 20px;
   overflow: visible;
+  background: #181818;
+  box-shadow: 8px 12px 24px -4px rgba(0, 0, 0, 0.55);
+  transition: all 0.3s ease;
 }
+
+.filter-switch:hover {
+  border-color: #3b82f6;
+  box-shadow: 8px 12px 24px -4px rgba(59, 130, 246, 0.3);
+}
+
 .filter-switch input {
   display: none;
 }
+
 .filter-switch label {
   flex: 1;
   text-align: center;
@@ -22,49 +31,83 @@
   position: relative;
   overflow: hidden;
   z-index: 1;
-  transition: all 0.5s;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   font-weight: 500;
-  font-size: 18px;
+  font-size: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  width: 200px;
+  width: 150px;
+  height: 38px;
+  color: #f1f1f1;
 }
+
 .filter-switch .background {
   position: absolute;
-  width: 100%;
+  width: calc(33.333% - 8px);
   height: 38px;
-  background-color: #ffc000;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
   top: 2px;
   left: 8px;
   margin-left: 4px;
   margin-top: 2px;
   border-radius: 30px;
   transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
 }
+
+/* POSICIONES PARA 3 OPCIONES */
+#option1:checked ~ .background {
+  left: 8px;
+  width: calc(33.333% - 8px);
+}
+
 #option2:checked ~ .background {
-  left: 50%;
+  left: 33.333%;
+  width: calc(33.333% - 8px);
 }
-#option1:checked + label[for="option1"] {
-  color: #212121;
-  font-weight: bold;
+
+#option3:checked ~ .background {
+  left: 66.666%;
+  width: calc(33.333% - 8px);
 }
-#option2:checked + label[for="option2"] {
-  color: #212121;
-  font-weight: bold;
-}
+
+/* ESTILOS DE TEXTO ACTIVO */
+#option1:checked + label[for="option1"],
+#option2:checked + label[for="option2"],
 #option3:checked + label[for="option3"] {
-  color: #212121;
-  font-weight: bold;
+  color: #ffffff;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
-#option4:checked + label[for="option4"] {
-  color: #212121;
-  font-weight: bold;
-}
+
+/* ESTILOS DE TEXTO INACTIVO */
 #option1:not(:checked) + label[for="option1"],
 #option2:not(:checked) + label[for="option2"],
-#option3:not(:checked) + label[for="option3"],
-#option4:not(:checked) + label[for="option4"] {
-  color: #7d7d7d;
+#option3:not(:checked) + label[for="option3"] {
+  color: #888;
+  transition: color 0.3s ease;
+}
+
+/* HOVER EFFECTS - COMO LA TABLA */
+.filter-switch label:hover {
+  color: #3b82f6 !important;
+  transform: scale(1.05);
+}
+
+/* EFECTO DE ANIMACIÓN DE ENTRADA */
+@keyframes switchFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.filter-switch {
+  animation: switchFadeIn 0.6s ease forwards;
 }

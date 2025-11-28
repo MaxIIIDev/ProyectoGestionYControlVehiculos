@@ -10,10 +10,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #1818185a;
-  border-radius: 16px;
-  border: black 1px solid;
-  box-shadow: 6px 12px 20px 0 rgb(0, 0, 0), 0 1.5px 6px 0 rgb(0, 0, 0);
+  background: #181818;
+  border-radius: 14px;
+  border: 1px solid #444;
+  box-shadow: 24px 32px 48px -8px rgba(0, 0, 0, 0.85),
+    8px 12px 24px -4px rgba(0, 0, 0, 0.55);
   padding: 0.5em 1.5em;
   margin: 1.5em 0;
   width: fit-content;
@@ -22,17 +23,18 @@
 
 .page-item {
   margin: 0 0.18em;
+  transition: transform 0.25s;
 }
 
 .page-link {
-  background: linear-gradient(135deg, #ffe066 60%, #ffb84c 100%);
-  color: #181818;
-  border: none;
+  background: linear-gradient(135deg, #232323 0%, #2d2d2d 100%);
+  color: #f1f1f1;
+  border: 1px solid #444;
   border-radius: 8px;
   font-weight: 600;
   font-size: 1.1em;
-  box-shadow: 0 2px 8px rgba(255, 224, 102, 0.18);
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.15s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
   outline: none;
   min-width: 2.5em;
   min-height: 2.5em;
@@ -43,46 +45,105 @@
 
 .page-item-previous .page-link,
 .page-item-next .page-link {
-  background: linear-gradient(135deg, #232323 60%, #ffe066 100%);
-  color: #ffe066;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
   font-size: 1.2em;
-  box-shadow: 0 2px 8px rgba(255, 224, 102, 0.1);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+  border: 1px solid #1e40af;
 }
 
+/* EFECTOS HOVER - COMO LA TABLA */
 .page-link:hover,
 .page-item-previous .page-link:hover,
 .page-item-next .page-link:hover {
-  background: linear-gradient(135deg, #fffbe6 60%, #ffe066 100%);
-  color: #222;
-  box-shadow: 0 4px 16px 0 rgba(255, 224, 102, 0.25),
-    0 1.5px 6px 0 rgba(0, 0, 0, 0.18);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
   transform: scale(1.08);
   cursor: pointer;
   text-decoration: none;
+  border-color: #3b82f6;
 }
 
+/* PÁGINA ACTIVA - DESTACADA */
 .page-item.active .page-link,
 .page-item.active .page-link:hover {
-  background: linear-gradient(135deg, #ffb84c 60%, #ffe066 100%);
-  color: #181818;
-  box-shadow: 0 4px 24px 0 #ffe06699, 0 1.5px 6px 0 #ffb84c99;
-  border: 2px solid #181818;
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 24px rgba(59, 130, 246, 0.6);
+  border: 2px solid #60a5fa;
   transform: scale(1.13);
   z-index: 2;
+  font-weight: bold;
 }
 
+/* ESTADO DISABLED */
 .page-item.disabled .page-link,
 .page-item.disabled .page-link:hover {
-  background: #444;
-  color: #bbb;
+  background: #2d2d2d;
+  color: #666;
+  border-color: #444;
   cursor: not-allowed;
   box-shadow: none;
   transform: none;
 }
 
+/* EFECTO BLUR AL HOVER SOBRE EL CONTENEDOR - COMO LA TABLA */
+.pagination-core:hover .page-item:not(:hover) {
+  filter: blur(1px);
+  opacity: 0.7;
+  transition: all 0.5s ease;
+}
+
+.pagination-core .page-item:hover {
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+/* FOCUS Y ACTIVE */
 .page-link:focus,
 .page-link:active,
 .page-link:focus-visible {
   outline: none !important;
-  box-shadow: none !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5) !important;
+}
+
+/* ANIMACIÓN DE ENTRADA COMO LA TABLA */
+@keyframes paginationFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pagination-core {
+  animation: paginationFadeIn 0.6s ease forwards;
+}
+
+.page-item {
+  animation: paginationFadeIn 0.6s ease forwards;
+}
+
+/* DELAYS ESCALONADOS PARA LOS BOTONES */
+.page-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.page-item:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.page-item:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.page-item:nth-child(4) {
+  animation-delay: 0.25s;
+}
+.page-item:nth-child(5) {
+  animation-delay: 0.3s;
+}
+.page-item:nth-child(6) {
+  animation-delay: 0.35s;
 }
