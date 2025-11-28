@@ -22,6 +22,7 @@ import endpointsAPI, {
 
 import ComboBoxBrowser from "../../src/Components/FormBuscador/ComboBoxBrowser";
 import { ParserDatesToStringMessage } from "../../src/Utils/ParserDatesToStringMessage";
+import FormCard from "../../src/Components/Form/FormCard";
 
 const headers = ["Fecha de Registro", "Kilometraje", "Estado"];
 const colWidths = ["100px", "100px", "100px"];
@@ -64,6 +65,7 @@ export default function KilometrosListar() {
     setSelectedEstado(estadoStr === "true");
     setShowModal(true);
   };
+
   useEffect(() => {
     console.log("Disparando useEffect", patenteBuscar, currentPage);
     if (!patenteBuscar) {
@@ -129,7 +131,6 @@ export default function KilometrosListar() {
           apiUrl={endpointsAPI.vehiculos.buscarPorPatenteLike.action("")}
           apiMethod={endpointsAPI.vehiculos.buscarPorPatenteLike.method}
           onEntitySelect={(vehiculo) => {
-            console.log("Selected Patente:", vehiculo.patente);
             setPatenteBuscar(vehiculo.patente);
           }}
           placeholder="Busqueda por Patente"
@@ -175,15 +176,16 @@ export default function KilometrosListar() {
               "km"
             }
             onClose={() => setShowModal(false)}>
-            {new Date(Date.now()).toISOString().split("T")[0] ===
-              new Date(selectedFechaRegistro).toISOString().split("T")[0] && (
-              <ButtonEdit
-                id={selectedId ? selectedId : "0"}
-                endpoint={endpointFront.controlKilometraje.actualizar.action(
-                  selectedId ? parseInt(selectedId) : 0
-                )}
-              />
-            )}
+            {selectedFechaRegistro &&
+              new Date(Date.now()).toISOString().split("T")[0] ===
+                new Date(selectedFechaRegistro).toISOString().split("T")[0] && (
+                <ButtonEdit
+                  id={selectedId ? selectedId : "0"}
+                  endpoint={endpointFront.controlKilometraje.actualizar.action(
+                    selectedId ? parseInt(selectedId) : 0
+                  )}
+                />
+              )}
 
             <AltaBajaLogica
               estado={selectedEstado}
