@@ -58,6 +58,17 @@ namespace Backend.Services
                 .FirstOrDefaultAsync(r => r.IdVehiculo == idVehiculo);
         }
 
+        public async Task<RegistroKilometraje?> GetLatestRegistroKilometrajeVehiculoIdAndNotSameAsync(
+            int idVehiculo,
+            int IdRegistroKilometraje
+        )
+        {
+            return await _context
+                .RegistrosKilometraje.OrderByDescending(register => register.FechaRegistro)
+                .Where(vehiculo => vehiculo.IdRegistroKilometraje != IdRegistroKilometraje)
+                .FirstOrDefaultAsync(r => r.IdVehiculo == idVehiculo);
+        }
+
         // NUEVO REGISTRO KILOMETRAJE
         public async Task<RegistroKilometraje> AddAsync(RegistroKilometraje registroKilometraje)
         {
@@ -65,14 +76,26 @@ namespace Backend.Services
                 throw new KeyNotFoundException(
                     "Vehiculo con id " + registroKilometraje.IdVehiculo + " no encontrado"
                 );
+            RegistroKilometraje? ultimoRegistroDeKilometraje =
+                await GetLatestRegistroKilometrajeByVehiculoIdAsync(registroKilometraje.IdVehiculo);
             if (
-                await GetLatestRegistroKilometrajeByVehiculoIdAsync(registroKilometraje.IdVehiculo)
-                    is (RegistroKilometraje registroFinded)
-                && registroKilometraje.Kilometraje <= registroFinded.Kilometraje
+                ultimoRegistroDeKilometraje != null
+                && DateOnly.FromDateTime(DateTime.Now)
+                    == DateOnly.FromDateTime(ultimoRegistroDeKilometraje.FechaRegistro)
+            )
+            {
+                throw new InvalidOperationException(
+                    "No se puede agregar mas de un registro por dia"
+                );
+            }
+            if (
+                ultimoRegistroDeKilometraje != null
+                && registroKilometraje.Kilometraje <= ultimoRegistroDeKilometraje.Kilometraje
             )
             {
                 throw new InvalidOperationException("El registro no puede ser menor al anterior");
             }
+
             _context.RegistrosKilometraje.Add(registroKilometraje);
             await _context.SaveChangesAsync();
             return registroKilometraje;
@@ -93,6 +116,19 @@ namespace Backend.Services
                 throw new KeyNotFoundException(
                     "Vehiculo con id " + registroKilometrajeDto.IdVehiculo + " no encontrado"
                 );
+            if (
+                await GetLatestRegistroKilometrajeVehiculoIdAndNotSameAsync(
+                    registroKilometrajeDto.IdVehiculo,
+                    id
+                )
+                    is (RegistroKilometraje registroLatestNotVehiculo)
+                && registroKilometrajeDto.Kilometraje <= registroLatestNotVehiculo.Kilometraje
+            )
+            {
+                throw new InvalidOperationException(
+                    "El registro no puede ser menor al anterior de otro vehiculo"
+                );
+            }
             mapper.Map(registroKilometrajeDto, registroFinded);
             await _context.SaveChangesAsync();
         }
@@ -133,12 +169,30 @@ namespace Backend.Services
         }
 
         // GET REGISTROS KILOMETRAJE POR VEHICULO ID
-        public async Task<List<RegistroKilometraje>> GetByVehiculoIdAsync(int IdVehiculo)
+        public async Task<PagedResponse<RegistroKilometraje>> GetByVehiculoIdAsync(
+            int IdVehiculo,
+            int nroPagina,
+            int tamanoPagina
+        )
         {
-            return await _context
-                .RegistrosKilometraje.Where(r => r.IdVehiculo == IdVehiculo)
+            IQueryable<RegistroKilometraje> query = _context.RegistrosKilometraje;
+            int totalRegistrosRegistroKilometraje = await query
+                .Where(r => r.IdVehiculo == IdVehiculo)
+                .CountAsync();
+            List<RegistroKilometraje>? registrosKilometraje = await query
+                .Where(r => r.IdVehiculo == IdVehiculo)
                 .OrderByDescending(r => r.IdRegistroKilometraje)
+                .Skip((nroPagina - 1) * tamanoPagina)
+                .Take(tamanoPagina)
                 .ToListAsync();
+            PagedResponse<RegistroKilometraje> pagedResponse =
+                new PagedResponse<RegistroKilometraje>(
+                    registrosKilometraje,
+                    totalRegistrosRegistroKilometraje,
+                    nroPagina,
+                    tamanoPagina
+                );
+            return pagedResponse;
         }
     }
 }

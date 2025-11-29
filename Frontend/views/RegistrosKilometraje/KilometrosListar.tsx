@@ -89,15 +89,25 @@ export default function KilometrosListar() {
         const kilometrajeParser = z.array(ListadoKilometrajeApiParser);
         const kilometrajes: ListadoKilometrajeType[] =
           kilometrajeParser.parse(apiResponse);
-        setMetadataPage({
-          data: kilometrajes,
-          ...apiResponse,
-        });
+        if (apiResponse.length !== 0) {
+          setMetadataPage({
+            data: kilometrajes,
+            totalPaginasCalculadas: apiResponse[0].totalPaginasCalculadas,
+            ...apiResponse,
+          });
+        }
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
   }, [currentPage, patenteBuscar]);
+  useEffect(() => {
+    console.log(
+      "Total paginas calculadas cambiaron a:",
+      metadataPage.totalPaginasCalculadas
+    );
+    console.log("Tipo de dato: " + metadataPage.totalPaginasCalculadas);
+  }, [metadataPage.totalPaginasCalculadas]);
   const tableData = metadataPage.data.map(
     (kilometraje: ListadoKilometrajeType) => (
       <tr

@@ -124,6 +124,10 @@ public class ControllerRegistroKilometraje : ControllerBase
         {
             return NotFound(new { Message = ex.Message });
         }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
     }
 
     // DELETE REGISTRO KILOMETRAJE
@@ -164,18 +168,25 @@ public class ControllerRegistroKilometraje : ControllerBase
 
     //ESTE METODO BUSCA EL VEHICULO POR LA PATENTE Y DEVUELVE SUS REGISTROS DE KILOMETRAJE A PARTIR DE SU ID
     [HttpGet("listado/{patente}")]
-    public async Task<IActionResult> GetRegistrosPorPatente(string patente)
+    public async Task<IActionResult> GetRegistrosPorPatente(
+        string patente,
+        [FromQuery] int nroPagina = 1,
+        [FromQuery] int tamanoPagina = 10
+    )
     {
-        var vehiculo = await _serviceVehiculo.GetByPatenteAsync(patente);
+        Vehiculo? vehiculo = await _serviceVehiculo.GetByPatenteAsync(patente);
 
         if (vehiculo == null)
         {
             return NotFound("No se encontró ningún vehículo con la patente proporcionada.");
         }
-        var registrosKilometraje = await _serviceRegistroKilometraje.GetByVehiculoIdAsync(
-            vehiculo.IdVehiculo
-        );
-        var result = registrosKilometraje.Select(r => new
+        PagedResponse<RegistroKilometraje> registrosKilometraje =
+            await _serviceRegistroKilometraje.GetByVehiculoIdAsync(
+                vehiculo.IdVehiculo,
+                nroPagina,
+                tamanoPagina
+            );
+        var result = registrosKilometraje.Items.Select(r => new
         {
             r.IdRegistroKilometraje,
             r.IdVehiculo,
@@ -185,6 +196,8 @@ public class ControllerRegistroKilometraje : ControllerBase
             Marca = vehiculo.Marca,
             Modelo = vehiculo.Modelo,
             Patente = vehiculo.Patente,
+            nroPagina = registrosKilometraje.PaginaActual,
+            totalPaginasCalculadas = registrosKilometraje.TotalPaginasCalculadas,
         });
         return Ok(result);
     }

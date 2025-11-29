@@ -60,18 +60,7 @@ export default function ActualizarRegistroKilometraje() {
     };
     fetchData();
   }, [id]);
-  useEffect(() => {
-    console.log("Initial Form Data ");
-    for (const key in initialFormData) {
-      console.log(
-        key + ": " + initialFormData[key as keyof typeof initialFormData]
-      );
-    }
-    console.log("Form Data ");
-    for (const key in formData) {
-      console.log(key + ": " + formData[key as keyof typeof formData]);
-    }
-  }, [initialFormData, formData]);
+
   const ValidateForm = (): boolean => {
     const validateFromZod = ControlKilometrajeSchema.safeParse(formData);
     if (!validateFromZod.success) {
