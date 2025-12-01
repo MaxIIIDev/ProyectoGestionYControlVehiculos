@@ -124,6 +124,36 @@ export const endpointsAPI = {
       method: "PATCH",
     },
   },
+  matafuegos: {
+    listar: {
+      action: `${API_ROUTE}/matafuegos`,
+      method: "GET",
+    },
+    nuevo: {
+      action: `${API_ROUTE}/matafuegos`,
+      method: "POST",
+    },
+    editar: {
+      action: (id: number) => `${API_ROUTE}/matafuegos/${id}`,
+      method: "PUT",
+    },
+    eliminar: {
+      action: (id: number) => `${API_ROUTE}/matafuegos/${id}`,
+      method: "DELETE",
+    },
+    buscarPorId: {
+      action: (id: number) => `${API_ROUTE}/matafuegos/${id}`,
+      method: "GET",
+    },
+    bajaLogica: {
+      action: (id: number) => `${API_ROUTE}/matafuegos/baja/${id}`,
+      method: "PATCH",
+    },
+    altaLogica: {
+      action: (id: number) => `${API_ROUTE}/matafuegos/alta/${id}`,
+      method: "PATCH",
+    },
+  },
 };
 //ENDPOINTS DEL FRONTEND
 export const endpointFront = {
@@ -160,6 +190,13 @@ export const endpointFront = {
   },
   matafuegos: {
     gestion: { action: "/Matafuegos" },
+    agregar: { action: "/Matafuegos/Nuevo" },
+    editar: {
+      action: (id: number) => {
+        return "/Matafuegos/Editar/" + id;
+      },
+      endpoint: "/Matafuegos/Editar/:id",
+    },
   },
   neumaticos: {
     gestion: { action: "/Neumaticos" },
