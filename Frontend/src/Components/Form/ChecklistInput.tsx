@@ -25,19 +25,22 @@ export default function ChecklistInput({
   disabled,
 }: ChecklistInputProps) {
   return (
-    <div className={`form-input d-flex row ${className || ""}`} style={style}>
-      <span>{label}</span>
-      <div className="w-25 justify-content-end">
-        <Form.Check
-          type="switch"
-          id={name}
-          checked={value}
-          onChange={(e) => onChange(e.target.checked)}
-          required={required}
-          disabled={disabled}
-          label=""
-        />
-      </div>
+    <div
+      className={`form-input d-flex align-items-center justify-content-between my-2 w-50  ${
+        className || ""
+      }`}
+      style={style}
+    >
+      <span className="me-2 text-dark">{label}</span>
+      <Form.Check
+        type="switch"
+        id={name}
+        checked={value}
+        onChange={(e) => onChange(e.target.checked)}
+        required={required}
+        disabled={disabled}
+        label=""
+      />
       {error && (
         <div className="mx-2 px-1 fs-6 text-start text-danger">{error}</div>
       )}
