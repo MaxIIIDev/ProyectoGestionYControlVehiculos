@@ -95,6 +95,35 @@ export const endpointsAPI = {
       method: "PATCH",
     },
   },
+  checklist: {
+    nuevo: { action: `${API_ROUTE}/Checklist`, method: "POST" },
+    listar: { action: `${API_ROUTE}/Checklist`, method: "GET" },
+    editar: {
+      action: (id: number) => `${API_ROUTE}/Checklist/${id}`,
+      method: "PUT",
+    },
+    eliminar: {
+      action: (id: number) => `${API_ROUTE}/Checklist/${id}`,
+      method: "DELETE",
+    },
+    buscarPorId: {
+      action: (id: number) => `${API_ROUTE}/Checklist/${id}`,
+      method: "GET",
+    },
+    buscarPorVehiculoId: {
+      action: (vehiculoId: number) =>
+        `${API_ROUTE}/Checklist/vehiculo/${vehiculoId}`,
+      method: "GET",
+    },
+    bajaLogica: {
+      action: (id: number) => `${API_ROUTE}/Checklist/baja/${id}`,
+      method: "PATCH",
+    },
+    altaLogica: {
+      action: (id: number) => `${API_ROUTE}/Checklist/alta/${id}`,
+      method: "PATCH",
+    },
+  },
 };
 //ENDPOINTS DEL FRONTEND
 export const endpointFront = {
@@ -134,6 +163,9 @@ export const endpointFront = {
   },
   neumaticos: {
     gestion: { action: "/Neumaticos" },
+  },
+  checklist: {
+    gestion: { action: "/Checklist" },
   },
 };
 export default endpointsAPI;

@@ -51,7 +51,7 @@ export default function KilometrosListar() {
               iconClass="bi bi-plus-circle"
               text=" Nuevo Checklist de Vehículos"
               onClick={() => {
-                navigate("/Checklist/Nuevo");
+                navigate(endpointFront.checklist.gestion.action);
               }}
             />
           }

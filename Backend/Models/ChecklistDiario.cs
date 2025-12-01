@@ -36,7 +36,6 @@ namespace Backend.Models
         public bool NivelAguaParabrisas { get; set; } = nivelAguaParabrisas;
         public bool MatafuegoVigente { get; set; } = matafuegoVigente;
 
-        [MinLength(3)]
         [MaxLength(255)]
         public string? Observaciones { get; set; } = observaciones;
 

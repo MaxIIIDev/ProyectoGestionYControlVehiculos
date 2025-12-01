@@ -12,6 +12,7 @@ import Neumaticos from "../../views/Neumaticos";
 import KilometrosListar from "../../views/RegistrosKilometraje/KilometrosListar";
 import VehiculosAcualizar from "../../views/Vehiculo/VehiculosActualizar";
 import VehiculosDocumentos from "../../views/VehiculosDocumentos";
+import Checklist from "../../views/Checklist/Checklist";
 import { endpointFront } from "./Routes/Enrouters";
 
 export default function RoutesComponent() {
@@ -77,6 +78,10 @@ export default function RoutesComponent() {
         <Route
           path={endpointFront.vehiculos.documentos.action}
           element={<VehiculosDocumentos />}
+        />
+        <Route
+          path={endpointFront.checklist.gestion.action}
+          element={<Checklist />}
         />
       </Routes>
     </Col>
