@@ -127,7 +127,8 @@ export default function KilometrosListar() {
         data-patente={kilometraje.Patente}
         data-fecharegistro={kilometraje.FechaRegistro}
         data-kilometraje={kilometraje.Kilometraje}
-        data-estado={kilometraje.Estado}>
+        data-estado={kilometraje.Estado}
+      >
         <td>{kilometraje.FechaRegistro.toLocaleDateString()}</td>
         <td>{kilometraje.Kilometraje}</td>
         <td>{kilometraje.Estado ? "Activo" : "Inactivo"}</td>
@@ -147,13 +148,15 @@ export default function KilometrosListar() {
           gap: "20px",
           alignItems: "center",
           justifyContent: "center",
-        }}>
+        }}
+      >
         <FormCard
           title="Buscar Vehículo por Patente"
           classNameCard="bg-dark text-white m-3 rounded-5"
           classNameHeader="fs-4 text-white text-center border-0 rounded-5"
           classNameBody="fs-5 text-center"
-          styleCard={{ maxWidth: "90%", maxHeight: "90%", padding: "20px" }}>
+          styleCard={{ maxWidth: "90%", maxHeight: "90%", padding: "20px" }}
+        >
           <ComboBoxBrowser
             apiUrl={endpointsAPI.vehiculos.buscarPorPatenteLike.action("")}
             apiMethod={endpointsAPI.vehiculos.buscarPorPatenteLike.method}
@@ -169,11 +172,11 @@ export default function KilometrosListar() {
             title=""
             classNameCard="bg-danger text-black  rounded-5 border border-2 border-danger"
             classNameHeader=" invisible"
-            classNameBody="text-center mb-3">
+            classNameBody="text-center mb-3"
+          >
             <TableContainer
-              title={
-                "No hay registros para la patente seleccionada"
-              }></TableContainer>
+              title={"No hay registros para la patente seleccionada"}
+            ></TableContainer>
           </FormCard>
         )}
         {patenteBuscar && metadataPage.data.length !== 0 && (
@@ -188,7 +191,8 @@ export default function KilometrosListar() {
             }
             classNameCard="bg-dark text-white  rounded-5 "
             classNameHeader="text-center fs-4 fst-italic font-monospace text- p-3 bg-info bolder border border-2 border-info font-weight-bold text-black "
-            classNameBody="p-4">
+            classNameBody="p-4"
+          >
             <TableContainer>
               <TableResponsive
                 headerTitle={headers}
@@ -213,7 +217,8 @@ export default function KilometrosListar() {
                   selectedKilometraje +
                   "km"
                 }
-                onClose={() => setShowModal(false)}>
+                onClose={() => setShowModal(false)}
+              >
                 {selectedFechaRegistro &&
                   new Date(Date.now())
                     .toLocaleDateString("es-AR")

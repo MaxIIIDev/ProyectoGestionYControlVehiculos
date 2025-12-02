@@ -133,4 +133,12 @@ public class ControllerChecklistDiario : ControllerBase
             return NotFound(new { message = ex.Message });
         }
     }
+
+    // GET CHECKLISTS DIARIOS POR VEHICULO ID
+    [HttpGet("vehiculo/{vehiculoId}")]
+    public async Task<IActionResult> GetChecklistsDiariosByVehiculoId(int vehiculoId)
+    {
+        var checklists = await _serviceChecklistDiario.GetByVehiculoIdAsync(vehiculoId);
+        return Ok(checklists);
+    }
 }
