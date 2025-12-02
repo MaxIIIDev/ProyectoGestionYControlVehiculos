@@ -69,46 +69,58 @@ export const AgregarMatafuego = () => {
     });
   };
   return (
-    <FormCard title="Registrar Formulario">
-      <Form
-        name="AgregarMatafuegoForm"
-        action={endpointsAPI.matafuegos.nuevo.action}
-        method={endpointsAPI.matafuegos.nuevo.method}
-        onSuccess={handleSuccess}
-        onError={handleErrors}
-        validateForm={validateForm}>
-        <FormInput
-          name="Proveedor"
-          label="Proveedor"
-          type="text"
-          placeholder="Ingrese el proveedor"
-          required={true}
-          value={formData.Proveedor}
-          onChange={onChange}
-          error={errors.Proveedor}></FormInput>
-        <FormInput
-          label="Fecha de Carga"
-          placeholder="Ingrese la Fecha de Carga"
-          type="date"
-          name="FechaCarga"
-          required={true}
-          value={formData.FechaCarga.toISOString().split("T")[0]}
-          onChange={onChange}
-          error={errors.FechaCarga}></FormInput>
-        <FormInput
-          label="Fecha de Vencimiento"
-          placeholder="Ingrese la Fecha de Vencimiento"
-          type="date"
-          name="FechaVencimiento"
-          required={true}
-          value={formData.FechaVencimiento.toISOString().split("T")[0]}
-          onChange={onChange}
-          error={errors.FechaVencimiento}></FormInput>
-        <FormButtons
-          setFormData={setFormData}
-          initialState={intialState}
-          formClear={cleanErrors}></FormButtons>
-      </Form>
-    </FormCard>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}>
+      <FormCard
+        title="Registrar Matafuego"
+        classNameCard=" bg-dark rounded-5 text-white "
+        styleCard={{ maxWidth: "600px" }}
+        classNameHeader="text-center fs-2"
+        classNameBody="fs-4">
+        <Form
+          name="AgregarMatafuegoForm"
+          action={endpointsAPI.matafuegos.nuevo.action}
+          method={endpointsAPI.matafuegos.nuevo.method}
+          onSuccess={handleSuccess}
+          onError={handleErrors}
+          validateForm={validateForm}>
+          <FormInput
+            name="Proveedor"
+            label="Proveedor"
+            type="text"
+            placeholder="Ingrese el proveedor"
+            required={false}
+            value={formData.Proveedor}
+            onChange={onChange}
+            error={errors.Proveedor}></FormInput>
+          <FormInput
+            label="Fecha de Carga"
+            placeholder="Ingrese la Fecha de Carga"
+            type="date"
+            name="FechaCarga"
+            required={true}
+            value={formData.FechaCarga.toISOString().split("T")[0]}
+            onChange={onChange}
+            error={errors.FechaCarga}></FormInput>
+          <FormInput
+            label="Fecha de Vencimiento"
+            placeholder="Ingrese la Fecha de Vencimiento"
+            type="date"
+            name="FechaVencimiento"
+            required={true}
+            value={formData.FechaVencimiento.toISOString().split("T")[0]}
+            onChange={onChange}
+            error={errors.FechaVencimiento}></FormInput>
+          <FormButtons
+            setFormData={setFormData}
+            initialState={intialState}
+            formClear={cleanErrors}></FormButtons>
+        </Form>
+      </FormCard>
+    </div>
   );
 };
