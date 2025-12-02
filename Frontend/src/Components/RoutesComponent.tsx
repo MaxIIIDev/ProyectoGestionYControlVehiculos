@@ -15,6 +15,7 @@ import VehiculosDocumentos from "../../views/VehiculosDocumentos";
 import Checklist from "../../views/Checklist/Checklist";
 import { endpointFront } from "./Routes/Enrouters";
 import { AgregarMatafuego } from "../../views/Matafuegos/AgregarMatafuego";
+import { ListarMatafuegos } from "../../views/Matafuegos/ListarMatafuegos";
 export default function RoutesComponent() {
   return (
     <Col xs={12} md={9} lg={10} className="p-4 bg-secondary">
@@ -87,6 +88,9 @@ export default function RoutesComponent() {
           path={endpointFront.matafuegos.agregar.action}
           element={<AgregarMatafuego />}
         />
+        <Route
+          path={endpointFront.matafuegos.listar.action}
+          element={<ListarMatafuegos />}></Route>
       </Routes>
     </Col>
   );

@@ -126,7 +126,8 @@ export const endpointsAPI = {
   },
   matafuegos: {
     listar: {
-      action: `${API_ROUTE}/matafuegos`,
+      action: (nroPagina: number, tamanoPagina: number): string =>
+        `${API_ROUTE}/matafuegos?numeroPagina=${nroPagina}&tamanoPagina=${tamanoPagina}`,
       method: "GET",
     },
     nuevo: {
@@ -196,6 +197,9 @@ export const endpointFront = {
         return "/Matafuegos/Editar/" + id;
       },
       endpoint: "/Matafuegos/Editar/:id",
+    },
+    listar: {
+      action: "/Matafuegos/Listar",
     },
   },
   neumaticos: {
