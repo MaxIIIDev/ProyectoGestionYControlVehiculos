@@ -1,0 +1,15 @@
+.boton-modal {
+  border: none;
+  background-color: #2b2929ff;
+  box-shadow: 4px 4px 8px 2px #000000ff;
+}
+
+.boton-modal:hover {
+  background-color: #4b4949ff;
+  box-shadow: 6px 6px 12px 3px #000000ff;
+}
+
+.boton-modal:active {
+  background-color: #1b1a1aff;
+  box-shadow: 2px 2px 4px 1px #000000ff;
+}

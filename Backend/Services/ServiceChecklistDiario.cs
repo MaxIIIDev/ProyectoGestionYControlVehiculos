@@ -102,5 +102,13 @@ namespace Backend.Services
             _context.ChecklistsDiarios.Update(checklistDiario);
             return await _context.SaveChangesAsync() > 0;
         }
+
+        // LISTAR CHECKLISTDIARIOS POR VEHICULO ID
+        public async Task<List<ChecklistDiario>> GetByVehiculoIdAsync(int vehiculoId)
+        {
+            return await _context
+                .ChecklistsDiarios.Where(c => c.IdVehiculo == vehiculoId)
+                .ToListAsync();
+        }
     }
 }

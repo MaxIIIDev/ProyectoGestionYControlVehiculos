@@ -2,7 +2,7 @@ import React from "react";
 import "../css/TableResponsive.css";
 
 interface TableProps {
-  headerTitle?: string[];
+  headerTitle?: React.ReactNode[];
   tableData?: React.ReactNode;
   colWidths?: string[];
 }

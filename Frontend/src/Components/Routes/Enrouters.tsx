@@ -110,11 +110,7 @@ export const endpointsAPI = {
       action: (id: number) => `${API_ROUTE}/Checklist/${id}`,
       method: "GET",
     },
-    buscarPorVehiculoId: {
-      action: (vehiculoId: number) =>
-        `${API_ROUTE}/Checklist/vehiculo/${vehiculoId}`,
-      method: "GET",
-    },
+
     bajaLogica: {
       action: (id: number) => `${API_ROUTE}/Checklist/baja/${id}`,
       method: "PATCH",
@@ -122,6 +118,11 @@ export const endpointsAPI = {
     altaLogica: {
       action: (id: number) => `${API_ROUTE}/Checklist/alta/${id}`,
       method: "PATCH",
+    },
+    listarPorVehiculoId: {
+      action: (vehiculoId: number) =>
+        `${API_ROUTE}/Checklist/vehiculo/${vehiculoId}`,
+      method: "GET",
     },
   },
   matafuegos: {
@@ -207,6 +208,7 @@ export const endpointFront = {
   },
   checklist: {
     gestion: { action: "/Checklist" },
+    listar: { action: "/Checklist/Listar" },
   },
 };
 export default endpointsAPI;
