@@ -18,6 +18,7 @@ import { ParserDatesToStringDateOnly } from "../../src/Utils/ParserDatesToString
 import FormCard from "../../src/Components/Form/FormCard";
 import GeneralContainer from "../../src/Components/FormBuscador/GeneralContainer";
 import { Button } from "react-bootstrap";
+import ResultInfo from "../../src/Components/FormBuscador/ResultInfo";
 
 export default function ChecklistListar() {
   const [idBuscar, setIdBuscar] = useState<string>("");
@@ -30,7 +31,7 @@ export default function ChecklistListar() {
     data: [],
     totalPaginasCalculadas: 0,
     paginaActual: 1,
-    tamanoPaginas: 3,
+    tamanoPaginas: 10,
   });
   const headers = [
     <div className="d-flex justify-content-center">Fecha</div>,
@@ -203,15 +204,17 @@ export default function ChecklistListar() {
       </svg>
     </div>,
     <div className="d-flex justify-content-center">
+      <span style={{ color: "#e85a5aff" }}>(</span>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        height="24px"
+        height="28px"
         viewBox="0 -960 960 960"
         width="24px"
         fill="#e85a5aff"
       >
         <path d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
       </svg>
+      <span style={{ color: "#e85a5aff" }}>)</span>
     </div>,
     <div className="d-flex justify-content-center">
       <svg
@@ -289,14 +292,14 @@ export default function ChecklistListar() {
         data: [],
         totalPaginasCalculadas: 0,
         paginaActual: 1,
-        tamanoPaginas: 3,
+        tamanoPaginas: 10,
       });
       return;
     }
     fetch(
       `${endpointsAPI.checklist.listarPorVehiculoId.action(
         idBuscar ? parseInt(idBuscar) : 0
-      )}?nroPagina=${currentPage}&tamanoPagina=3`,
+      )}?nroPagina=${currentPage}&tamanoPagina=10`,
       { method: endpointsAPI.checklist.listarPorVehiculoId.method }
     )
       .then((response) => response.json())
@@ -326,281 +329,282 @@ export default function ChecklistListar() {
     );
     console.log("Tipo de dato: " + metadataPage.totalPaginasCalculadas);
   }, [metadataPage.totalPaginasCalculadas]);
-  const tableData = metadataPage.data.map(
-    (chcklst: ListadoChecklistDiarioType) => (
-      <tr
-        key={chcklst.IdChecklistDiario}
-        style={{ cursor: "pointer", textAlign: "center" }}
-        data-id={chcklst.IdChecklistDiario}
-        data-fecha={chcklst.Fecha}
-        data-farodelanteroizquierdo={chcklst.FaroDelanteroIzquierdo}
-        data-farodelanteroderecho={chcklst.FaroDelanteroDerecho}
-        data-farotraseroizquierdo={chcklst.FaroTraseroIzquierdo}
-        data-farotraseroderecho={chcklst.FaroTraseroDerecho}
-        data-liquidofrenos={chcklst.LiquidoFrenos}
-        data-nivelaceite={chcklst.NivelAceite}
-        data-presionneumaticos={chcklst.PresionNeumaticos}
-        data-nivelrefrigerante={chcklst.NivelRefrigerante}
-      >
-        <td>{ParserDatesToStringDateOnly(new Date(chcklst.Fecha))}</td>
-        <td>
-          {chcklst.FaroDelanteroIzquierdo ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#75FB4C"
-            >
-              <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#da6b67ff"
-            >
-              <path d="M330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm36-190 114-114 114 114 56-56-114-114 114-114-56-56-114 114-114-114-56 56 114 114-114 114 56 56Zm-2 110h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z" />
-            </svg>
-          )}
-        </td>
-        <td>
-          {chcklst.FaroDelanteroDerecho ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#75FB4C"
-            >
-              <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#da6b67ff"
-            >
-              <path d="M330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm36-190 114-114 114 114 56-56-114-114 114-114-56-56-114 114-114-114-56 56 114 114-114 114 56 56Zm-2 110h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z" />
-            </svg>
-          )}
-        </td>
-        <td>
-          {chcklst.FaroTraseroIzquierdo ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#75FB4C"
-            >
-              <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#da6b67ff"
-            >
-              <path d="M330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm36-190 114-114 114 114 56-56-114-114 114-114-56-56-114 114-114-114-56 56 114 114-114 114 56 56Zm-2 110h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z" />
-            </svg>
-          )}
-        </td>
-        <td>
-          {chcklst.FaroTraseroDerecho ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#75FB4C"
-            >
-              <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#da6b67ff"
-            >
-              <path d="M330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm36-190 114-114 114 114 56-56-114-114 114-114-56-56-114 114-114-114-56 56 114 114-114 114 56 56Zm-2 110h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z" />
-            </svg>
-          )}
-        </td>
-        <td>
-          {chcklst.LiquidoFrenos ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#75FB4C"
-            >
-              <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#da6b67ff"
-            >
-              <path d="M330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm36-190 114-114 114 114 56-56-114-114 114-114-56-56-114 114-114-114-56 56 114 114-114 114 56 56Zm-2 110h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z" />
-            </svg>
-          )}
-        </td>
-        <td>
-          {chcklst.NivelAceite ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#75FB4C"
-            >
-              <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#da6b67ff"
-            >
-              <path d="M330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm36-190 114-114 114 114 56-56-114-114 114-114-56-56-114 114-114-114-56 56 114 114-114 114 56 56Zm-2 110h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z" />
-            </svg>
-          )}
-        </td>
-        <td>
-          {chcklst.PresionNeumaticos ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#75FB4C"
-            >
-              <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#da6b67ff"
-            >
-              <path d="M330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm36-190 114-114 114 114 56-56-114-114 114-114-56-56-114 114-114-114-56 56 114 114-114 114 56 56Zm-2 110h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z" />
-            </svg>
-          )}
-        </td>
-        <td>
-          {chcklst.NivelRefrigerante ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#75FB4C"
-            >
-              <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#da6b67ff"
-            >
-              <path d="M330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm36-190 114-114 114 114 56-56-114-114 114-114-56-56-114 114-114-114-56 56 114 114-114 114 56 56Zm-2 110h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z" />
-            </svg>
-          )}
-        </td>
-        <td>
-          {chcklst.NivelAguaParabrisas ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#75FB4C"
-            >
-              <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#da6b67ff"
-            >
-              <path d="M330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm36-190 114-114 114 114 56-56-114-114 114-114-56-56-114 114-114-114-56 56 114 114-114 114 56 56Zm-2 110h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z" />
-            </svg>
-          )}
-        </td>
-        <td>
-          {chcklst.MatafuegoVigente ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#75FB4C"
-            >
-              <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#da6b67ff"
-            >
-              <path d="M330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm36-190 114-114 114 114 56-56-114-114 114-114-56-56-114 114-114-114-56 56 114 114-114 114 56 56Zm-2 110h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z" />
-            </svg>
-          )}
-        </td>
-        <td>
-          {chcklst.Observaciones.length > 0 ? (
-            <Button className="boton-modal border-0 p-1 m-0 w-75 rounded-1">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="24px"
-                viewBox="0 -960 960 960"
-                width="24px"
-                fill="#75FB4C"
-              >
-                <path d="M320-440h320v-80H320v80Zm0 120h320v-80H320v80Zm0 120h200v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z" />
-              </svg>
-            </Button>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="24px"
-              viewBox="0 -960 960 960"
-              width="24px"
-              fill="#D16D6A"
-            >
-              <path d="M240-800v200-200 640-9.5 9.5-640Zm0 720q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v174q-19-7-39-10.5t-41-3.5v-120H520v-200H240v640h254q8 23 20 43t28 37H240Zm396-20-56-56 84-84-84-84 56-56 84 84 84-84 56 56-83 84 83 84-56 56-84-83-84 83Z" />
-            </svg>
-          )}
-        </td>
-      </tr>
-    )
+  const dataOrdenada = [...metadataPage.data].sort(
+    (a, b) => new Date(b.Fecha).getTime() - new Date(a.Fecha).getTime()
   );
+  const tableData = dataOrdenada.map((chcklst: ListadoChecklistDiarioType) => (
+    <tr
+      key={chcklst.IdChecklistDiario}
+      style={{ cursor: "pointer", textAlign: "center" }}
+      data-id={chcklst.IdChecklistDiario}
+      data-fecha={chcklst.Fecha}
+      data-farodelanteroizquierdo={chcklst.FaroDelanteroIzquierdo}
+      data-farodelanteroderecho={chcklst.FaroDelanteroDerecho}
+      data-farotraseroizquierdo={chcklst.FaroTraseroIzquierdo}
+      data-farotraseroderecho={chcklst.FaroTraseroDerecho}
+      data-liquidofrenos={chcklst.LiquidoFrenos}
+      data-nivelaceite={chcklst.NivelAceite}
+      data-presionneumaticos={chcklst.PresionNeumaticos}
+      data-nivelrefrigerante={chcklst.NivelRefrigerante}
+    >
+      <td>{ParserDatesToStringDateOnly(new Date(chcklst.Fecha))}</td>
+      <td>
+        {chcklst.FaroDelanteroIzquierdo ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#75FB4C"
+          >
+            <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+          </svg>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#da6b67ff"
+          >
+            <path d="M330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm36-190 114-114 114 114 56-56-114-114 114-114-56-56-114 114-114-114-56 56 114 114-114 114 56 56Zm-2 110h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z" />
+          </svg>
+        )}
+      </td>
+      <td>
+        {chcklst.FaroDelanteroDerecho ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#75FB4C"
+          >
+            <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+          </svg>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#da6b67ff"
+          >
+            <path d="M330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm36-190 114-114 114 114 56-56-114-114 114-114-56-56-114 114-114-114-56 56 114 114-114 114 56 56Zm-2 110h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z" />
+          </svg>
+        )}
+      </td>
+      <td>
+        {chcklst.FaroTraseroIzquierdo ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#75FB4C"
+          >
+            <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+          </svg>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#da6b67ff"
+          >
+            <path d="M330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm36-190 114-114 114 114 56-56-114-114 114-114-56-56-114 114-114-114-56 56 114 114-114 114 56 56Zm-2 110h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z" />
+          </svg>
+        )}
+      </td>
+      <td>
+        {chcklst.FaroTraseroDerecho ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#75FB4C"
+          >
+            <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+          </svg>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#da6b67ff"
+          >
+            <path d="M330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm36-190 114-114 114 114 56-56-114-114 114-114-56-56-114 114-114-114-56 56 114 114-114 114 56 56Zm-2 110h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z" />
+          </svg>
+        )}
+      </td>
+      <td>
+        {chcklst.LiquidoFrenos ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#75FB4C"
+          >
+            <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+          </svg>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#da6b67ff"
+          >
+            <path d="M330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm36-190 114-114 114 114 56-56-114-114 114-114-56-56-114 114-114-114-56 56 114 114-114 114 56 56Zm-2 110h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z" />
+          </svg>
+        )}
+      </td>
+      <td>
+        {chcklst.NivelAceite ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#75FB4C"
+          >
+            <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+          </svg>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#da6b67ff"
+          >
+            <path d="M330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm36-190 114-114 114 114 56-56-114-114 114-114-56-56-114 114-114-114-56 56 114 114-114 114 56 56Zm-2 110h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z" />
+          </svg>
+        )}
+      </td>
+      <td>
+        {chcklst.PresionNeumaticos ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#75FB4C"
+          >
+            <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+          </svg>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#da6b67ff"
+          >
+            <path d="M330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm36-190 114-114 114 114 56-56-114-114 114-114-56-56-114 114-114-114-56 56 114 114-114 114 56 56Zm-2 110h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z" />
+          </svg>
+        )}
+      </td>
+      <td>
+        {chcklst.NivelRefrigerante ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#75FB4C"
+          >
+            <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+          </svg>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#da6b67ff"
+          >
+            <path d="M330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm36-190 114-114 114 114 56-56-114-114 114-114-56-56-114 114-114-114-56 56 114 114-114 114 56 56Zm-2 110h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z" />
+          </svg>
+        )}
+      </td>
+      <td>
+        {chcklst.NivelAguaParabrisas ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#75FB4C"
+          >
+            <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+          </svg>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#da6b67ff"
+          >
+            <path d="M330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm36-190 114-114 114 114 56-56-114-114 114-114-56-56-114 114-114-114-56 56 114 114-114 114 56 56Zm-2 110h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z" />
+          </svg>
+        )}
+      </td>
+      <td>
+        {chcklst.MatafuegoVigente ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#75FB4C"
+          >
+            <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+          </svg>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#da6b67ff"
+          >
+            <path d="M330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm36-190 114-114 114 114 56-56-114-114 114-114-56-56-114 114-114-114-56 56 114 114-114 114 56 56Zm-2 110h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z" />
+          </svg>
+        )}
+      </td>
+      <td>
+        {chcklst.Observaciones.length > 0 ? (
+          <Button className="boton-modal border-0 p-1 m-0 w-75 rounded-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="#75FB4C"
+            >
+              <path d="M320-440h320v-80H320v80Zm0 120h320v-80H320v80Zm0 120h200v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z" />
+            </svg>
+          </Button>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#D16D6A"
+          >
+            <path d="M240-800v200-200 640-9.5 9.5-640Zm0 720q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v174q-19-7-39-10.5t-41-3.5v-120H520v-200H240v640h254q8 23 20 43t28 37H240Zm396-20-56-56 84-84-84-84 56-56 84 84 84-84 56 56-83 84 83 84-56 56-84-83-84 83Z" />
+          </svg>
+        )}
+      </td>
+    </tr>
+  ));
 
   return (
     <>
@@ -625,21 +629,30 @@ export default function ChecklistListar() {
         </FormCard>
         {/* Tabla de Checklists debe aparecer solo si se ha seleccionado un vehículo */}
         {vehiculoSeleccionado && (
-          <TableContainer
-            title={`Listado de Checklists para: ${vehiculoSeleccionado?.patente}`}
-          >
-            {metadataPage.data.length > 0 ? (
-              <TableResponsive
-                tableData={tableData}
-                headerTitle={headers}
-                colWidths={colWidths}
-              />
-            ) : (
-              <div className="text-center py-4 text-danger">
-                No hay checklists para el vehículo seleccionado.
-              </div>
-            )}
-          </TableContainer>
+          <>
+            <ResultInfo
+              title="Vehiculo Seleccionado:"
+              info={[
+                { label: "Marca", value: vehiculoSeleccionado.marca },
+                { label: "Modelo", value: vehiculoSeleccionado.modelo },
+                { label: "Año", value: vehiculoSeleccionado.anio },
+                { label: "Patente", value: vehiculoSeleccionado.patente },
+              ]}
+            />
+            <TableContainer>
+              {metadataPage.data.length > 0 ? (
+                <TableResponsive
+                  tableData={tableData}
+                  headerTitle={headers}
+                  colWidths={colWidths}
+                />
+              ) : (
+                <div className="text-center py-4 text-danger">
+                  No hay checklists para el vehículo seleccionado.
+                </div>
+              )}
+            </TableContainer>
+          </>
         )}
         {metadataPage.data.length > 0 && vehiculoSeleccionado && (
           <PaginatorForTable
