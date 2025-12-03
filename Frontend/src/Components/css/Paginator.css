@@ -17,8 +17,8 @@
     8px 12px 24px -4px rgba(0, 0, 0, 0.55);
   padding: 0.5em 1.5em;
   margin: 1.5em 0;
-  width: fit-content;
-  gap: 15%;
+  width: auto;
+  gap: 0.5em;
 }
 
 .page-item {

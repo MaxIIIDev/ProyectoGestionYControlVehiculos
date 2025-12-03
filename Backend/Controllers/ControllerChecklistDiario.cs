@@ -136,9 +136,21 @@ public class ControllerChecklistDiario : ControllerBase
 
     // GET CHECKLISTS DIARIOS POR VEHICULO ID
     [HttpGet("vehiculo/{vehiculoId}")]
-    public async Task<IActionResult> GetChecklistsDiariosByVehiculoId(int vehiculoId)
+    public async Task<IActionResult> GetChecklistsDiariosByVehiculoId(
+        int vehiculoId,
+        [FromQuery] int nroPagina = 1,
+        [FromQuery] int tamanoPagina = 10
+    )
     {
-        var checklists = await _serviceChecklistDiario.GetByVehiculoIdAsync(vehiculoId);
-        return Ok(checklists);
+        var checklistsVehiculo = await _serviceChecklistDiario.GetByVehiculoIdAsync(
+            vehiculoId,
+            nroPagina,
+            tamanoPagina
+        );
+        if (checklistsVehiculo == null)
+        {
+            return NotFound("No se encontraron checklists para el vehiculo seleccionado.");
+        }
+        return Ok(checklistsVehiculo);
     }
 }

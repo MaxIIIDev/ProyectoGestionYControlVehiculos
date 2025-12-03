@@ -49,3 +49,11 @@ export const ListadoChecklistDiarioApiParser = ListadoChecklistDiario.transform(
     Observaciones: apiData.observaciones,
   })
 );
+
+export const PagedResponseSchema = z.object({
+  items: z.array(ListadoChecklistDiario),
+  paginaActual: z.number(),
+  tamanoPaginas: z.number(),
+  totalRegistrosBd: z.number(),
+  totalPaginasCalculadas: z.number(),
+});

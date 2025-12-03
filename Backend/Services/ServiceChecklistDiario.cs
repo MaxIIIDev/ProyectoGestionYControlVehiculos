@@ -104,11 +104,25 @@ namespace Backend.Services
         }
 
         // LISTAR CHECKLISTDIARIOS POR VEHICULO ID
-        public async Task<List<ChecklistDiario>> GetByVehiculoIdAsync(int vehiculoId)
+        public async Task<PagedResponse<ChecklistDiario>> GetByVehiculoIdAsync(
+            int vehiculoId,
+            int nroPagina,
+            int tamanoPagina
+        )
         {
-            return await _context
-                .ChecklistsDiarios.Where(c => c.IdVehiculo == vehiculoId)
+            var query = _context.ChecklistsDiarios.Where(c => c.IdVehiculo == vehiculoId);
+            var totalRegistros = await query.CountAsync();
+            var items = await query
+                .Skip((nroPagina - 1) * tamanoPagina)
+                .Take(tamanoPagina)
                 .ToListAsync();
+
+            return new PagedResponse<ChecklistDiario>(
+                items,
+                totalRegistros,
+                nroPagina,
+                tamanoPagina
+            );
         }
     }
 }
