@@ -1,14 +1,11 @@
 import TableContainer from "../../src/Components/Table/TableContainer";
-
 import TableResponsive from "../../src/Components/Table/TableResponsive";
-
 import { useEffect, useState } from "react";
 import NavButtonPosition from "../../src/Components/NavButtonPosition";
 import ModalTableHandler from "../../src/Components/Functions/ModalTableHandler";
 import ModalTable from "../../src/Components/Table/ModalTable";
 import { ButtonEdit } from "../../src/Components/Table/ModalTableButtonsAll";
 import AltaBajaLogica from "../../src/Components/Table/AltaBajaLogica";
-
 import {
   ListadoKilometrajeApiParser,
   type ListadoKilometrajeType,

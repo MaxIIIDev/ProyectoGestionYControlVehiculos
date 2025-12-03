@@ -91,9 +91,12 @@ export default function RoutesComponent() {
         />
         <Route
           path={endpointFront.matafuegos.listar.action}
-          element={<ListarMatafuegos />}></Route>
-        path={endpointFront.checklist.listar.action}
-        element={<ChecklistListar />}
+          element={<ListarMatafuegos />}
+        ></Route>
+        <Route
+          path={endpointFront.checklist.listar.action}
+          element={<ChecklistListar />}
+        />
       </Routes>
     </Col>
   );
