@@ -21,6 +21,8 @@ import { Button } from "react-bootstrap";
 
 export default function ChecklistListar() {
   const [idBuscar, setIdBuscar] = useState<string>("");
+  const [vehiculoSeleccionado, setVehiculoSeleccionado] = useState<any>(null);
+
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [metadataPage, setMetadataPage] = useState<
     PaginaResponseType<ListadoChecklistDiarioType>
@@ -616,40 +618,48 @@ export default function ChecklistListar() {
             onEntitySelect={(vehiculo) => {
               console.log("Vehiculo seleccionado:", vehiculo);
               setIdBuscar(vehiculo ? vehiculo.idVehiculo : "");
+              setVehiculoSeleccionado(vehiculo);
             }}
             placeholder="Busqueda por Patente"
           />
         </FormCard>
-        <TableContainer title="Listado de Checklists">
-          {metadataPage.data.length > 0 ? (
-            <TableResponsive
-              tableData={tableData}
-              headerTitle={headers}
-              colWidths={colWidths}
-            />
-          ) : (
-            <div className="text-center py-4 text-danger">
-              No hay checklists para el vehículo seleccionado.
-            </div>
-          )}
-        </TableContainer>
-        <PaginatorForTable
-          totalCountPages={metadataPage.totalPaginasCalculadas}
-          currentPage={metadataPage.paginaActual}
-          previousPage={() => {
-            if (currentPage > 1) {
-              setCurrentPage(currentPage - 1);
-            }
-          }}
-          nextPage={() => {
-            if (currentPage < metadataPage.totalPaginasCalculadas) {
-              setCurrentPage(currentPage + 1);
-            }
-          }}
-          onPageChange={(newPage) => {
-            setCurrentPage(newPage);
-          }}
-        />
+        {/* Tabla de Checklists debe aparecer solo si se ha seleccionado un vehículo */}
+        {vehiculoSeleccionado && (
+          <TableContainer
+            title={`Listado de Checklists para: ${vehiculoSeleccionado?.patente}`}
+          >
+            {metadataPage.data.length > 0 ? (
+              <TableResponsive
+                tableData={tableData}
+                headerTitle={headers}
+                colWidths={colWidths}
+              />
+            ) : (
+              <div className="text-center py-4 text-danger">
+                No hay checklists para el vehículo seleccionado.
+              </div>
+            )}
+          </TableContainer>
+        )}
+        {metadataPage.data.length > 0 && vehiculoSeleccionado && (
+          <PaginatorForTable
+            totalCountPages={metadataPage.totalPaginasCalculadas}
+            currentPage={metadataPage.paginaActual}
+            previousPage={() => {
+              if (currentPage > 1) {
+                setCurrentPage(currentPage - 1);
+              }
+            }}
+            nextPage={() => {
+              if (currentPage < metadataPage.totalPaginasCalculadas) {
+                setCurrentPage(currentPage + 1);
+              }
+            }}
+            onPageChange={(newPage) => {
+              setCurrentPage(newPage);
+            }}
+          />
+        )}
         <NavButtonPosition />
       </GeneralContainer>
     </>
