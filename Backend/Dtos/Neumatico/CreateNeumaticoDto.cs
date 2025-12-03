@@ -5,6 +5,10 @@ public class CreateNeumaticoDto
     public CreateNeumaticoDto() { }
 
     [Required(ErrorMessage = "El campo {0} es requerido")]
+    [Range(1, Int32.MaxValue, ErrorMessage = "El campo {0} debe ser un número positivo")]
+    public int NroSerie { get; set; }
+
+    [Required(ErrorMessage = "El campo {0} es requerido")]
     public string? Marca { get; set; }
 
     [Required(ErrorMessage = "El campo {0} es requerido")]

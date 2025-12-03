@@ -3,6 +3,9 @@ import { z as zodVariable } from "zod";
 export const MatafuegoSchema = zodVariable
   .object({
     IdMatafuego: zodVariable.int32().optional(),
+    NroSerie: zodVariable
+      .int32({ message: "El número de serie debe ser un número entero" })
+      .positive({ message: "El número de serie debe ser un número positivo" }),
     Proveedor: zodVariable
       .string()
       .trim()
@@ -40,6 +43,7 @@ export const MatafuegoSchema = zodVariable
 export type MatafuegoType = zodVariable.infer<typeof MatafuegoSchema>;
 const ApiMatafuegoSchema = zodVariable.object({
   idMatafuego: zodVariable.number(),
+  nroSerie: zodVariable.number(),
   proveedor: zodVariable.string(),
   fechaCarga: zodVariable.string(),
   fechaVencimiento: zodVariable.string(),
@@ -48,6 +52,7 @@ const ApiMatafuegoSchema = zodVariable.object({
 export const MatafuegoApiParser = ApiMatafuegoSchema.transform((data) => {
   const parsedData: MatafuegoType = {
     IdMatafuego: data.idMatafuego,
+    NroSerie: data.nroSerie,
     Proveedor: data.proveedor,
     FechaCarga: new Date(data.fechaCarga),
     FechaVencimiento: new Date(data.fechaVencimiento),

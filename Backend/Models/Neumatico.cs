@@ -16,6 +16,7 @@ namespace Backend.Models
     //     Auxilio
     // }
     public class Neumatico(
+        int nroSerie,
         string marca,
         string medida,
         bool estandar,
@@ -29,6 +30,9 @@ namespace Backend.Models
     {
         [Key]
         public int IdNeumatico { get; set; }
+
+        [Required]
+        public int NroSerie { get; set; } = nroSerie;
 
         [Required]
         public string Marca { get; set; } = marca;
@@ -59,7 +63,17 @@ namespace Backend.Models
         public bool Estado { get; set; } = estado;
 
         public Neumatico()
-            : this(default!, default!, default, default, default, default!, default, default, true)
-        { }
+            : this(
+                default!,
+                default!,
+                default!,
+                default,
+                default,
+                default,
+                default!,
+                default,
+                default,
+                true
+            ) { }
     }
 }

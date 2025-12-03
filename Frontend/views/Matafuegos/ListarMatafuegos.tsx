@@ -84,6 +84,7 @@ export const ListarMatafuegos = () => {
       key={matafuego.IdMatafuego}
       onClick={() => handleRowClick(matafuego)}
       style={{ cursor: "pointer", textAlign: "center" }}>
+      <td>{matafuego.NroSerie}</td>
       <td>{matafuego.Proveedor}</td>
       <td>{matafuego.FechaCarga.toISOString().split("T")[0]}</td>
       <td>{matafuego.FechaVencimiento.toISOString().split("T")[0]}</td>
@@ -95,6 +96,7 @@ export const ListarMatafuegos = () => {
       <TableContainer title="Listado de Matafuegos">
         <TableResponsive
           headerTitle={[
+            "NroSerie",
             "Proveedor",
             "Fecha de Carga",
             "Fecha de Vencimiento",
@@ -107,7 +109,9 @@ export const ListarMatafuegos = () => {
           show={showModal}
           title={
             (selectedMatafuego &&
-              "Proveedor: " +
+              "NroSerie: " +
+                selectedMatafuego?.NroSerie +
+                "Proveedor: " +
                 selectedMatafuego?.Proveedor +
                 " - Fecha de Carga: " +
                 ParserDatesToStringMessage(selectedMatafuego!.FechaCarga) +

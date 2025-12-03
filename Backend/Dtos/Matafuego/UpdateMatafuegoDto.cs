@@ -4,6 +4,10 @@ public class UpdateMatafuegoDto
 {
     public UpdateMatafuegoDto() { }
 
+    [Required(ErrorMessage = "El campo {0} es requerido")]
+    [Range(1, Int32.MaxValue, ErrorMessage = "El campo {0} debe ser un número positivo")]
+    public int NroSerie { get; set; }
+
     [MinLength(3, ErrorMessage = "El campo {0} debe tener al menos 3 caracteres")]
     [MaxLength(50, ErrorMessage = "El campo {0} no puede tener más de 50 caracteres")]
     public string? Proveedor { get; set; } = String.Empty;

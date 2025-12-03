@@ -22,6 +22,7 @@ export const EditarMatafuego = () => {
   if (!id?.match("^[0-9]+$"))
     navigate(endpointFront.controlKilometraje.listar.action);
   const intialState: MatafuegoType = {
+    NroSerie: 0,
     Proveedor: "",
     FechaCarga: new Date(),
     FechaVencimiento: new Date(),
@@ -51,7 +52,12 @@ export const EditarMatafuego = () => {
   }, [id]);
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
-    const finalValue = type === "date" ? new Date(value) : value;
+    const finalValue =
+      type === "date"
+        ? new Date(value)
+        : name == "NroSerie"
+        ? parseInt(value)
+        : value;
     setFormData({
       ...formData,
       [name]: finalValue,
@@ -111,6 +117,15 @@ export const EditarMatafuego = () => {
           onSuccess={handleSuccess}
           onError={handleErrors}
           validateForm={validateForm}>
+          <FormInput
+            name="NroSerie"
+            label="NroSerie"
+            type="text"
+            placeholder="Ingrese el número de serie"
+            required={false}
+            value={formData.NroSerie}
+            onChange={onChange}
+            error={errors.NroSerie}></FormInput>
           <FormInput
             name="Proveedor"
             label="Proveedor"

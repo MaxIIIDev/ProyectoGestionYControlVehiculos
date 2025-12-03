@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Backend.Models
 {
     public class Matafuego(
+        int nroSerie,
         string proveedor,
         DateOnly fechaCarga,
         DateOnly fechaVencimiento,
@@ -12,6 +13,7 @@ namespace Backend.Models
     {
         [Key]
         public int IdMatafuego { get; set; }
+        public int NroSerie { get; set; } = nroSerie;
         public string Proveedor { get; set; } = proveedor;
         public DateOnly FechaCarga { get; set; } = fechaCarga;
         public DateOnly FechaVencimiento { get; set; } = fechaVencimiento;
@@ -19,6 +21,6 @@ namespace Backend.Models
         public Vehiculo? Vehiculo { get; set; }
 
         public Matafuego()
-            : this(default!, default, default, true) { }
+            : this(default!, default!, default, default, true) { }
     }
 }
