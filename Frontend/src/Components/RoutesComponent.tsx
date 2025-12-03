@@ -18,6 +18,7 @@ import { AgregarMatafuego } from "../../views/Matafuegos/AgregarMatafuego";
 import { ListarMatafuegos } from "../../views/Matafuegos/ListarMatafuegos";
 import ChecklistListar from "../../views/Checklist/ChecklistListar";
 import { EditarMatafuego } from "../../views/Matafuegos/EditarMatafuego";
+import { AsignarMatafuegoAVehiculo } from "../../views/Matafuegos/AsignarMatafuegoAVehiculo";
 export default function RoutesComponent() {
   return (
     <Col xs={12} md={9} lg={10} className="p-4 bg-secondary">
@@ -100,6 +101,10 @@ export default function RoutesComponent() {
         <Route
           path={endpointFront.matafuegos.editar.endpoint}
           element={<EditarMatafuego />}
+        />
+        <Route
+          path={endpointFront.matafuegos.asignarAVehiculo.action}
+          element={<AsignarMatafuegoAVehiculo />}
         />
       </Routes>
     </Col>

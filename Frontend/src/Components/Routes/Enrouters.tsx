@@ -202,6 +202,9 @@ export const endpointFront = {
     listar: {
       action: "/Matafuegos/Listar",
     },
+    asignarAVehiculo: {
+      action: "/Matafuegos/AsignarAVehiculo",
+    },
   },
   neumaticos: {
     gestion: { action: "/Neumaticos" },

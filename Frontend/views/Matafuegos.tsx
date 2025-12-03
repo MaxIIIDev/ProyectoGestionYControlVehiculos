@@ -53,6 +53,21 @@ export default function GestionMatafuegos() {
             />
           }
         />
+
+        <CardGestion
+          title="Asignar Matafuego a Vehículo"
+          icon="bi bi-truck"
+          description="Asignar Matafuego a un Vehículo"
+          button={
+            <CardButton
+              iconClass="bi bi-truck"
+              text=" Asignar Matafuego"
+              onClick={() => {
+                navigate("/Matafuegos/AsignarAVehiculo");
+              }}
+            />
+          }
+        />
       </CardRowContainer>
       <NavButtonPosition />
     </>
