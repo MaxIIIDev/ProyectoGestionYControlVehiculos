@@ -17,6 +17,7 @@ import { endpointFront } from "./Routes/Enrouters";
 import { AgregarMatafuego } from "../../views/Matafuegos/AgregarMatafuego";
 import { ListarMatafuegos } from "../../views/Matafuegos/ListarMatafuegos";
 import ChecklistListar from "../../views/Checklist/ChecklistListar";
+import { EditarMatafuego } from "../../views/Matafuegos/EditarMatafuego";
 export default function RoutesComponent() {
   return (
     <Col xs={12} md={9} lg={10} className="p-4 bg-secondary">
@@ -91,11 +92,14 @@ export default function RoutesComponent() {
         />
         <Route
           path={endpointFront.matafuegos.listar.action}
-          element={<ListarMatafuegos />}
-        ></Route>
+          element={<ListarMatafuegos />}></Route>
         <Route
           path={endpointFront.checklist.listar.action}
           element={<ChecklistListar />}
+        />
+        <Route
+          path={endpointFront.matafuegos.editar.endpoint}
+          element={<EditarMatafuego />}
         />
       </Routes>
     </Col>
