@@ -1,0 +1,18 @@
+.header-mobile {
+  display: none;
+}
+.header-desktop {
+  display: inline-block;
+}
+@media (max-width: 600px) {
+  .header-mobile {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 1.1em;
+    text-align: center;
+    line-height: 1.1;
+  }
+  .header-desktop {
+    display: none;
+  }
+}

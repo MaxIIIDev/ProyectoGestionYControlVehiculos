@@ -4,7 +4,7 @@ import { type PaginaResponseType } from "../../types/PaginaResponse.Type";
 import { useEffect, useState } from "react";
 import NavButtonPosition from "../../src/Components/NavButtonPosition";
 //import ModalTableHandler from "../../src/Components/Functions/ModalTableHandler";
-//import ModalTable from "../../src/Components/Table/ModalTable";
+import ModalTable from "../../src/Components/Table/ModalTable";
 import "../../src/Components/css/BotonModal.css";
 import { PaginatorForTable } from "../../src/Components/Table/Paginator";
 import endpointsAPI from "../../src/Components/Routes/Enrouters";
@@ -19,11 +19,13 @@ import FormCard from "../../src/Components/Form/FormCard";
 import GeneralContainer from "../../src/Components/FormBuscador/GeneralContainer";
 import { Button } from "react-bootstrap";
 import ResultInfo from "../../src/Components/FormBuscador/ResultInfo";
+import "../../src/Components/css/FocosTabla.css";
 
 export default function ChecklistListar() {
   const [idBuscar, setIdBuscar] = useState<string>("");
   const [vehiculoSeleccionado, setVehiculoSeleccionado] = useState<any>(null);
-
+  const [observaciones, setObservaciones] = useState<string>("");
+  const [showModal, setShowModal] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [metadataPage, setMetadataPage] = useState<
     PaginaResponseType<ListadoChecklistDiarioType>
@@ -36,173 +38,195 @@ export default function ChecklistListar() {
   const headers = [
     <div className="d-flex justify-content-center">Fecha</div>,
     <div className="d-flex justify-content-center gap-2">
-      <i className="bi bi-lightbulb"></i>
-      <svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <defs>
-          <filter
-            id="destello-amarillo"
-            x="-50%"
-            y="-50%"
-            width="200%"
-            height="200%"
-          >
-            <feGaussianBlur
-              in="SourceGraphic"
-              stdDeviation="1.5"
-              result="blur"
-            />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-        <path d="M5 18a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5z" />
-        <rect
-          x="4"
-          y="6"
-          width="6"
-          height="6"
-          fill="#FFD700"
-          filter="url(#destello-amarillo)"
-        />
-      </svg>
+      <span className="header-desktop">
+        <i className="bi bi-lightbulb"></i>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <defs>
+            <filter
+              id="destello-amarillo"
+              x="-50%"
+              y="-50%"
+              width="200%"
+              height="200%"
+            >
+              <feGaussianBlur
+                in="SourceGraphic"
+                stdDeviation="1.5"
+                result="blur"
+              />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          <path d="M5 18a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5z" />
+          <rect
+            x="4"
+            y="6"
+            width="6"
+            height="6"
+            fill="#FFD700"
+            filter="url(#destello-amarillo)"
+          />
+        </svg>
+      </span>
+      <span className="header-mobile foco-label">
+        D<br />I
+      </span>
     </div>,
     <div className="d-flex justify-content-center gap-2">
-      <i className="bi bi-lightbulb"></i>
-      <svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <defs>
-          <filter
-            id="destello-amarillo"
-            x="-50%"
-            y="-50%"
-            width="200%"
-            height="200%"
-          >
-            <feGaussianBlur
-              in="SourceGraphic"
-              stdDeviation="1.5"
-              result="blur"
-            />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-        <path d="M5 18a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5z" />
-        <rect
-          x="14"
-          y="6"
-          width="6"
-          height="6"
-          fill="#FFD700"
-          filter="url(#destello-amarillo)"
-        />
-      </svg>
+      <span className="header-desktop">
+        <i className="bi bi-lightbulb"></i>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <defs>
+            <filter
+              id="destello-amarillo"
+              x="-50%"
+              y="-50%"
+              width="200%"
+              height="200%"
+            >
+              <feGaussianBlur
+                in="SourceGraphic"
+                stdDeviation="1.5"
+                result="blur"
+              />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          <path d="M5 18a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5z" />
+          <rect
+            x="14"
+            y="6"
+            width="6"
+            height="6"
+            fill="#FFD700"
+            filter="url(#destello-amarillo)"
+          />
+        </svg>
+      </span>
+      <span className="header-mobile foco-label">
+        D<br />D
+      </span>
     </div>,
     <div className="d-flex justify-content-center gap-2">
-      <i className="bi bi-lightbulb"></i>
-      <svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <defs>
-          <filter
-            id="destello-amarillo"
-            x="-50%"
-            y="-50%"
-            width="200%"
-            height="200%"
-          >
-            <feGaussianBlur
-              in="SourceGraphic"
-              stdDeviation="1.5"
-              result="blur"
-            />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-        <path d="M5 18a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5z" />
-        <rect
-          x="4"
-          y="12"
-          width="6"
-          height="6"
-          fill="#FFD700"
-          filter="url(#destello-amarillo)"
-        />
-      </svg>
+      <span className="header-desktop">
+        <i className="bi bi-lightbulb"></i>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <defs>
+            <filter
+              id="destello-amarillo"
+              x="-50%"
+              y="-50%"
+              width="200%"
+              height="200%"
+            >
+              <feGaussianBlur
+                in="SourceGraphic"
+                stdDeviation="1.5"
+                result="blur"
+              />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          <path d="M5 18a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5z" />
+          <rect
+            x="4"
+            y="12"
+            width="6"
+            height="6"
+            fill="#FFD700"
+            filter="url(#destello-amarillo)"
+          />
+        </svg>
+      </span>
+      <span className="header-mobile foco-label">
+        T<br />I
+      </span>
     </div>,
     <div className="d-flex justify-content-center gap-2">
-      <i className="bi bi-lightbulb"></i>
-      <svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <defs>
-          <filter
-            id="destello-amarillo"
-            x="-50%"
-            y="-50%"
-            width="200%"
-            height="200%"
-          >
-            <feGaussianBlur
-              in="SourceGraphic"
-              stdDeviation="1.5"
-              result="blur"
-            />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-        <path d="M5 18a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5z" />
-        <rect
-          x="14"
-          y="12"
-          width="6"
-          height="6"
-          fill="#FFD700"
-          filter="url(#destello-amarillo)"
-        />
-      </svg>
+      <span className="header-desktop">
+        <i className="bi bi-lightbulb"></i>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <defs>
+            <filter
+              id="destello-amarillo"
+              x="-50%"
+              y="-50%"
+              width="200%"
+              height="200%"
+            >
+              <feGaussianBlur
+                in="SourceGraphic"
+                stdDeviation="1.5"
+                result="blur"
+              />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          <path d="M5 18a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5z" />
+          <rect
+            x="14"
+            y="12"
+            width="6"
+            height="6"
+            fill="#FFD700"
+            filter="url(#destello-amarillo)"
+          />
+        </svg>
+      </span>
+      <span className="header-mobile foco-label">
+        T<br />D
+      </span>
     </div>,
+
+    ,
     <div className="d-flex justify-content-center">
       <span style={{ color: "#e85a5aff" }}>(</span>
       <svg
@@ -580,7 +604,13 @@ export default function ChecklistListar() {
       </td>
       <td>
         {chcklst.Observaciones.length > 0 ? (
-          <Button className="boton-modal border-0 p-1 m-0 w-75 rounded-1">
+          <Button
+            className="boton-modal border-0 p-1 m-0 w-75 rounded-1"
+            onClick={() => {
+              setShowModal(true);
+              setObservaciones(chcklst.Observaciones);
+            }}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="24px"
@@ -674,6 +704,25 @@ export default function ChecklistListar() {
           />
         )}
         <NavButtonPosition />
+        <ModalTable
+          onClose={() => setShowModal(false)}
+          show={showModal}
+          title={
+            "Observaciones del Checklist - Fecha: " +
+            metadataPage.data
+              .find((chk) => chk.IdChecklistDiario)
+              ?.Fecha.split("T")[0]
+          }
+          children={
+            <textarea
+              id="observaciones-textarea"
+              className="form-control"
+              rows={10}
+              readOnly
+              value={observaciones}
+            ></textarea>
+          }
+        />
       </GeneralContainer>
     </>
   );
