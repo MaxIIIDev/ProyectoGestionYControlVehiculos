@@ -34,6 +34,11 @@ export const endpointsAPI = {
         `${API_ROUTE}/Vehiculos/buscarPorPatenteLike/${patente}`,
       method: "GET",
     },
+    asignarAVehiculo: {
+      action: (idVehiculo: number, idMatafuego: number) =>
+        `${API_ROUTE}/vehiculos/asignarMatafuego/${idVehiculo}/${idMatafuego}`,
+      method: "PUT",
+    },
   },
   controlKilometraje: {
     nuevo: { action: `${API_ROUTE}/registro-kilometraje`, method: "POST" },
@@ -154,6 +159,13 @@ export const endpointsAPI = {
     altaLogica: {
       action: (id: number) => `${API_ROUTE}/matafuegos/alta/${id}`,
       method: "PATCH",
+    },
+
+    buscarPorNroSerie: {
+      action: (nroSerie: string) => {
+        return `${API_ROUTE}/matafuegos/buscarPorNroSerie/${nroSerie}`;
+      },
+      method: "GET",
     },
   },
 };

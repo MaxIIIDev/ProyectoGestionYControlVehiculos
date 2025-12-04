@@ -90,6 +90,7 @@ const ComboBoxBrowser: React.FC<ComboBoxBrowserProps> = ({
       return;
     }
     const timeout = setTimeout(() => {
+      console.log("Buscando en la API:", `${apiUrl}${inputValue}`);
       fetch(`${apiUrl}${inputValue}`, {
         method: apiMethod,
       })
@@ -97,10 +98,15 @@ const ComboBoxBrowser: React.FC<ComboBoxBrowserProps> = ({
         .then((data) => {
           console.log("Respuesta de la API:", data);
           // Trae un array directamente
-          const opts = (Array.isArray(data) ? data : []).map(
+          const opts: Option[] = (Array.isArray(data) ? data : []).map(
             (v: { [key: string]: string }) => ({
-              value: v.idVehiculo,
-              label: v.patente,
+              value: v.idVehiculo || v.idMatafuego,
+              label: v.patente
+                ? "Patente: " + v.patente
+                : v.nroSerie
+                ? "Id: " + v.nroSerie + " - Proveedor: " + v.proveedor
+                : "",
+
               original: v,
             })
           );

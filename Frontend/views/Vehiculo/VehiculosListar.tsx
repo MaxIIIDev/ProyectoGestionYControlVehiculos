@@ -26,9 +26,19 @@ const headers = [
   "Patente",
   "Numero de Chasis",
   "Numero de Motor",
+  "Matafuego",
   "Estado",
 ];
-const colWidths = ["90px", "100px", "50px", "65px", "200px", "150px", "70px"];
+const colWidths = [
+  "90px",
+  "100px",
+  "50px",
+  "65px",
+  "200px",
+  "150px",
+  "70px",
+  "70px",
+];
 
 export default function VehiculosListar() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -36,6 +46,8 @@ export default function VehiculosListar() {
   const [selectedMarca, setSelectedMarca] = useState<string>("");
   const [selectedModelo, setSelectedModelo] = useState<string>("");
   const [selectedPatente, setSelectedPatente] = useState<string>("");
+  const [selectedNroSerie, setSelectedNroSerie] = useState<string>("");
+  const [selectedProveedor, setSelectedProveedor] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [metadataPage, setMetadataPage] = useState<
     PaginaResponseType<VehiculoSchemaType>
@@ -54,13 +66,17 @@ export default function VehiculosListar() {
     marca?: string,
     modelo?: string,
     patente?: string,
-    estadoStr?: string
+    estadoStr?: string,
+    nroSerie?: string,
+    proveedor?: string
   ) => {
     setSelectedId(id);
     setSelectedMarca(marca || "");
     setSelectedModelo(modelo || "");
     setSelectedPatente(patente || "");
     setSelectedEstado(estadoStr === "true");
+    setSelectedNroSerie(nroSerie || "");
+    setSelectedProveedor(proveedor || "");
     setShowModal(true);
   };
   useEffect(() => {
@@ -96,19 +112,24 @@ export default function VehiculosListar() {
         "modelo",
         "patente",
         "estado",
+        "nroSerie",
+        "proveedor",
       ])}
       style={{ cursor: "pointer", textAlign: "center" }}
       data-id={vehiculo.idVehiculo}
       data-marca={vehiculo.Marca}
       data-modelo={vehiculo.Modelo}
       data-patente={vehiculo.Patente}
-      data-estado={vehiculo.Estado}>
+      data-estado={vehiculo.Estado}
+      data-nroSerie={vehiculo.Matafuego?.NroSerie}
+      data-proveedor={vehiculo.Matafuego?.Proveedor}>
       <td>{vehiculo.Marca}</td>
       <td>{vehiculo.Modelo}</td>
       <td>{vehiculo.Anio}</td>
       <td>{vehiculo.Patente}</td>
       <td>{vehiculo.NumeroChasis}</td>
       <td>{vehiculo.NumeroMotor}</td>
+      <td>{vehiculo.Matafuego ? "Sí" : "No"}</td>
       <td>{vehiculo.Estado ? "Activo" : "Inactivo"}</td>
     </tr>
   ));
@@ -133,14 +154,21 @@ export default function VehiculosListar() {
         />
         <ModalTable
           show={showModal}
-          title={
-            selectedMarca +
-            " " +
-            selectedModelo +
-            " - " +
-            "Patente: " +
-            selectedPatente
-          }
+          title={`
+            ${selectedMarca} 
+        
+            ${selectedModelo} 
+            -  
+            Patente: 
+            ${selectedPatente} 
+           - Matafuego:
+            ${
+              selectedNroSerie.trim().length > 0 &&
+              selectedProveedor.trim().length > 0
+                ? `|| Numero de serie: ${selectedNroSerie} | Proveedor: ${selectedProveedor} ||`
+                : "Sin Matafuego"
+            }
+          `}
           onClose={() => setShowModal(false)}>
           <ButtonEdit
             id={selectedId ? selectedId : "0"}

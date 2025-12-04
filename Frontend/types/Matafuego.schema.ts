@@ -41,7 +41,7 @@ export const MatafuegoSchema = zodVariable
   });
 
 export type MatafuegoType = zodVariable.infer<typeof MatafuegoSchema>;
-const ApiMatafuegoSchema = zodVariable.object({
+export const ApiMatafuegoSchema = zodVariable.object({
   idMatafuego: zodVariable.number(),
   nroSerie: zodVariable.number(),
   proveedor: zodVariable.string(),

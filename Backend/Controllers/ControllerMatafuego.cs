@@ -114,5 +114,17 @@ public class ControllerMatafuego : ControllerBase
         }
         return NoContent();
     }
+
+    [HttpGet("buscarPorNroSerie/{nroSerieLike}")]
+    public async Task<IActionResult> GetMatafuegoByNroSerieLike(string nroSerieLike)
+    {
+        var matafuegos = await _serviceMatafuego.getMatafuegoByNroSerieLike(nroSerieLike);
+        System.Console.WriteLine(matafuegos);
+        if (matafuegos == null || matafuegos.Count == 0)
+        {
+            return NotFound();
+        }
+        return Ok(matafuegos);
+    }
     // ACA HAY Q VER TAMBIEN EL TEMA DE LA CARGA DE DOCUMENTOS RELACIONADOS
 }

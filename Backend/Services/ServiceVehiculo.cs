@@ -16,16 +16,44 @@ namespace Backend.Services
         }
 
         // GET TODO VEHICULOS
-        public async Task<PagedResponse<Vehiculo>> GetAllAsync(int nroPagina, int tamanoPagina)
+        public async Task<PagedResponse<VehiculoDto>> GetAllAsync(int nroPagina, int tamanoPagina)
         {
             IQueryable<Vehiculo> query = _context.Vehiculos;
             int totalRegistrosVehiculo = await query.CountAsync();
-            List<Vehiculo>? vehiculos = await query
+            List<VehiculoDto>? vehiculos = await query
+                .Include(m => m.Matafuego)
                 .OrderBy(v => v.IdVehiculo)
                 .Skip((nroPagina - 1) * tamanoPagina)
                 .Take(tamanoPagina)
+                .Select(v => new VehiculoDto
+                {
+                    IdVehiculo = v.IdVehiculo,
+                    Marca = v.Marca,
+                    Modelo = v.Modelo,
+                    Anio = v.Anio,
+                    Patente = v.Patente,
+                    Color = v.Color,
+                    CantidadNeumaticos = v.CantidadNeumaticos,
+                    CantidadAuxilios = v.CantidadAuxilios,
+                    NumeroChasis = v.NumeroChasis,
+                    NumeroMotor = v.NumeroMotor,
+                    IdMatafuego = v.IdMatafuego,
+                    Matafuego =
+                        v.Matafuego != null
+                            ? new MatafuegoDto
+                            {
+                                IdMatafuego = v.Matafuego.IdMatafuego,
+                                NroSerie = v.Matafuego.NroSerie,
+                                Proveedor = v.Matafuego.Proveedor,
+                                FechaCarga = v.Matafuego.FechaCarga,
+                                FechaVencimiento = v.Matafuego.FechaVencimiento,
+                                Estado = v.Matafuego.Estado,
+                            }
+                            : null,
+                    Estado = v.Estado,
+                })
                 .ToListAsync();
-            return new PagedResponse<Vehiculo>(
+            return new PagedResponse<VehiculoDto>(
                 vehiculos,
                 totalRegistrosVehiculo,
                 nroPagina,
@@ -156,6 +184,25 @@ namespace Backend.Services
             if (vehiculo == null)
                 return false;
             vehiculo.Estado = true;
+            _context.Vehiculos.Update(vehiculo);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> AsignarMatafuegoAVehiculo(int idMatafuego, int idVehiculo)
+        {
+            System.Console.WriteLine(
+                "Asignando matafuego " + idMatafuego + " al vehiculo " + idVehiculo
+            );
+            Matafuego? matafuego = await _context.Matafuegos.FindAsync(idMatafuego);
+            if (matafuego == null)
+                throw new KeyNotFoundException(
+                    "Matafuego con id " + idMatafuego + " no encontrado"
+                );
+            Vehiculo? vehiculo = await _context.Vehiculos.FindAsync(idVehiculo);
+            if (vehiculo == null)
+                throw new KeyNotFoundException("Vehiculo con id " + idVehiculo + " no encontrado");
+
+            vehiculo.IdMatafuego = idMatafuego;
             _context.Vehiculos.Update(vehiculo);
             return await _context.SaveChangesAsync() > 0;
         }

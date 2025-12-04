@@ -23,7 +23,7 @@ public class ControllerVehiculo : ControllerBase
         [FromQuery] int tamanoPagina = 10
     )
     {
-        PagedResponse<Vehiculo> vehiculos = await _serviceVehiculo.GetAllAsync(
+        PagedResponse<VehiculoDto> vehiculos = await _serviceVehiculo.GetAllAsync(
             nroPagina,
             tamanoPagina
         );
@@ -149,5 +149,19 @@ public class ControllerVehiculo : ControllerBase
             return NotFound();
         }
         return Ok(vehiculos);
+    }
+
+    [HttpPut("asignarMatafuego/{idVehiculo}/{idMatafuego}")]
+    public async Task<IActionResult> AsignarMatafuegoAVehiculo(int idVehiculo, int idMatafuego)
+    {
+        try
+        {
+            await _serviceVehiculo.AsignarMatafuegoAVehiculo(idMatafuego, idVehiculo);
+            return NoContent();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { Message = ex.Message });
+        }
     }
 }

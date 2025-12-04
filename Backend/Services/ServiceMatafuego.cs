@@ -39,6 +39,15 @@ namespace Backend.Services
             return await _context.Matafuegos.FindAsync(id);
         }
 
+        public async Task<List<Matafuego>> getMatafuegoByNroSerieLike(string nroSerieLike)
+        {
+            return await _context
+                .Matafuegos.Where(Matafuego =>
+                    EF.Functions.Like(Matafuego.NroSerie.ToString(), $"%{nroSerieLike}%")
+                )
+                .ToListAsync();
+        }
+
         // NUEVO MATAFUEGO
         public async Task<Matafuego> AddAsync(Matafuego matafuego)
         {

@@ -1,4 +1,9 @@
 import { z } from "zod";
+import {
+  ApiMatafuegoSchema,
+  MatafuegoApiParser,
+  MatafuegoSchema,
+} from "./Matafuego.schema";
 export const VehiculoSchema = z.object({
   idVehiculo: z.int32().optional(),
   Marca: z
@@ -49,6 +54,7 @@ export const VehiculoSchema = z.object({
     .max(50, {
       message: "El número de motor no puede tener más de 50 caracteres",
     }),
+  Matafuego: MatafuegoSchema.nullable().optional(),
   Estado: z.boolean().optional(),
 });
 const ApiVehiculoSchema = z.object({
@@ -65,7 +71,7 @@ const ApiVehiculoSchema = z.object({
   estado: z.boolean(),
 
   idMatafuego: z.number().nullable().optional(),
-  matafuego: z.any().nullable().optional(),
+  matafuego: ApiMatafuegoSchema.nullable().optional(),
   documentos: z.array(z.any()).nullable().optional(),
   checklistsDiarios: z.array(z.any()).nullable().optional(),
   registrosKilometraje: z.array(z.any()).nullable().optional(),
@@ -83,6 +89,9 @@ export const VehiculoApiParser = ApiVehiculoSchema.transform((apiData) => {
     NumeroMotor: apiData.numeroMotor,
     CantidadNeumaticos: apiData.cantidadNeumaticos,
     CantidadAuxilios: apiData.cantidadAuxilios,
+    Matafuego: apiData.matafuego
+      ? MatafuegoApiParser.parse(apiData.matafuego)
+      : null,
     Estado: apiData.estado,
   };
   return vehiculoFormed;
