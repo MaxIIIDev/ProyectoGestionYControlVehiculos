@@ -14,6 +14,7 @@ import { formatZodErrors } from "../../src/Utils/Validation.utils";
 import FormButtons from "../../src/Components/Form/FormButtons";
 import ComboBoxBrowser from "../../src/Components/FormBuscador/ComboBoxBrowser";
 import ResultInfo from "../../src/Components/FormBuscador/ResultInfo";
+import { NavButtonPosition } from "../../src/Components";
 
 export const AgregarRegistroKilometraje = () => {
   const navigate = useNavigate();
@@ -266,6 +267,7 @@ export const AgregarRegistroKilometraje = () => {
           </FormCard>
         )}
       </FormCard>
+      {!desbloquearSegundoFormulario && <NavButtonPosition />}
     </div>
   );
 };

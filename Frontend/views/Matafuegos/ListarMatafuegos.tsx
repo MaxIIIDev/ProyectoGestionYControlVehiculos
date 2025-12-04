@@ -17,6 +17,7 @@ import { ParserDatesToStringMessage } from "../../src/Utils/ParserDatesToStringM
 import { ButtonEdit } from "../../src/Components/Table/ModalTableButtonsAll";
 import { PaginatorForTable } from "../../src/Components/Table/Paginator";
 import AltaBajaLogica from "../../src/Components/Table/AltaBajaLogica";
+import { NavButtonPosition } from "../../src/Components";
 export const ListarMatafuegos = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedMatafuego, setSelectedMatafuego] =
@@ -178,6 +179,7 @@ export const ListarMatafuegos = () => {
             metadataPage.totalPaginasCalculadas
           }></PaginatorForTable>
       </TableContainer>
+      <NavButtonPosition />
     </>
   );
 };

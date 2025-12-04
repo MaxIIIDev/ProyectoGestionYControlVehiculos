@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import FormButtons from "../../src/Components/Form/FormButtons";
 import ComboBoxBrowser from "../../src/Components/FormBuscador/ComboBoxBrowser";
 import ResultInfo from "../../src/Components/FormBuscador/ResultInfo";
+import { NavButtonPosition } from "../../src/Components";
 
 export const AsignarMatafuegoAVehiculo = () => {
   const navigate = useNavigate();
@@ -244,6 +245,8 @@ export const AsignarMatafuegoAVehiculo = () => {
           </FormCard>
         )}
       </FormCard>
+
+      {!desbloquearSegundoFormulario && <NavButtonPosition />}
     </div>
   );
 };
