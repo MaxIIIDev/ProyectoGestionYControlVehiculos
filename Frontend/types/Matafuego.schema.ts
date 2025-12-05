@@ -40,7 +40,6 @@ export const MatafuegoSchema = zodVariable
     path: ["FechaVencimiento"],
   });
 
-export type MatafuegoType = zodVariable.infer<typeof MatafuegoSchema>;
 export const ApiMatafuegoSchema = zodVariable.object({
   idMatafuego: zodVariable.number(),
   nroSerie: zodVariable.number(),
@@ -61,3 +60,4 @@ export const MatafuegoApiParser = ApiMatafuegoSchema.transform((data) => {
   return parsedData;
 });
 export type ApiMatafuegoType = zodVariable.infer<typeof ApiMatafuegoSchema>;
+export type MatafuegoType = zodVariable.infer<typeof MatafuegoSchema>;

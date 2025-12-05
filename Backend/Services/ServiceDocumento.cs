@@ -141,6 +141,16 @@ namespace Backend.Services
             return await _context.Documentos.Where(d => d.IdVehiculo == IdVehiculo).ToListAsync();
         }
 
+        public async Task<List<Documento>> GetByMatafuegoIdAsync(int idMatafuego)
+        {
+            return await _context.Documentos.Where(d => d.IdMatafuego == idMatafuego).ToListAsync();
+        }
+
+        public async Task<List<Documento>> GetDocumentosAsync(int idMatafuego)
+        {
+            return await _context.Documentos.Where(d => d.IdMatafuego == idMatafuego).ToListAsync();
+        }
+
         //ESTOS METODOS SON PARA LA CREACION DE LAS RUTAS DE ALMACENAMIENTO Y NOMBRES DE ARCHIVOS
         public async Task<string?> GetPatenteByVehiculoId(int? idVehiculo)
         {

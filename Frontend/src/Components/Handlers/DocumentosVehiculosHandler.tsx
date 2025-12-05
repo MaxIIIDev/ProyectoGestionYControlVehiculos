@@ -109,6 +109,7 @@ export default function DocumentosVehiculosHandler({
                 </div>
                 <div className="d-flex gap-3">
                   <Button
+                    style={{ marginRight: "5px" }}
                     as="a"
                     variant="primary"
                     onClick={() => {
@@ -119,14 +120,14 @@ export default function DocumentosVehiculosHandler({
                   >
                     Abrir
                   </Button>
-                  <Button
+                  {/* <Button
                     variant="primary"
                     href={doc.urlDocumento}
                     target="_blank"
                     size="sm"
                   >
                     Ir a Ubicación
-                  </Button>
+                  </Button> */}
                 </div>
               </div>
             );
@@ -144,6 +145,7 @@ export default function DocumentosVehiculosHandler({
                   <strong>{req.label}:</strong> No cargada
                 </span>
                 <Button
+                  style={{ marginRight: "5px" }}
                   variant="success"
                   size="sm"
                   onClick={() => onCargar && onCargar(req.tipo)}

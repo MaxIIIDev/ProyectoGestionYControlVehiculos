@@ -3,7 +3,7 @@ import GeneralContainer from "../src/Components/FormBuscador/GeneralContainer";
 import ResultInfo from "../src/Components/FormBuscador/ResultInfo";
 import NavButtonPosition from "../src/Components/NavButtonPosition";
 import Enrouters from "../src/Components/Routes/Enrouters";
-import DocumentosVehiculosHandler from "../src/Components/FormBuscador/DocumentosVehiculosHandler";
+import DocumentosVehiculosHandler from "../src/Components/Handlers/DocumentosVehiculosHandler";
 import ContainerCargador from "../src/Components/CargadorDeArchivos/ContainerCargador";
 import { useState } from "react";
 import type { VehiculoSchemaType } from "../types/Vehiculo.schema";

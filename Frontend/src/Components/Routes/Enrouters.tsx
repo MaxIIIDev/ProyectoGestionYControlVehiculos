@@ -89,6 +89,11 @@ export const endpointsAPI = {
         `${API_ROUTE}/Documentos/vehiculo/${vehiculoId}`,
       method: "GET",
     },
+    buscarPorMatafuegoId: {
+      action: (matafuegoId: number) =>
+        `${API_ROUTE}/documentos/matafuego/${matafuegoId}`,
+      method: "GET",
+    },
     cargarDocumento: {
       action: (documentoId: number) =>
         `${API_ROUTE}/Documentos/archivo/${documentoId}`,
@@ -216,6 +221,9 @@ export const endpointFront = {
     },
     asignarAVehiculo: {
       action: "/Matafuegos/AsignarAVehiculo",
+    },
+    documentos: {
+      action: "/Matafuegos/Documentacion",
     },
   },
   neumaticos: {

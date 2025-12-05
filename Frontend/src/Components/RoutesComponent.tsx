@@ -16,6 +16,7 @@ import Checklist from "../../views/Checklist/Checklist";
 import { endpointFront } from "./Routes/Enrouters";
 import { AgregarMatafuego } from "../../views/Matafuegos/AgregarMatafuego";
 import { ListarMatafuegos } from "../../views/Matafuegos/ListarMatafuegos";
+import MatafuegoDocumentos from "../../views/Documentos/MatafuegoDocumentos";
 import ChecklistListar from "../../views/Checklist/ChecklistListar";
 import { EditarMatafuego } from "../../views/Matafuegos/EditarMatafuego";
 import { AsignarMatafuegoAVehiculo } from "../../views/Matafuegos/AsignarMatafuegoAVehiculo";
@@ -93,7 +94,8 @@ export default function RoutesComponent() {
         />
         <Route
           path={endpointFront.matafuegos.listar.action}
-          element={<ListarMatafuegos />}></Route>
+          element={<ListarMatafuegos />}
+        ></Route>
         <Route
           path={endpointFront.checklist.listar.action}
           element={<ChecklistListar />}
@@ -105,6 +107,10 @@ export default function RoutesComponent() {
         <Route
           path={endpointFront.matafuegos.asignarAVehiculo.action}
           element={<AsignarMatafuegoAVehiculo />}
+        />
+        <Route
+          path={endpointFront.matafuegos.documentos.action}
+          element={<MatafuegoDocumentos />}
         />
       </Routes>
     </Col>

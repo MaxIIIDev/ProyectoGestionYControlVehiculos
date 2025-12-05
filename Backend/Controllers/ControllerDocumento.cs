@@ -157,6 +157,13 @@ public class ControllerDocumento : ControllerBase
         return Ok(documentos);
     }
 
+    [HttpGet("matafuego/{idMatafuego}")]
+    public async Task<IActionResult> GetDocumentosByMatafuegoId(int idMatafuego)
+    {
+        var documentos = await _serviceDocumento.GetByMatafuegoIdAsync(idMatafuego);
+        return Ok(documentos);
+    }
+
     // GET ARCHIVO POR DOCUMENTO ID
     [HttpGet("archivo/{id}")]
     public async Task<IActionResult> GetArchivoByDocumentoId(int id)
