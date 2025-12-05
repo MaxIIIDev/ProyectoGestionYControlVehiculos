@@ -163,5 +163,9 @@ public class ControllerVehiculo : ControllerBase
         {
             return NotFound(new { Message = ex.Message });
         }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
     }
 }

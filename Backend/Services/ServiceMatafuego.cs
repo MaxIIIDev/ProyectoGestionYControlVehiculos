@@ -102,5 +102,13 @@ namespace Backend.Services
             _context.Matafuegos.Update(matafuego);
             return await _context.SaveChangesAsync() > 0;
         }
+
+        public async Task<bool> MatafuegoAsignadoAVehiculo(int idMatafuego)
+        {
+            var matafuego = await _context.Vehiculos.FirstOrDefaultAsync(v =>
+                v.IdMatafuego == idMatafuego
+            );
+            return matafuego != null;
+        }
     }
 }

@@ -8,11 +8,17 @@ namespace Backend.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper mapper;
+        private readonly ServiceMatafuego serviceMatafuego;
 
-        public ServiceVehiculo(AppDbContext context, IMapper mapper)
+        public ServiceVehiculo(
+            AppDbContext context,
+            IMapper mapper,
+            ServiceMatafuego serviceMatafuego
+        )
         {
             _context = context;
             this.mapper = mapper;
+            this.serviceMatafuego = serviceMatafuego;
         }
 
         // GET TODO VEHICULOS
@@ -74,10 +80,38 @@ namespace Backend.Services
         }
 
         // GET VEHICULO POR PATENTE %LIKE%
-        public async Task<List<Vehiculo>> GetByPatenteLikeAsync(string patente)
+        public async Task<List<VehiculoDto>> GetByPatenteLikeAsync(string patente)
         {
             return await _context
-                .Vehiculos.Where(v => EF.Functions.Like(v.Patente, $"%{patente}%"))
+                .Vehiculos.Include(m => m.Matafuego)
+                .Where(v => EF.Functions.Like(v.Patente, $"%{patente}%"))
+                .Select(v => new VehiculoDto
+                {
+                    IdVehiculo = v.IdVehiculo,
+                    Marca = v.Marca,
+                    Modelo = v.Modelo,
+                    Anio = v.Anio,
+                    Patente = v.Patente,
+                    Color = v.Color,
+                    CantidadNeumaticos = v.CantidadNeumaticos,
+                    CantidadAuxilios = v.CantidadAuxilios,
+                    NumeroChasis = v.NumeroChasis,
+                    NumeroMotor = v.NumeroMotor,
+                    IdMatafuego = v.IdMatafuego,
+                    Matafuego =
+                        v.Matafuego != null
+                            ? new MatafuegoDto
+                            {
+                                IdMatafuego = v.Matafuego.IdMatafuego,
+                                NroSerie = v.Matafuego.NroSerie,
+                                Proveedor = v.Matafuego.Proveedor,
+                                FechaCarga = v.Matafuego.FechaCarga,
+                                FechaVencimiento = v.Matafuego.FechaVencimiento,
+                                Estado = v.Matafuego.Estado,
+                            }
+                            : null,
+                    Estado = v.Estado,
+                })
                 .ToListAsync();
         }
 
@@ -190,13 +224,14 @@ namespace Backend.Services
 
         public async Task<bool> AsignarMatafuegoAVehiculo(int idMatafuego, int idVehiculo)
         {
-            System.Console.WriteLine(
-                "Asignando matafuego " + idMatafuego + " al vehiculo " + idVehiculo
-            );
             Matafuego? matafuego = await _context.Matafuegos.FindAsync(idMatafuego);
             if (matafuego == null)
                 throw new KeyNotFoundException(
                     "Matafuego con id " + idMatafuego + " no encontrado"
+                );
+            if (await serviceMatafuego.MatafuegoAsignadoAVehiculo(idMatafuego) is true)
+                throw new InvalidOperationException(
+                    "El matafuego con id " + idMatafuego + " ya se encuentra asignado a un vehiculo"
                 );
             Vehiculo? vehiculo = await _context.Vehiculos.FindAsync(idVehiculo);
             if (vehiculo == null)

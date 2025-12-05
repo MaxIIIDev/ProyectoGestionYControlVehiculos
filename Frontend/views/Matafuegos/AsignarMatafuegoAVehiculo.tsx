@@ -11,6 +11,10 @@ import FormButtons from "../../src/Components/Form/FormButtons";
 import ComboBoxBrowser from "../../src/Components/FormBuscador/ComboBoxBrowser";
 import ResultInfo from "../../src/Components/FormBuscador/ResultInfo";
 import { NavButtonPosition } from "../../src/Components";
+import {
+  VehiculoApiParser,
+  type VehiculoSchemaType,
+} from "../../types/Vehiculo.schema";
 
 export const AsignarMatafuegoAVehiculo = () => {
   const navigate = useNavigate();
@@ -23,9 +27,7 @@ export const AsignarMatafuegoAVehiculo = () => {
     IdMatafuego: number;
   }>(initialState);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [Vehiculo, setVehiculo] = useState<{
-    [key: string]: string | number;
-  }>();
+  const [Vehiculo, setVehiculo] = useState<VehiculoSchemaType | null>();
   const [Matafuego, setMatafuego] = useState<{
     [key: string]: string | number;
   }>();
@@ -38,7 +40,7 @@ export const AsignarMatafuegoAVehiculo = () => {
     setFormData({ ...formData, [name]: valorFinal });
   };
   const desbloquearSegundoFormulario: boolean =
-    Vehiculo != null && parseInt(Vehiculo.idVehiculo.toString()) > 0
+    Vehiculo != null && parseInt(Vehiculo.idVehiculo!.toString()) > 0
       ? true
       : false;
   const validateForm: boolean = formData
@@ -85,9 +87,38 @@ export const AsignarMatafuegoAVehiculo = () => {
   };
   useEffect(() => {
     if (formData.IdMatafuego && formData.IdVehiculo == 0) {
+      setVehiculo(null);
       formData.IdMatafuego = 0;
+      return;
+    }
+    if (formData.IdMatafuego == 0 && formData.IdVehiculo == 0) {
+      setVehiculo(null);
+      return;
     }
     console.log("formData: " + JSON.stringify(formData));
+    if (Vehiculo && Vehiculo.Matafuego != null) {
+      Swal.fire({
+        title: "Advertencia: El vehiculo tiene un Matafuego asignado",
+        text: `Datos del Matafuego: |
+         Nro de Serie: ${Vehiculo!.Matafuego.NroSerie}
+         Proveedor: ${Vehiculo!.Matafuego.Proveedor} |
+         Si continua se desasignara el actual y se asignara el nuevo`,
+        icon: "warning",
+        confirmButtonText: "Aceptar",
+        cancelButtonColor: "#d33",
+        cancelButtonText: "Cancelar",
+        showCancelButton: true,
+      }).then((result) => {
+        if (result.dismiss === Swal.DismissReason.cancel) {
+          setVehiculo(null);
+          setFormData({
+            IdMatafuego: 0,
+            IdVehiculo: 0,
+          });
+          return;
+        }
+      });
+    }
   }, [formData.IdVehiculo]);
   return (
     <div
@@ -99,9 +130,10 @@ export const AsignarMatafuegoAVehiculo = () => {
         padding: "20px",
         width: "100%",
         height: "100%",
-      }}>
+      }}
+    >
       <FormCard
-        title="Registros Km"
+        title="Asignar Matafuego"
         classNameCard="mb-1 bg-dark text-white  rounded-5 "
         classNameHeader="fs-1 text-white text-center border-0 rounded-5"
         styleBody={{
@@ -109,7 +141,8 @@ export const AsignarMatafuegoAVehiculo = () => {
           alignItems: "center",
           justifyContent: "center",
           flexDirection: "column",
-        }}>
+        }}
+      >
         <FormCard
           title="Buscar Vehiculo"
           classNameCard="mb-1 bg-dark text-white  rounded-5 "
@@ -121,32 +154,41 @@ export const AsignarMatafuegoAVehiculo = () => {
             minHeight: "200px",
           }}
           styleHeader={{ fontFamily: "serif" }}
-          classNameBody="fs-5 p-1">
+          classNameBody="fs-5 p-1"
+        >
           <ComboBoxBrowser
             apiUrl={endpointsAPI.vehiculos.buscarPorPatenteLike.action("")}
             apiMethod={endpointsAPI.vehiculos.buscarPorPatenteLike.method}
             onEntitySelect={(value: { [key: string]: string }) => {
-              setVehiculo(value);
+              value != null
+                ? setVehiculo(VehiculoApiParser.parse(value))
+                : setVehiculo(null);
+
               setFormData({
-                ...formData,
+                IdMatafuego:
+                  value != null && value.idMatafuego != null
+                    ? parseInt(value.idMatafuego)
+                    : 0,
                 IdVehiculo:
                   value != null && value.idVehiculo != null
                     ? parseInt(value.idVehiculo)
                     : 0,
               });
             }}
-            defaultOption="Buscador por Patente"
+            defaultOption={"Buscador por Patente"}
             name="patente"
-            placeholder="Buscador por Patente"></ComboBoxBrowser>
+            placeholder="Buscador por Patente"
+          ></ComboBoxBrowser>
           {Vehiculo && desbloquearSegundoFormulario && (
             <div style={{ marginTop: 16 }}>
               <ResultInfo
                 title="Vehiculo Seleccionado"
                 info={[
-                  { label: "Marca", value: `${Vehiculo.marca}` },
-                  { label: "Modelo", value: `${Vehiculo.modelo}` },
-                  { label: "Patente", value: `${Vehiculo.patente}` },
-                ]}></ResultInfo>
+                  { label: "Marca", value: `${Vehiculo.Marca}` },
+                  { label: "Modelo", value: `${Vehiculo.Modelo}` },
+                  { label: "Patente", value: `${Vehiculo.Patente}` },
+                ]}
+              ></ResultInfo>
             </div>
           )}
         </FormCard>
@@ -156,12 +198,13 @@ export const AsignarMatafuegoAVehiculo = () => {
             classNameCard="mb-1 bg-dark text-white  rounded-5 "
             classNameHeader="fs-2 text-white text-center border-0 rounded-5"
             styleCard={{
-              maxWidth: "80%",
+              maxWidth: "90%",
               padding: "20px",
               marginTop: "20px",
             }}
             styleHeader={{ fontFamily: "serif" }}
-            classNameBody="fs-5 p-1">
+            classNameBody="fs-5 p-1"
+          >
             {
               <div>
                 <ComboBoxBrowser
@@ -179,7 +222,8 @@ export const AsignarMatafuegoAVehiculo = () => {
                   }}
                   defaultOption="Buscador por NroSerie"
                   name="NroSerie"
-                  placeholder="Buscador por NroSerie"></ComboBoxBrowser>
+                  placeholder="Buscador por NroSerie"
+                ></ComboBoxBrowser>
                 <Form
                   name="vehiculoForm"
                   method={endpointsAPI.vehiculos.asignarAVehiculo.method}
@@ -201,14 +245,16 @@ export const AsignarMatafuegoAVehiculo = () => {
                     return true;
                   }}
                   onSuccess={handleSuccess}
-                  onError={handleError}>
+                  onError={handleError}
+                >
                   <FormInput
                     type="hidden"
                     name="IdMatafuego"
                     value={formData.IdMatafuego ? formData.IdMatafuego : 0}
                     onChange={handleChange}
                     required={false}
-                    error={errors.IdMatafuego}></FormInput>
+                    error={errors.IdMatafuego}
+                  ></FormInput>
                   <FormInput
                     type="hidden"
                     name="IdVehiculo"
@@ -227,7 +273,8 @@ export const AsignarMatafuegoAVehiculo = () => {
                         alignItems: "center",
                         gap: "5px",
                         paddingLeft: "10px",
-                      }}>
+                      }}
+                    >
                       <i className="bi bi-info-circle"></i>
                       <span>
                         Seleccione un vehículo arriba para habilitar este campo.
@@ -238,7 +285,8 @@ export const AsignarMatafuegoAVehiculo = () => {
                     initialState={initialState}
                     setFormData={setFormData}
                     formClear={formCleanTextErrors}
-                    disabledSubmitButton={!validateForm}></FormButtons>
+                    disabledSubmitButton={!validateForm}
+                  ></FormButtons>
                 </Form>
               </div>
             }
