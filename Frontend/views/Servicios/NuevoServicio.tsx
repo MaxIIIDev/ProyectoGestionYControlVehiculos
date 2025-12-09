@@ -241,30 +241,40 @@ export default function NuevoServicio() {
               value={formData.bujias}
               onChange={(value) => setFormData({ ...formData, bujias: value })}
             />
+            <div className="w-50 ms-2"></div>
           </div>
-          <div className="d-flex justify-content-between w-100 mx-auto gap-3">
-            <FormInput
-              type="text"
-              label="Kilometraje del Servicio"
-              name="KmService"
-              placeholder="Kilometraje del Servicio"
-              value={formData.kmService}
-              onChange={(e) =>
-                setFormData({ ...formData, kmService: Number(e.target.value) })
-              }
-              required={false}
-            />
-            <FormInput
-              type="text"
-              label="Proveedor"
-              name="Proveedor"
-              placeholder="Proveedor"
-              value={formData.proveedor}
-              onChange={(e) =>
-                setFormData({ ...formData, proveedor: e.target.value })
-              }
-              required={false}
-            />
+          <div className="row w-100 mx-auto">
+            <div className="col-md-6">
+              <FormInput
+                type="text"
+                label="Kilometraje del Servicio"
+                name="KmService"
+                placeholder="Kilometraje del Servicio"
+                value={formData.kmService}
+                className="flex-grow-1"
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    kmService: Number(e.target.value),
+                  })
+                }
+                required={true}
+              />
+            </div>
+            <div className="col-md-6">
+              <FormInput
+                type="text"
+                label="Proveedor"
+                name="Proveedor"
+                placeholder="Proveedor"
+                value={formData.proveedor}
+                className="flex-grow-1"
+                onChange={(e) =>
+                  setFormData({ ...formData, proveedor: e.target.value })
+                }
+                required={false}
+              />
+            </div>
           </div>
           <FormButtons
             setFormData={setFormData}

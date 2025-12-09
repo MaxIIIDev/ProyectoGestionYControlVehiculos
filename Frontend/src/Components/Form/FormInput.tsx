@@ -13,6 +13,8 @@ interface FormInputProps {
   required: boolean;
   error?: string;
   disabled?: boolean;
+  as?: string;
+  rows?: number;
 }
 
 export default function FormInput({
@@ -27,6 +29,8 @@ export default function FormInput({
   style,
   error,
   disabled,
+  as,
+  rows,
 }: FormInputProps) {
   return (
     <Form.Group className="mb-3" controlId={name}>
@@ -42,10 +46,13 @@ export default function FormInput({
         style={style}
         isInvalid={!!error}
         disabled={disabled}
+        as={as as any}
+        rows={rows}
       />
       <Form.Control.Feedback
         type="invalid"
-        className=" mx-2 px-1 fs-6 text-start">
+        className=" mx-2 px-1 fs-6 text-start"
+      >
         {error}
       </Form.Control.Feedback>
     </Form.Group>
