@@ -104,7 +104,10 @@ const ComboBoxBrowser: React.FC<ComboBoxBrowserProps> = ({
               label: v.patente
                 ? "Patente: " + v.patente
                 : v.nroSerie
-                ? "Id: " + v.nroSerie + " - Proveedor: " + v.proveedor
+                ? "Numero de Serie: " +
+                  v.nroSerie +
+                  " - Proveedor: " +
+                  v.proveedor
                 : "",
 
               original: v,

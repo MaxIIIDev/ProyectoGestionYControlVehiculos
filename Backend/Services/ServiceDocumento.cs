@@ -105,8 +105,12 @@ namespace Backend.Services
         {
             var documento = await _context.Documentos.FindAsync(id);
             if (documento == null)
-                return false;
-
+                throw new KeyNotFoundException("No se encontro el documento con Id: " + id);
+            string? rutaDelDocumento = documento.UrlArchivos;
+            if (File.Exists(rutaDelDocumento))
+            {
+                File.Delete(rutaDelDocumento);
+            }
             _context.Documentos.Remove(documento);
             return await _context.SaveChangesAsync() > 0;
         }

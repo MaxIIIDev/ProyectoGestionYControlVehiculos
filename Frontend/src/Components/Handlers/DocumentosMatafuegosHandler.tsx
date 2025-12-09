@@ -1,8 +1,9 @@
 import { Button } from "react-bootstrap";
-import Enrouters from "../Routes/Enrouters";
+import Enrouters, { endpointsAPI } from "../Routes/Enrouters";
 import { useState } from "react";
-
+import { Toast } from "../../Utils/Toast";
 import Switch from "../Styled/StyledSwitch";
+import Swal from "sweetalert2";
 
 interface Documento {
   idDocumento?: number;
@@ -40,7 +41,26 @@ export default function DocumentosMatafuegoHandler({
     const url = window.URL.createObjectURL(blob);
     window.open(url, "_blank", "noopener,noreferrer");
   };
-
+  const deleteDocument = async (idDocumento: number) => {
+    try {
+      const responseFromApi = await fetch(
+        endpointsAPI.documentos.eliminar.action(idDocumento),
+        { method: endpointsAPI.documentos.eliminar.method }
+      );
+      if (!responseFromApi.ok) {
+        throw new Error("No se elimino el documento");
+      }
+      Toast.fire({
+        icon: "success",
+        title: "Documento Eliminado con Exito",
+      });
+    } catch (error: unknown) {
+      Toast.fire({
+        icon: "error",
+        title: error instanceof Error ? error.message : "Ocurrio un error",
+      });
+    }
+  };
   return (
     <div className="d-flex flex-column gap-2">
       <div className="d-flex flex-row gap-2 mb-2">
@@ -115,6 +135,18 @@ export default function DocumentosMatafuegoHandler({
                     }}
                   >
                     Abrir
+                  </Button>
+                  <Button
+                    style={{ marginRight: "5px" }}
+                    as="a"
+                    variant="danger"
+                    onClick={() => {
+                      if (doc.idDocumento) {
+                        deleteDocument(doc.idDocumento);
+                      }
+                    }}
+                  >
+                    Eliminar
                   </Button>
                   {/* <Button
                     variant="primary"

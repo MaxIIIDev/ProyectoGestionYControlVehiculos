@@ -117,12 +117,15 @@ public class ControllerDocumento : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDocumento(int id)
     {
-        bool deleted = await _serviceDocumento.DeleteAsync(id);
-        if (!deleted)
+        try
         {
-            return NotFound("Documento no encontrado con id: " + id);
+            bool deleted = await _serviceDocumento.DeleteAsync(id);
+            return NoContent();
         }
-        return NoContent();
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
     }
 
     // BAJA LOGICA DOCUMENTO

@@ -45,7 +45,7 @@ export default function MatafuegoDocumentos() {
           }
           relatedApiMethod={Enrouters.documentos.buscarPorMatafuegoId.method}
           entityLabel={entity}
-          defaultOption="Buscar matafuego por patente"
+          defaultOption="Ingrese el Numero de Serie "
           onEntitySelect={handleMatafuegoSelect}
           renderEntity={(matafuego) => (
             <ResultInfo

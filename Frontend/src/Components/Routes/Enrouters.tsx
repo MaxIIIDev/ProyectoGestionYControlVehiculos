@@ -77,7 +77,7 @@ export const endpointsAPI = {
       method: "PUT",
     },
     eliminar: {
-      action: (id: number) => `${API_ROUTE}/Documentos/${id}`,
+      action: (id: number) => `${API_ROUTE}/documentos/${id}`,
       method: "DELETE",
     },
     buscarPorId: {
