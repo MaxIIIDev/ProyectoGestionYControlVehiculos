@@ -43,6 +43,39 @@ export default function DocumentosMatafuegoHandler({
     const url = window.URL.createObjectURL(blob);
     window.open(url, "_blank", "noopener,noreferrer");
   };
+  const validateDelete = (tipo: string, idDocumento: number) => {
+    Swal.fire({
+      title: `Va a eliminar un documento  - Tipo de Documento: ${tipo}`,
+      icon: "warning",
+      input: "text",
+      inputLabel:
+        "Ingrese 'Confirmar' para eliminar (esta accion no tiene vuelta atras)",
+      inputPlaceholder: "Confirmar",
+      inputValidator: (value) => {
+        if (value !== "Confirmar") {
+          return "Debe ingresar 'Confirmar' para eliminar el registro";
+        }
+      },
+      confirmButtonText: "Eliminar",
+      confirmButtonColor: "#ca1212ff",
+      showCancelButton: true,
+      cancelButtonColor: "#0d6efd",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isDismissed) {
+        Swal.fire(
+          "Se cancelo la operacion",
+          "No se elimino el documento",
+          "info"
+        );
+        return;
+      }
+      if (result.isConfirmed) {
+        await deleteDocument(idDocumento);
+        return;
+      }
+    });
+  };
   const deleteDocument = async (idDocumento: number) => {
     try {
       const responseFromApi = await fetch(
@@ -145,7 +178,7 @@ export default function DocumentosMatafuegoHandler({
                     variant="danger"
                     onClick={() => {
                       if (doc.idDocumento) {
-                        deleteDocument(doc.idDocumento);
+                        validateDelete(doc.tipo ?? "", doc.idDocumento);
                       }
                     }}
                   >
