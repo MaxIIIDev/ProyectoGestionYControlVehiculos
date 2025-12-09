@@ -21,27 +21,32 @@ public class CreateServiceDto
 
     [Required]
     [Range(0, int.MaxValue)]
-    public int? KmActual { get; set; }
+    public int? KmService { get; set; }
 
-    [Required]
-    [Range(0, int.MaxValue)]
-    public int? KmProx { get; set; }
-
-    [Required]
-    [Range(0, int.MaxValue)]
-    public int? KmProxPolyV { get; set; }
-
-    [Required]
-    [Range(0, int.MaxValue)]
-    public int? KmProxBombaDeAgua { get; set; }
-
-    [Required]
-    [MinLength(1)]
-    [MaxLength(100)]
+    [MaxLength(10000)]
     public string? Detalle { get; set; }
 
     [Required]
     public DateOnly? Fecha { get; set; }
 
     public bool Estado { get; set; } = true;
+
+    public bool? Aceite { get; set; }
+
+    public bool? BombaAceite { get; set; }
+
+    public bool? BombaAgua { get; set; }
+
+    public bool? BombaCombustible { get; set; }
+
+    public bool? Bujias { get; set; }
+
+    public bool? Excepcional { get; set; }
+
+    [MaxLength(100)]
+    public string? Proveedor { get; set; }
+
+    public bool? Realizado { get; set; }
+
+    public string? ServicioExcepcional { get; set; }
 }
