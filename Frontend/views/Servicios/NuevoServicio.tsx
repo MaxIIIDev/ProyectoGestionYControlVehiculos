@@ -100,12 +100,13 @@ export default function NuevoServicio() {
       BombaAceite: formData.bombaAceite,
       Bujias: formData.bujias,
       KmService: formData.kmService,
-      Excepcional: formData.excepcional,
-      ServicioExcepcional: formData.servicioExcepcional,
+      Excepcional: false,
+      ServicioExcepcional: "",
       Proveedor: formData.proveedor,
       Detalle: formData.detalle,
-      Realizado: formData.realizado,
-      Estado: formData.estado,
+      Realizado: false,
+      Estado: true,
+      Fecha: new Date().toISOString().split("T")[0],
     };
     console.log("Datos para backend:", formData);
     try {
@@ -151,13 +152,13 @@ export default function NuevoServicio() {
           <div className="d-flex justify-content-between w-100 mx-auto gap-3">
             <Checklistinput
               label="Cambio de Aceite"
-              name="aceite"
+              name="Aceite"
               value={formData.aceite}
               onChange={(value) => setFormData({ ...formData, aceite: value })}
             />
             <Checklistinput
               label="Filtro de Aceite"
-              name="filtroDeAceite"
+              name="FiltroDeAceite"
               value={formData.filtroDeAceite}
               onChange={(value) =>
                 setFormData({ ...formData, filtroDeAceite: value })
@@ -165,7 +166,7 @@ export default function NuevoServicio() {
             />
             <Checklistinput
               label="Bomba de Aceite"
-              name="bombaAceite"
+              name="BombaAceite"
               value={formData.bombaAceite}
               onChange={(value) =>
                 setFormData({ ...formData, bombaAceite: value })
@@ -176,7 +177,7 @@ export default function NuevoServicio() {
           <div className="d-flex justify-content-between w-100 mx-auto gap-3">
             <Checklistinput
               label="Filtro de Aire"
-              name="filtroDeAire"
+              name="FiltroDeAire"
               value={formData.filtroDeAire}
               onChange={(value) =>
                 setFormData({ ...formData, filtroDeAire: value })
@@ -184,7 +185,7 @@ export default function NuevoServicio() {
             />
             <Checklistinput
               label="Filtro de Combustible"
-              name="filtroDeCombustible"
+              name="FiltroDeCombustible"
               value={formData.filtroDeCombustible}
               onChange={(value) =>
                 setFormData({ ...formData, filtroDeCombustible: value })
@@ -192,7 +193,7 @@ export default function NuevoServicio() {
             />
             <Checklistinput
               label="Bomba de Combustible"
-              name="bombaCombustible"
+              name="BombaCombustible"
               value={formData.bombaCombustible}
               onChange={(value) =>
                 setFormData({ ...formData, bombaCombustible: value })
@@ -202,7 +203,7 @@ export default function NuevoServicio() {
           <div className="d-flex justify-content-between w-100 mx-auto gap-3">
             <Checklistinput
               label="Alienación y Balanceo"
-              name="alineoBalanceo"
+              name="AlineoBalanceo"
               value={formData.alineoBalanceo}
               onChange={(value) =>
                 setFormData({ ...formData, alineoBalanceo: value })
@@ -210,7 +211,7 @@ export default function NuevoServicio() {
             />
             <Checklistinput
               label="Cambio de Bomba de Agua"
-              name="bombaAgua"
+              name="BombaAgua"
               value={formData.bombaAgua}
               onChange={(value) =>
                 setFormData({ ...formData, bombaAgua: value })
@@ -218,7 +219,7 @@ export default function NuevoServicio() {
             />
             <Checklistinput
               label="Correa Poly V"
-              name="correaPolyV"
+              name="CorreaPolyV"
               value={formData.correaPolyV}
               onChange={(value) =>
                 setFormData({ ...formData, correaPolyV: value })
@@ -228,7 +229,7 @@ export default function NuevoServicio() {
           <div className="d-flex justify-content-between w-100 mx-auto gap-3">
             <Checklistinput
               label="Correa Dentada"
-              name="correaDentada"
+              name="CorreaDentada"
               value={formData.correaDentada}
               onChange={(value) =>
                 setFormData({ ...formData, correaDentada: value })
@@ -236,7 +237,7 @@ export default function NuevoServicio() {
             />
             <Checklistinput
               label="Cambio de Bujías"
-              name="bujias"
+              name="Bujias"
               value={formData.bujias}
               onChange={(value) => setFormData({ ...formData, bujias: value })}
             />
@@ -245,7 +246,7 @@ export default function NuevoServicio() {
             <FormInput
               type="text"
               label="Kilometraje del Servicio"
-              name="kmService"
+              name="KmService"
               placeholder="Kilometraje del Servicio"
               value={formData.kmService}
               onChange={(e) =>
@@ -256,7 +257,7 @@ export default function NuevoServicio() {
             <FormInput
               type="text"
               label="Proveedor"
-              name="proveedor"
+              name="Proveedor"
               placeholder="Proveedor"
               value={formData.proveedor}
               onChange={(e) =>
