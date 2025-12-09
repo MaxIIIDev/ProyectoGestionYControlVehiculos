@@ -26,7 +26,6 @@ public class CreateServiceDto
     [MaxLength(10000)]
     public string? Detalle { get; set; }
 
-    [Required]
     public DateOnly? Fecha { get; set; }
 
     public bool Estado { get; set; } = true;

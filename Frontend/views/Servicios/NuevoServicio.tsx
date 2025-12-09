@@ -106,7 +106,7 @@ export default function NuevoServicio() {
       Detalle: formData.detalle,
       Realizado: false,
       Estado: true,
-      Fecha: new Date().toISOString().split("T")[0],
+      Fecha: null,
     };
     console.log("Datos para backend:", formData);
     try {

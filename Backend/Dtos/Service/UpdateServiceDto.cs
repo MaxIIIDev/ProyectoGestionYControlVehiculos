@@ -23,12 +23,9 @@ public class UpdateServiceDto
     [Range(0, int.MaxValue)]
     public int? KmService { get; set; }
 
-    [Required]
-    [MinLength(1)]
     [MaxLength(10000)]
     public string? Detalle { get; set; }
 
-    [Required]
     public DateOnly? Fecha { get; set; }
 
     public bool Estado { get; set; } = true;

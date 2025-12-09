@@ -48,7 +48,7 @@ export default function VehiculosMantenimiento() {
               iconClass="bi bi-card-list"
               text=" Listar Mantenimientos"
               onClick={() => {
-                navigate("/Mantenimiento/Listar");
+                navigate("/Mantenimiento/ListarServicios");
               }}
             />
           }

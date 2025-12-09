@@ -226,6 +226,7 @@ export const endpointFront = {
     nuevo: { action: "/Mantenimiento/Nuevo" },
     gestion: { action: "/Mantenimiento" },
     nuevoEx: { action: "/Mantenimiento/NuevoExcepcional" },
+    listarPorVehiculo: { action: "/Mantenimiento/ListarServicios" },
   },
   controlKilometraje: {
     listar: { action: "/KilometrosListar" },

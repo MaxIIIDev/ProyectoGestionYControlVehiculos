@@ -146,7 +146,7 @@ export default function RoutesComponent() {
           element={<NuevoExcepcional />}
         />
         <Route
-          path={endpointFront.mantenimiento.gestion.action}
+          path={endpointFront.mantenimiento.listarPorVehiculo.action}
           element={<ListarServicios />}
         />
       </Routes>
