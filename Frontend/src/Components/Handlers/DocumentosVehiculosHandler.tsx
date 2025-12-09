@@ -1,8 +1,10 @@
 import { Button } from "react-bootstrap";
-import Enrouters from "../Routes/Enrouters";
+import Enrouters, { endpointsAPI } from "../Routes/Enrouters";
 import { useState } from "react";
 
 import Switch from "../Styled/StyledSwitch";
+import Swal from "sweetalert2";
+import { Toast } from "../../Utils/Toast";
 
 interface Documento {
   idDocumento?: number;
@@ -15,11 +17,13 @@ interface Documento {
 interface DocumentosVehiculosHandlerProps {
   docs: Documento[];
   onCargar?: (tipo: string, idDocumentoViejo?: number) => void;
+  onSuccess?: () => void;
 }
 
 export default function DocumentosVehiculosHandler({
   docs,
   onCargar,
+  onSuccess,
 }: DocumentosVehiculosHandlerProps) {
   const [mostrarActivos, setMostrarActivos] = useState(true);
   const tiposRequeridos = [
@@ -44,7 +48,60 @@ export default function DocumentosVehiculosHandler({
     const url = window.URL.createObjectURL(blob);
     window.open(url, "_blank", "noopener,noreferrer");
   };
-
+  const validateDelete = (tipo: string, idDocumento: number) => {
+    Swal.fire({
+      title: `Va a eliminar un documento  - Tipo de Documento: ${tipo}`,
+      icon: "warning",
+      input: "text",
+      inputLabel:
+        "Ingrese 'Confirmar' para eliminar (esta accion no tiene vuelta atras)",
+      inputPlaceholder: "Confirmar",
+      inputValidator: (value) => {
+        if (value !== "Confirmar") {
+          return "Debe ingresar 'Confirmar' para eliminar el registro";
+        }
+      },
+      confirmButtonText: "Eliminar",
+      confirmButtonColor: "#ca1212ff",
+      showCancelButton: true,
+      cancelButtonColor: "#0d6efd",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isDismissed) {
+        Swal.fire(
+          "Se cancelo la operacion",
+          "No se elimino el documento",
+          "info"
+        );
+        return;
+      }
+      if (result.isConfirmed) {
+        await deleteDocument(idDocumento);
+        return;
+      }
+    });
+  };
+  const deleteDocument = async (idDocumento: number) => {
+    try {
+      const responseFromApi = await fetch(
+        endpointsAPI.documentos.eliminar.action(idDocumento),
+        { method: endpointsAPI.documentos.eliminar.method }
+      );
+      if (!responseFromApi.ok) {
+        throw new Error("No se elimino el documento");
+      }
+      Toast.fire({
+        icon: "success",
+        title: "Documento Eliminado con Exito",
+      });
+      if (onSuccess) onSuccess();
+    } catch (error: unknown) {
+      Toast.fire({
+        icon: "error",
+        title: error instanceof Error ? error.message : "Ocurrio un error",
+      });
+    }
+  };
   return (
     <div className="d-flex flex-column gap-2">
       <div className="d-flex flex-row gap-2 mb-2">
@@ -119,6 +176,18 @@ export default function DocumentosVehiculosHandler({
                     }}
                   >
                     Abrir
+                  </Button>
+                  <Button
+                    style={{ marginRight: "5px" }}
+                    as="a"
+                    variant="danger"
+                    onClick={() => {
+                      if (doc.idDocumento) {
+                        validateDelete(doc.tipo ?? "", doc.idDocumento);
+                      }
+                    }}
+                  >
+                    Eliminar
                   </Button>
                   {/* <Button
                     variant="primary"
