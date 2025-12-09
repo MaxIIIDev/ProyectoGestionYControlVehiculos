@@ -57,7 +57,11 @@ export default function VehiculosDocumentos() {
           )}
           refresh={refreshKey}
           renderRelated={(docs) => (
-            <DocumentosVehiculosHandler docs={docs} onCargar={handleCargar} />
+            <DocumentosVehiculosHandler
+              docs={docs}
+              onCargar={handleCargar}
+              onSuccess={handleRefresh}
+            />
           )}
         />
         {/* Hasta aca llegaria lo que seria la pagina, Este bonton seria el volver */}
