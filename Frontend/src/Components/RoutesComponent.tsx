@@ -23,6 +23,10 @@ import { AsignarMatafuegoAVehiculo } from "../../views/Matafuegos/AsignarMatafue
 import NuevoServicio from "../../views/Servicios/NuevoServicio";
 import NuevoExcepcional from "../../views/Servicios/NuevoExcepcional";
 import ListarServicios from "../../views/Servicios/ListarServicios";
+import { AgregarNeumatico } from "../../views/Neumaticos/AgregarNeumatico";
+import { ListarNeumaticos } from "../../views/Neumaticos/ListarNeumaticos";
+import { EditarNeumaticos } from "../../views/Neumaticos/EditarNeumaticos";
+import { AsignarNeumaticos } from "../../views/Neumaticos/AsignarNeumaticos";
 export default function RoutesComponent() {
   return (
     <Col xs={12} md={9} lg={10} className="p-4 bg-secondary">
@@ -83,6 +87,24 @@ export default function RoutesComponent() {
           path={endpointFront.neumaticos.gestion.action}
           element={<Neumaticos />}
         />
+        <Route
+          path={endpointFront.neumaticos.agregar.action}
+          element={<AgregarNeumatico />}
+        ></Route>
+
+        <Route
+          path={endpointFront.neumaticos.editar.action}
+          element={<EditarNeumaticos />}
+        ></Route>
+        <Route
+          path={endpointFront.neumaticos.asignar.action}
+          element={<AsignarNeumaticos />}
+        ></Route>
+        <Route
+          path={endpointFront.neumaticos.listar.action}
+          element={<ListarNeumaticos />}
+        ></Route>
+
         <Route
           path={endpointFront.vehiculos.documentos.action}
           element={<VehiculosDocumentos />}

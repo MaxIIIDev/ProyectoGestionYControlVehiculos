@@ -181,6 +181,28 @@ export const endpointsAPI = {
       method: "GET",
     },
   },
+  posicionNeumatico: {
+    Listar: {
+      action: `${API_ROUTE}/posiciones-neumaticos`,
+      method: "GET",
+    },
+    Agregar: {
+      action: `${API_ROUTE}/posiciones-neumaticos`,
+      method: "POST",
+    },
+    ObtenerPorId: {
+      action: (id: number) => `${API_ROUTE}/posiciones-neumaticos/${id}`,
+      method: "GET",
+    },
+    Actualizar: {
+      action: (id: number) => `${API_ROUTE}/posiciones-neumaticos/${id}`,
+      method: "PUT",
+    },
+    Eliminar: {
+      action: (id: number) => `${API_ROUTE}/posiciones-neumaticos/${id}`,
+      method: "DELETE",
+    },
+  },
 };
 //ENDPOINTS DEL FRONTEND
 export const endpointFront = {
@@ -237,6 +259,10 @@ export const endpointFront = {
   },
   neumaticos: {
     gestion: { action: "/Neumaticos" },
+    agregar: { action: "/Neumaticos/Nuevo" },
+    asignar: { action: "/Neumaticos/Asignar" },
+    listar: { action: "/Neumaticos/Listar" },
+    editar: { action: "/Neumaticos/Editar" },
   },
   checklist: {
     gestion: { action: "/Checklist" },
