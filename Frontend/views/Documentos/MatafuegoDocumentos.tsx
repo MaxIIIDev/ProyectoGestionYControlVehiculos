@@ -60,7 +60,11 @@ export default function MatafuegoDocumentos() {
           )}
           refresh={refreshKey}
           renderRelated={(docs) => (
-            <DocumentosMatafuegosHandler docs={docs} onCargar={handleCargar} />
+            <DocumentosMatafuegosHandler
+              docs={docs}
+              onCargar={handleCargar}
+              onSuccess={handleRefresh}
+            />
           )}
         />
         {/* Hasta aca llegaria lo que seria la pagina, Este bonton seria el volver */}
