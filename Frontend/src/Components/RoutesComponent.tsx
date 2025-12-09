@@ -20,6 +20,9 @@ import MatafuegoDocumentos from "../../views/Documentos/MatafuegoDocumentos";
 import ChecklistListar from "../../views/Checklist/ChecklistListar";
 import { EditarMatafuego } from "../../views/Matafuegos/EditarMatafuego";
 import { AsignarMatafuegoAVehiculo } from "../../views/Matafuegos/AsignarMatafuegoAVehiculo";
+import NuevoServicio from "../../views/Servicios/NuevoServicio";
+import NuevoExcepcional from "../../views/Servicios/NuevoExcepcional";
+import ListarServicios from "../../views/Servicios/ListarServicios";
 export default function RoutesComponent() {
   return (
     <Col xs={12} md={9} lg={10} className="p-4 bg-secondary">
@@ -95,10 +98,6 @@ export default function RoutesComponent() {
         <Route
           path={endpointFront.matafuegos.listar.action}
           element={<ListarMatafuegos />}
-        ></Route>
-        <Route
-          path={endpointFront.checklist.listar.action}
-          element={<ChecklistListar />}
         />
         <Route
           path={endpointFront.matafuegos.editar.endpoint}
@@ -111,6 +110,22 @@ export default function RoutesComponent() {
         <Route
           path={endpointFront.matafuegos.documentos.action}
           element={<MatafuegoDocumentos />}
+        />
+        <Route
+          path={endpointFront.checklist.listar.action}
+          element={<ChecklistListar />}
+        />
+        <Route
+          path={endpointFront.mantenimiento.nuevo.action}
+          element={<NuevoServicio />}
+        />
+        <Route
+          path={endpointFront.mantenimiento.nuevoEx.action}
+          element={<NuevoExcepcional />}
+        />
+        <Route
+          path={endpointFront.mantenimiento.gestion.action}
+          element={<ListarServicios />}
         />
       </Routes>
     </Col>
