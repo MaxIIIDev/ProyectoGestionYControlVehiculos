@@ -3,7 +3,7 @@ using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
 
-[Route("api/services")]
+[Route("api/mantenimiento")]
 [ApiController]
 public class ControllerService : ControllerBase
 {
@@ -111,5 +111,26 @@ public class ControllerService : ControllerBase
             return NotFound();
         }
         return NoContent();
+    }
+
+    // GET SERVICIOS POR ID VEHICULO
+
+    [HttpGet("vehiculo/{vehiculoId}")]
+    public async Task<IActionResult> GetServicesByVehiculoId(
+        int vehiculoId,
+        [FromQuery] int nroPagina = 1,
+        [FromQuery] int tamanoPagina = 10
+    )
+    {
+        var servicesVehiculo = await _serviceService.GetServiceByVehicleId(
+            vehiculoId,
+            nroPagina,
+            tamanoPagina
+        );
+        if (servicesVehiculo == null)
+        {
+            return NotFound("No se encontraron servicios para el vehiculo seleccionado.");
+        }
+        return Ok(servicesVehiculo);
     }
 }

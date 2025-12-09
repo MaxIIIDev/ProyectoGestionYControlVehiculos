@@ -34,7 +34,7 @@ export default function VehiculosMantenimiento() {
               iconClass="bi bi-exclamation-circle"
               text=" Nueva Tarea Excepcional"
               onClick={() => {
-                navigate("/Vehiculos/Documentacion");
+                navigate("/Mantenimiento/NuevoExcepcional");
               }}
             />
           }

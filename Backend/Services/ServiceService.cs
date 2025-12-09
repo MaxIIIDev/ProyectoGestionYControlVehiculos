@@ -92,5 +92,23 @@ namespace Backend.Services
             _context.Services.Update(service);
             return await _context.SaveChangesAsync() > 0;
         }
+
+        // GET SERVICIOS POR ID VEHICULO
+
+        public async Task<PagedResponse<Service>> GetServiceByVehicleId(
+            int vehiculoId,
+            int nroPagina,
+            int tamanoPagina
+        )
+        {
+            var query = _context.Services.Where(s => s.IdVehiculo == vehiculoId);
+            var totalRegistros = await query.CountAsync();
+            var items = await query
+                .Skip((nroPagina - 1) * tamanoPagina)
+                .Take(tamanoPagina)
+                .ToListAsync();
+
+            return new PagedResponse<Service>(items, totalRegistros, nroPagina, tamanoPagina);
+        }
     }
 }

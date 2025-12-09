@@ -173,6 +173,14 @@ export const endpointsAPI = {
       method: "GET",
     },
   },
+  mantenimiento: {
+    nuevo: { action: `${API_ROUTE}/Mantenimiento`, method: "POST" },
+    listarPorVehiculoId: {
+      action: (vehiculoId: number) =>
+        `${API_ROUTE}/Mantenimiento/vehiculo/${vehiculoId}`,
+      method: "GET",
+    },
+  },
 };
 //ENDPOINTS DEL FRONTEND
 export const endpointFront = {
@@ -195,6 +203,7 @@ export const endpointFront = {
     listar: { action: "/Mantenimiento/Listar" },
     nuevo: { action: "/Mantenimiento/Nuevo" },
     gestion: { action: "/Mantenimiento" },
+    nuevoEx: { action: "/Mantenimiento/NuevoExcepcional" },
   },
   controlKilometraje: {
     listar: { action: "/KilometrosListar" },
