@@ -16,11 +16,13 @@ interface Documento {
 interface DocumentosMatafuegoHandlerProps {
   docs: Documento[];
   onCargar?: (tipo: string, idDocumentoViejo?: number) => void;
+  onSuccess?: () => void;
 }
 
 export default function DocumentosMatafuegoHandler({
   docs,
   onCargar,
+  onSuccess,
 }: DocumentosMatafuegoHandlerProps) {
   const [mostrarActivos, setMostrarActivos] = useState(true);
   const tiposRequeridos = [{ tipo: "Oblea", label: "Oblea" }];
@@ -54,6 +56,7 @@ export default function DocumentosMatafuegoHandler({
         icon: "success",
         title: "Documento Eliminado con Exito",
       });
+      if (onSuccess) onSuccess();
     } catch (error: unknown) {
       Toast.fire({
         icon: "error",
