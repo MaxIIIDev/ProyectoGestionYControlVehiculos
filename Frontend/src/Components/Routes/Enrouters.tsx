@@ -203,6 +203,36 @@ export const endpointsAPI = {
       method: "DELETE",
     },
   },
+  neumaticos: {
+    listar: {
+      action: `${API_ROUTE}/neumaticos`,
+      method: "GET",
+    },
+    nuevo: {
+      action: `${API_ROUTE}/neumaticos`,
+      method: "POST",
+    },
+    editar: {
+      action: (id: number) => `${API_ROUTE}/neumaticos/${id}`,
+      method: "PUT",
+    },
+    eliminar: {
+      action: (id: number) => `${API_ROUTE}/neumaticos/${id}`,
+      method: "DELETE",
+    },
+    buscarPorId: {
+      action: (id: number) => `${API_ROUTE}/neumaticos/${id}`,
+      method: "GET",
+    },
+    bajaLogica: {
+      action: (id: number) => `${API_ROUTE}/neumaticos/baja/${id}`,
+      method: "PATCH",
+    },
+    altaLogica: {
+      action: (id: number) => `${API_ROUTE}/neumaticos/alta/${id}`,
+      method: "PATCH",
+    },
+  },
 };
 //ENDPOINTS DEL FRONTEND
 export const endpointFront = {

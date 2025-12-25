@@ -15,6 +15,7 @@ interface FormInputProps {
   disabled?: boolean;
   as?: string;
   rows?: number;
+  children?: React.ReactNode;
 }
 
 export default function FormInput({
@@ -31,6 +32,7 @@ export default function FormInput({
   disabled,
   as,
   rows,
+  children,
 }: FormInputProps) {
   return (
     <Form.Group className="mb-3" controlId={name}>
@@ -47,12 +49,12 @@ export default function FormInput({
         isInvalid={!!error}
         disabled={disabled}
         as={as as any}
-        rows={rows}
-      />
+        rows={rows}>
+        {children}
+      </Form.Control>
       <Form.Control.Feedback
         type="invalid"
-        className=" mx-2 px-1 fs-6 text-start"
-      >
+        className=" mx-2 px-1 fs-6 text-start">
         {error}
       </Form.Control.Feedback>
     </Form.Group>

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251220034010_changeNeumaticoSchema")]
+    partial class changeNeumaticoSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -231,7 +234,7 @@ namespace Backend.Migrations
                     b.Property<bool>("Estandar")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<DateOnly?>("FechaColocacion")
+                    b.Property<DateOnly>("FechaColocacion")
                         .HasColumnType("date");
 
                     b.Property<int?>("IdPosicionNeumatico")
@@ -240,7 +243,7 @@ namespace Backend.Migrations
                     b.Property<int?>("IdVehiculo")
                         .HasColumnType("int");
 
-                    b.Property<int?>("KmColocacion")
+                    b.Property<int>("KmColocacion")
                         .HasColumnType("int");
 
                     b.Property<int>("KmRodados")

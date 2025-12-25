@@ -43,8 +43,7 @@ namespace Backend.Models
         [Required]
         public bool Estandar { get; set; } = estandar;
 
-        [Required]
-        public int KmColocacion { get; set; } = kmColocacion;
+        public int? KmColocacion { get; set; } = kmColocacion;
 
         [Required]
         public int KmRodados { get; set; } = kmRodados;
@@ -52,10 +51,10 @@ namespace Backend.Models
         public bool DesgasteIrregular { get; set; } = desgasteIrregular;
 
         [ForeignKey("Posicion")]
-        public int IdPosicionNeumatico { get; set; }
+        public int? IdPosicionNeumatico { get; set; }
         public PosicionNeumatico? Posicion { get; set; }
 
-        public DateOnly FechaColocacion { get; set; } = fechaColocacion;
+        public DateOnly? FechaColocacion { get; set; } = fechaColocacion;
 
         [ForeignKey("Vehiculo")]
         public int? IdVehiculo { get; set; } = idVehiculo;

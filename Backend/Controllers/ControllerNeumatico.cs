@@ -44,9 +44,10 @@ public class ControllerNeumatico : ControllerBase
 
     // POST NUEVO NEUMATICO
     [HttpPost]
-    public async Task<IActionResult> AddNeumatico([FromBody] CreateNeumaticoDto neumaticoDto)
+    public async Task<IActionResult> AddNeumatico([FromBody] CreateNeumaticoDto NeumaticoDto)
     {
-        Neumatico neumatico = mapper.Map<Neumatico>(neumaticoDto);
+        System.Console.WriteLine("hola");
+        Neumatico neumatico = mapper.Map<Neumatico>(NeumaticoDto);
         var newNeumatico = await _serviceNeumatico.AddAsync(neumatico);
         return CreatedAtAction(
             nameof(GetNeumaticoById),

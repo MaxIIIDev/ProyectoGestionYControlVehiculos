@@ -29,12 +29,13 @@ export default function ChecklistInput({
       className={`form-input d-flex align-items-center justify-content-between my-2 w-50  ${
         className || ""
       }`}
-      style={style}
-    >
+      style={style}>
       <span className="me-2 text-dark">{label}</span>
       <Form.Check
         type="switch"
         id={name}
+        name={name}
+        value="true"
         checked={value}
         onChange={(e) => onChange(e.target.checked)}
         required={required}

@@ -31,7 +31,7 @@ export const AgregarMatafuego = () => {
       type === "date"
         ? new Date(value)
         : name == "NroSerie"
-        ? parseInt(value)
+        ? parseInt(value) || 0
         : value;
     setFormData({
       ...formData,
