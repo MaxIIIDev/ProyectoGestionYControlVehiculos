@@ -59,9 +59,9 @@ export const ApiNeumaticoSchema = zodVariable.object({
   kmColocacion: zodVariable.number(),
   kmRodados: zodVariable.number(),
   desgasteIrregular: zodVariable.boolean(),
-  idPosicionNeumatico: zodVariable.number(),
+  idPosicionNeumatico: zodVariable.number().optional().nullable(),
   fechaColocacion: zodVariable.string().optional(),
-  idVehiculo: zodVariable.number(),
+  idVehiculo: zodVariable.number().optional().nullable(),
   estado: zodVariable.boolean(),
 });
 export const NeumaticoApiParser = ApiNeumaticoSchema.transform((data) => {
@@ -74,11 +74,11 @@ export const NeumaticoApiParser = ApiNeumaticoSchema.transform((data) => {
     KmColocacion: data.kmColocacion,
     KmRodados: data.kmRodados,
     DesgasteIrregular: data.desgasteIrregular,
-    IdPosicionNeumatico: data.idPosicionNeumatico,
+    IdPosicionNeumatico: data.idPosicionNeumatico ?? undefined,
     FechaColocacion: data.fechaColocacion
       ? new Date(data.fechaColocacion)
       : undefined,
-    IdVehiculo: data.idVehiculo,
+    IdVehiculo: data.idVehiculo ?? undefined,
     Estado: data.estado,
   };
   return parsedData;

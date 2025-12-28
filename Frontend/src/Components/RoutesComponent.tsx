@@ -89,21 +89,17 @@ export default function RoutesComponent() {
         />
         <Route
           path={endpointFront.neumaticos.agregar.action}
-          element={<AgregarNeumatico />}
-        ></Route>
+          element={<AgregarNeumatico />}></Route>
 
         <Route
-          path={endpointFront.neumaticos.editar.action}
-          element={<EditarNeumaticos />}
-        ></Route>
+          path={endpointFront.neumaticos.editar.endpoint}
+          element={<EditarNeumaticos />}></Route>
         <Route
           path={endpointFront.neumaticos.asignar.action}
-          element={<AsignarNeumaticos />}
-        ></Route>
+          element={<AsignarNeumaticos />}></Route>
         <Route
           path={endpointFront.neumaticos.listar.action}
-          element={<ListarNeumaticos />}
-        ></Route>
+          element={<ListarNeumaticos />}></Route>
 
         <Route
           path={endpointFront.vehiculos.documentos.action}

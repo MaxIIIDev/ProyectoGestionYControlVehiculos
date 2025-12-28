@@ -205,7 +205,8 @@ export const endpointsAPI = {
   },
   neumaticos: {
     listar: {
-      action: `${API_ROUTE}/neumaticos`,
+      action: (nroPagina: number, tamanoPagina: number): string =>
+        `${API_ROUTE}/neumaticos?numeroPagina=${nroPagina}&tamanoPagina=${tamanoPagina}`,
       method: "GET",
     },
     nuevo: {
@@ -293,7 +294,10 @@ export const endpointFront = {
     agregar: { action: "/Neumaticos/Nuevo" },
     asignar: { action: "/Neumaticos/Asignar" },
     listar: { action: "/Neumaticos/Listar" },
-    editar: { action: "/Neumaticos/Editar" },
+    editar: {
+      action: (id: number) => `/Neumaticos/Editar/${id}`,
+      endpoint: `/Neumaticos/Editar/:id`,
+    },
   },
   checklist: {
     gestion: { action: "/Checklist" },
