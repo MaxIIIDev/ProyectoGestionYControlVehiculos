@@ -43,7 +43,8 @@ export const NeumaticoSchema = zodVariable.object({
     .max(new Date("2200-01-01"), {
       error: "La fecha de colocacion debe ser posterior a 2200-01-01",
     })
-    .optional(),
+    .optional()
+    .nullable(),
   IdVehiculo: zodVariable
     .int32({ error: "El IdVehiculo debe ser un numero entero" })
     .positive({ error: "El IdVehiculo debe ser un numero positivo" })
@@ -60,7 +61,7 @@ export const ApiNeumaticoSchema = zodVariable.object({
   kmRodados: zodVariable.number(),
   desgasteIrregular: zodVariable.boolean(),
   idPosicionNeumatico: zodVariable.number().optional().nullable(),
-  fechaColocacion: zodVariable.string().optional(),
+  fechaColocacion: zodVariable.string().optional().nullable(),
   idVehiculo: zodVariable.number().optional().nullable(),
   estado: zodVariable.boolean(),
 });
@@ -77,7 +78,7 @@ export const NeumaticoApiParser = ApiNeumaticoSchema.transform((data) => {
     IdPosicionNeumatico: data.idPosicionNeumatico ?? undefined,
     FechaColocacion: data.fechaColocacion
       ? new Date(data.fechaColocacion)
-      : undefined,
+      : null,
     IdVehiculo: data.idVehiculo ?? undefined,
     Estado: data.estado,
   };

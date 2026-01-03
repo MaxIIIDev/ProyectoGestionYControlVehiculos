@@ -24,6 +24,7 @@ export const AgregarNeumatico = () => {
     KmRodados: 0,
     DesgasteIrregular: false,
     Estado: true,
+    FechaColocacion: null,
   };
   const [getNeumatico, setNeumatico] = useState<NeumaticoType>(intialState);
   const [getErrors, setErrors] = useState<{ [key: string]: string }>({});

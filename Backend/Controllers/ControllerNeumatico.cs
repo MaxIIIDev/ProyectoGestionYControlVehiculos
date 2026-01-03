@@ -48,6 +48,9 @@ public class ControllerNeumatico : ControllerBase
     {
         System.Console.WriteLine("hola");
         Neumatico neumatico = mapper.Map<Neumatico>(NeumaticoDto);
+        if (NeumaticoDto == null)
+            neumatico.FechaColocacion = null;
+
         var newNeumatico = await _serviceNeumatico.AddAsync(neumatico);
         return CreatedAtAction(
             nameof(GetNeumaticoById),

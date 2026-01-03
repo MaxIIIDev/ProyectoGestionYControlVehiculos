@@ -5,7 +5,7 @@ public class CreateNeumaticoDto
     public CreateNeumaticoDto() { }
 
     [Required(ErrorMessage = "El campo {0} es requerido")]
-    [Range(1, Int32.MaxValue, ErrorMessage = "El campo {0} debe ser un número positivo")]
+    [Range(0, Int32.MaxValue, ErrorMessage = "El campo {0} debe ser un número positivo")]
     public int NroSerie { get; set; }
 
     [Required(ErrorMessage = "El campo {0} es requerido")]
@@ -20,7 +20,7 @@ public class CreateNeumaticoDto
     public int? KmColocacion { get; set; }
 
     [Required(ErrorMessage = "El campo {0} es requerido")]
-    [Range(1, int.MaxValue, ErrorMessage = "El campo {0} debe estar entre {1} y {2}")]
+    [Range(0, int.MaxValue, ErrorMessage = "El campo {0} debe estar entre {1} y {2}")]
     public int? KmRodados { get; set; }
 
     public bool? DesgasteIrregular { get; set; }
@@ -34,7 +34,7 @@ public class CreateNeumaticoDto
         "2200-01-01",
         ErrorMessage = "El campo {0} debe estar entre {1} y {2}"
     )]
-    public DateOnly? FechaColocacion { get; set; }
+    public DateOnly? FechaColocacion { get; set; } = null;
 
     [Range(1, int.MaxValue, ErrorMessage = "El campo {0} debe estar entre {1} y {2}")]
     public int? IdVehiculo { get; set; }

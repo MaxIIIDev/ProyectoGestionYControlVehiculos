@@ -23,7 +23,7 @@ namespace Backend.Models
         int kmColocacion,
         int kmRodados,
         bool desgasteIrregular,
-        DateOnly fechaColocacion,
+        DateOnly? fechaColocacion,
         int? idVehiculo,
         bool estado
     )
