@@ -1,9 +1,10 @@
 import {
+  NeumaticoApiParser,
   NeumaticoSchema,
   type NeumaticoType,
 } from "../../types/Neumatico.schema";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getErrorMessage } from "../../src/Utils/Errors.utils";
 import FormCard from "../../src/Components/Form/FormCard";
 import {
@@ -16,6 +17,10 @@ import ChecklistInput from "../../src/Components/Form/ChecklistInput";
 import FormButtons from "../../src/Components/Form/FormButtons";
 import { useEffect, useState } from "react";
 export const EditarNeumaticos = () => {
+  const navigate = useNavigate();
+
+  const { id } = useParams();
+  if (!id?.match("^[0-9]+$")) navigate(endpointFront.neumaticos.listar.action);
   const intialState: NeumaticoType = {
     NroSerie: 0,
     Marca: "",
@@ -27,7 +32,6 @@ export const EditarNeumaticos = () => {
   };
   const [getNeumatico, setNeumatico] = useState<NeumaticoType>(intialState);
   const [getErrors, setErrors] = useState<{ [key: string]: string }>({});
-  const navigate = useNavigate();
   const cleanErrors = () => {
     setErrors({});
   };
@@ -47,7 +51,27 @@ export const EditarNeumaticos = () => {
     });
   };
   useEffect(() => {
+    const fetchNeumatico = async () => {
+      try {
+        const responseFromApi = await fetch(
+          endpointsAPI.neumaticos.buscarPorId.action(parseInt(id!)),
+          {
+            method: endpointsAPI.neumaticos.buscarPorId.method,
+          }
+        );
+        const data = await responseFromApi.json();
+        const dataParsed = NeumaticoApiParser.parse(data);
+
+        setNeumatico(dataParsed);
+      } catch (error) {
+        onError(error instanceof Error ? error.message : error);
+      }
+    };
+    fetchNeumatico();
+  }, [id]);
+  useEffect(() => {
     console.log(getNeumatico);
+    console.log("Fecha de colocacion:", typeof getNeumatico.FechaColocacion);
   }, [getNeumatico]);
   // useEffect(() => {
   //   const getPosicionesNeumaticos = async () => {
@@ -90,6 +114,7 @@ export const EditarNeumaticos = () => {
     if (!validateFromZod.success) {
       const newErrors = formatZodErrors(validateFromZod.error);
       setErrors(newErrors);
+      console.log("Errores:", newErrors);
       return false;
     } else {
       setErrors({});
@@ -121,9 +146,12 @@ export const EditarNeumaticos = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const validateFormResult = validateForm();
+
     if (!validateFormResult) {
       return;
     }
+    console.log("Datos para backend:", getNeumatico);
+
     const dataParaBackend = {
       IdNeumatico: getNeumatico.IdNeumatico,
       NroSerie: getNeumatico.NroSerie,
@@ -136,14 +164,23 @@ export const EditarNeumaticos = () => {
     };
     console.log("Datos para backend:", getNeumatico);
     try {
-      const response = await fetch(endpointsAPI.neumaticos.nuevo.action, {
-        method: endpointsAPI.neumaticos.nuevo.method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataParaBackend),
-      });
-      if (response.ok) onSuccess();
+      const response = await fetch(
+        endpointsAPI.neumaticos.editar.action(parseInt(id!)),
+        {
+          method: endpointsAPI.neumaticos.editar.method,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataParaBackend),
+        }
+      );
+      if (!response.ok) {
+        const text = await response.text();
+        const indexData = text.indexOf('"errors"');
+        const indexEndData = text.indexOf('"traceId"');
+        throw new Error(text.substring(indexData, indexEndData));
+      }
+      onSuccess();
     } catch (error) {
       onError(error);
     }
@@ -156,7 +193,7 @@ export const EditarNeumaticos = () => {
         justifyContent: "center",
       }}>
       <FormCard
-        title="Registrar Neumatico"
+        title="Actualizar Neumatico"
         classNameCard="bg-dark rounded-5 text-white "
         styleCard={{ maxWidth: "600px" }}
         classNameHeader="text-center fs-2"

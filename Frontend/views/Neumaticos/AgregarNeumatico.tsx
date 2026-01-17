@@ -16,6 +16,8 @@ import ChecklistInput from "../../src/Components/Form/ChecklistInput";
 import FormButtons from "../../src/Components/Form/FormButtons";
 import { useEffect, useState } from "react";
 export const AgregarNeumatico = () => {
+  const navigate = useNavigate();
+
   const intialState: NeumaticoType = {
     NroSerie: 0,
     Marca: "",
@@ -28,7 +30,6 @@ export const AgregarNeumatico = () => {
   };
   const [getNeumatico, setNeumatico] = useState<NeumaticoType>(intialState);
   const [getErrors, setErrors] = useState<{ [key: string]: string }>({});
-  const navigate = useNavigate();
   const cleanErrors = () => {
     setErrors({});
   };
@@ -50,6 +51,7 @@ export const AgregarNeumatico = () => {
   useEffect(() => {
     console.log(getNeumatico);
   }, [getNeumatico]);
+
   // useEffect(() => {
   //   const getPosicionesNeumaticos = async () => {
   //     try {

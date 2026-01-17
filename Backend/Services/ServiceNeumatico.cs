@@ -33,6 +33,16 @@ namespace Backend.Services
             );
         }
 
+        public async Task<List<Neumatico>> GetAllNotAsignedAsync()
+        {
+            IQueryable<Neumatico> query = _context.Neumaticos;
+            List<Neumatico>? neumaticos = await query
+                .Where(n => n.IdVehiculo == null)
+                .OrderBy(n => n.IdNeumatico)
+                .ToListAsync();
+            return neumaticos;
+        }
+
         // NEUMATICO POR ID
         public async Task<Neumatico?> GetByIdAsync(int id)
         {

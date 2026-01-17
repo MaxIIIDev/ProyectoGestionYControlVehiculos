@@ -42,6 +42,13 @@ public class ControllerNeumatico : ControllerBase
         return Ok(neumatico);
     }
 
+    [HttpGet("getAllNotAsigned")]
+    public async Task<IActionResult> GetAllNotAsigned()
+    {
+        var neumaticos = await _serviceNeumatico.GetAllNotAsignedAsync();
+        return Ok(neumaticos);
+    }
+
     // POST NUEVO NEUMATICO
     [HttpPost]
     public async Task<IActionResult> AddNeumatico([FromBody] CreateNeumaticoDto NeumaticoDto)

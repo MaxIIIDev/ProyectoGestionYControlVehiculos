@@ -1,4 +1,5 @@
 import { z as zodVariable } from "zod";
+import { ParseStringToLocalDateOnly } from "../src/Utils/ParseStringToLocalDateOnly";
 export const NeumaticoSchema = zodVariable.object({
   IdNeumatico: zodVariable
     .int32({ error: "IdNeumatico debe ser un numero entero" })
@@ -22,9 +23,9 @@ export const NeumaticoSchema = zodVariable.object({
     .optional(),
   KmColocacion: zodVariable
     .int32({ error: "Km colocacion debe ser un numero entero" })
-    .positive({ error: "Km colocacion debe ser un numero positivo" })
-
-    .optional(),
+    .min(0, { error: "Km colocacion debe ser un numero positivo" })
+    .optional()
+    .nullable(),
   KmRodados: zodVariable
     .int32({ error: "Km Rodados debe ser un numero entero" })
     .min(0, { error: "Km Rodados debe ser un numero positivo" }),
@@ -34,8 +35,9 @@ export const NeumaticoSchema = zodVariable.object({
   IdPosicionNeumatico: zodVariable
     .int32({ error: "IdPosicionNeumatico debe ser un numero positivo" })
     .positive()
-    .optional(),
-  FechaColocacion: zodVariable
+    .optional()
+    .nullable(),
+  FechaColocacion: zodVariable.coerce
     .date()
     .min(new Date("1900-01-01"), {
       error: "La fecha de colocacion debe ser posterior a 1900-01-01",
@@ -48,7 +50,8 @@ export const NeumaticoSchema = zodVariable.object({
   IdVehiculo: zodVariable
     .int32({ error: "El IdVehiculo debe ser un numero entero" })
     .positive({ error: "El IdVehiculo debe ser un numero positivo" })
-    .optional(),
+    .optional()
+    .nullable(),
   Estado: zodVariable.boolean().default(true),
 });
 export const ApiNeumaticoSchema = zodVariable.object({
@@ -75,11 +78,11 @@ export const NeumaticoApiParser = ApiNeumaticoSchema.transform((data) => {
     KmColocacion: data.kmColocacion,
     KmRodados: data.kmRodados,
     DesgasteIrregular: data.desgasteIrregular,
-    IdPosicionNeumatico: data.idPosicionNeumatico ?? undefined,
+    IdPosicionNeumatico: data.idPosicionNeumatico ?? null,
     FechaColocacion: data.fechaColocacion
-      ? new Date(data.fechaColocacion)
+      ? ParseStringToLocalDateOnly(data.fechaColocacion)
       : null,
-    IdVehiculo: data.idVehiculo ?? undefined,
+    IdVehiculo: data.idVehiculo ?? null,
     Estado: data.estado,
   };
   return parsedData;
