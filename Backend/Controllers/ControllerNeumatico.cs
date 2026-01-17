@@ -66,6 +66,17 @@ public class ControllerNeumatico : ControllerBase
         );
     }
 
+    [HttpPut("cambiar/neumatico/{idOld}/a/{idNew}")]
+    public async Task<IActionResult> CambiarNeumatico(int idOld, int idNew)
+    {
+        var result = await _serviceNeumatico.CambiarNeumaticoAsync(idOld, idNew);
+        if (!result)
+        {
+            return NotFound();
+        }
+        return NoContent();
+    }
+
     // PUT ACTUALIZAR NEUMATICO
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateNeumatico(

@@ -57,6 +57,22 @@ namespace Backend.Services
             return neumatico;
         }
 
+        public async Task<bool> CambiarNeumaticoAsync(int idOld, int idNew)
+        {
+            Neumatico? neumaticoOld = await _context.Neumaticos.FindAsync(idOld);
+            Neumatico? neumaticoNew = await _context.Neumaticos.FindAsync(idNew);
+            if (neumaticoOld == null || neumaticoNew == null)
+                throw new KeyNotFoundException(
+                    "No se puede cambiar el neumatico: no existe el neumatico con id "
+                        + (neumaticoOld is null ? idOld : idNew)
+                );
+            neumaticoNew.IdVehiculo = neumaticoOld.IdVehiculo;
+            neumaticoOld.IdVehiculo = null;
+            _context.Neumaticos.Update(neumaticoOld);
+            _context.Neumaticos.Update(neumaticoNew);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
         // UPDATE NEUMATICO
         public async Task UpdateAsync(int id, UpdateNeumaticoDto neumaticoDto)
         {
