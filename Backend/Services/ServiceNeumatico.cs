@@ -47,7 +47,7 @@ namespace Backend.Services
         {
             IQueryable<Neumatico> query = _context.Neumaticos;
             List<Neumatico>? neumaticos = await query
-                .Where(n => n.IdVehiculo == null)
+                .Where(n => n.IdVehiculo == null && n.Estado == true)
                 .OrderBy(n => n.IdNeumatico)
                 .ToListAsync();
             return neumaticos;
