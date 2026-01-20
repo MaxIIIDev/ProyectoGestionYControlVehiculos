@@ -42,10 +42,17 @@ public class ControllerNeumatico : ControllerBase
         return Ok(neumatico);
     }
 
-    [HttpGet("getAllNotAsigned")]
-    public async Task<IActionResult> GetAllNotAsigned()
+    [HttpGet("getAllNotAssigned")]
+    public async Task<IActionResult> GetAllNotAssigned()
     {
-        var neumaticos = await _serviceNeumatico.GetAllNotAsignedAsync();
+        var neumaticos = await _serviceNeumatico.GetAllNotAssignedAsync();
+        return Ok(neumaticos);
+    }
+
+    [HttpGet("getAllAssignedTo/{idVehiculo}")]
+    public async Task<IActionResult> GetAllAssignedTo(int idVehiculo)
+    {
+        var neumaticos = await _serviceNeumatico.GetAllAssignedToAsync(idVehiculo);
         return Ok(neumaticos);
     }
 

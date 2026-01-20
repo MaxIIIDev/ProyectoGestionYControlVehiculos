@@ -243,6 +243,15 @@ export const endpointsAPI = {
         `${API_ROUTE}/neumaticos/borrar/asignacion/${idNeumatico}`,
       method: "PUT",
     },
+    obtenerTodosLosNeumaticosAsignadosAVehiculo: {
+      action: (idVehiculo: number) =>
+        `${API_ROUTE}/neumaticos/getAllAssignedTo/${idVehiculo}`,
+      method: "GET",
+    },
+    obtenerTodosLosNeumaticosNoAsignados: {
+      action: () => `${API_ROUTE}/neumaticos/getAllNotAssigned`,
+      method: "GET",
+    },
   },
 };
 //ENDPOINTS DEL FRONTEND
