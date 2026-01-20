@@ -66,15 +66,40 @@ public class ControllerNeumatico : ControllerBase
         );
     }
 
-    [HttpPut("cambiar/neumatico/{idOld}/a/{idNew}")]
-    public async Task<IActionResult> CambiarNeumatico(int idOld, int idNew)
+    [HttpPut("asignar/neumatico/{idVehiculo}/a/{idNeumatico}")]
+    public async Task<IActionResult> AsignarNeumatico(int idVehiculo, int idNeumatico)
     {
-        var result = await _serviceNeumatico.CambiarNeumaticoAsync(idOld, idNew);
-        if (!result)
+        try
         {
-            return NotFound();
+            var result = await _serviceNeumatico.AsignarNeumaticoAsync(idVehiculo, idNeumatico);
+            if (!result)
+            {
+                return BadRequest("No se pudo asignar el neumatico");
+            }
+            return NoContent();
         }
-        return NoContent();
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+    }
+
+    [HttpPut("borrar/asignacion/{idNeumatico}")]
+    public async Task<IActionResult> BorrarAsignacion(int idNeumatico)
+    {
+        try
+        {
+            var result = await _serviceNeumatico.BorrarAsignacionAsync(idNeumatico);
+            if (!result)
+            {
+                return BadRequest("No se pudo borrar la asignacion");
+            }
+            return NoContent();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
     }
 
     // PUT ACTUALIZAR NEUMATICO

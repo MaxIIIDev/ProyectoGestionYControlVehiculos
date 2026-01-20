@@ -130,8 +130,7 @@ export const AsignarMatafuegoAVehiculo = () => {
         padding: "20px",
         width: "100%",
         height: "100%",
-      }}
-    >
+      }}>
       <FormCard
         title="Asignar Matafuego"
         classNameCard="mb-1 bg-dark text-white  rounded-5 "
@@ -141,8 +140,7 @@ export const AsignarMatafuegoAVehiculo = () => {
           alignItems: "center",
           justifyContent: "center",
           flexDirection: "column",
-        }}
-      >
+        }}>
         <FormCard
           title="Buscar Vehiculo"
           classNameCard="mb-1 bg-dark text-white  rounded-5 "
@@ -154,15 +152,16 @@ export const AsignarMatafuegoAVehiculo = () => {
             minHeight: "200px",
           }}
           styleHeader={{ fontFamily: "serif" }}
-          classNameBody="fs-5 p-1"
-        >
+          classNameBody="fs-5 p-1">
           <ComboBoxBrowser
             apiUrl={endpointsAPI.vehiculos.buscarPorPatenteLike.action("")}
             apiMethod={endpointsAPI.vehiculos.buscarPorPatenteLike.method}
             onEntitySelect={(value: { [key: string]: string }) => {
-              value != null
-                ? setVehiculo(VehiculoApiParser.parse(value))
-                : setVehiculo(null);
+              if (value != null) {
+                setVehiculo(VehiculoApiParser.parse(value));
+              } else {
+                setVehiculo(null);
+              }
 
               setFormData({
                 IdMatafuego:
@@ -177,8 +176,7 @@ export const AsignarMatafuegoAVehiculo = () => {
             }}
             defaultOption={"Buscador por Patente"}
             name="patente"
-            placeholder="Buscador por Patente"
-          ></ComboBoxBrowser>
+            placeholder="Buscador por Patente"></ComboBoxBrowser>
           {Vehiculo && desbloquearSegundoFormulario && (
             <div style={{ marginTop: 16 }}>
               <ResultInfo
@@ -187,8 +185,7 @@ export const AsignarMatafuegoAVehiculo = () => {
                   { label: "Marca", value: `${Vehiculo.Marca}` },
                   { label: "Modelo", value: `${Vehiculo.Modelo}` },
                   { label: "Patente", value: `${Vehiculo.Patente}` },
-                ]}
-              ></ResultInfo>
+                ]}></ResultInfo>
             </div>
           )}
         </FormCard>
@@ -203,8 +200,7 @@ export const AsignarMatafuegoAVehiculo = () => {
               marginTop: "20px",
             }}
             styleHeader={{ fontFamily: "serif" }}
-            classNameBody="fs-5 p-1"
-          >
+            classNameBody="fs-5 p-1">
             {
               <div>
                 <ComboBoxBrowser
@@ -222,14 +218,13 @@ export const AsignarMatafuegoAVehiculo = () => {
                   }}
                   defaultOption="Buscador por NroSerie"
                   name="NroSerie"
-                  placeholder="Buscador por NroSerie"
-                ></ComboBoxBrowser>
+                  placeholder="Buscador por NroSerie"></ComboBoxBrowser>
                 <Form
                   name="vehiculoForm"
                   method={endpointsAPI.vehiculos.asignarAVehiculo.method}
                   action={endpointsAPI.vehiculos.asignarAVehiculo.action(
                     formData.IdVehiculo,
-                    formData.IdMatafuego
+                    formData.IdMatafuego,
                   )}
                   validateForm={() => {
                     if (formData.IdVehiculo <= 0) {
@@ -245,16 +240,14 @@ export const AsignarMatafuegoAVehiculo = () => {
                     return true;
                   }}
                   onSuccess={handleSuccess}
-                  onError={handleError}
-                >
+                  onError={handleError}>
                   <FormInput
                     type="hidden"
                     name="IdMatafuego"
                     value={formData.IdMatafuego ? formData.IdMatafuego : 0}
                     onChange={handleChange}
                     required={false}
-                    error={errors.IdMatafuego}
-                  ></FormInput>
+                    error={errors.IdMatafuego}></FormInput>
                   <FormInput
                     type="hidden"
                     name="IdVehiculo"
@@ -273,8 +266,7 @@ export const AsignarMatafuegoAVehiculo = () => {
                         alignItems: "center",
                         gap: "5px",
                         paddingLeft: "10px",
-                      }}
-                    >
+                      }}>
                       <i className="bi bi-info-circle"></i>
                       <span>
                         Seleccione un vehículo arriba para habilitar este campo.
@@ -285,8 +277,7 @@ export const AsignarMatafuegoAVehiculo = () => {
                     initialState={initialState}
                     setFormData={setFormData}
                     formClear={formCleanTextErrors}
-                    disabledSubmitButton={!validateForm}
-                  ></FormButtons>
+                    disabledSubmitButton={!validateForm}></FormButtons>
                 </Form>
               </div>
             }

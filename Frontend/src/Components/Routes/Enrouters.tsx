@@ -233,6 +233,16 @@ export const endpointsAPI = {
       action: (id: number) => `${API_ROUTE}/neumaticos/alta/${id}`,
       method: "PATCH",
     },
+    asignarNeumaticos: {
+      action: (idVehiculo: number, idNeumatico: number) =>
+        `${API_ROUTE}/neumaticos/asignar/${idVehiculo}/a/${idNeumatico}`,
+      method: "PUT",
+    },
+    borrarAsignacion: {
+      action: (idNeumatico: number) =>
+        `${API_ROUTE}/neumaticos/borrar/asignacion/${idNeumatico}`,
+      method: "PUT",
+    },
   },
 };
 //ENDPOINTS DEL FRONTEND
