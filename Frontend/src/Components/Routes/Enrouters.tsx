@@ -235,7 +235,7 @@ export const endpointsAPI = {
     },
     asignarNeumaticos: {
       action: (idVehiculo: number, idNeumatico: number) =>
-        `${API_ROUTE}/neumaticos/asignar/${idVehiculo}/a/${idNeumatico}`,
+        `${API_ROUTE}/neumaticos/asignar/neumatico/${idVehiculo}/a/${idNeumatico}`,
       method: "PUT",
     },
     borrarAsignacion: {
