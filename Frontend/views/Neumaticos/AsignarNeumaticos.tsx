@@ -51,7 +51,7 @@ export const AsignarNeumaticos = () => {
       tamanoPaginas: 10,
     });
   const [reload, setReload] = useState(1);
-
+  const [quantityNeumaticosInTable] = useState(6);
   // ... [TU LÓGICA DE CARGA DE DATOS INTACTA] ...
   useEffect(() => {
     if (vehiculo == null) return;
@@ -60,7 +60,7 @@ export const AsignarNeumaticos = () => {
         const responseFromApi = await fetch(
           endpointsAPI.neumaticos.obtenerTodosLosNeumaticosNoAsignados.action(
             currentPageAvailable,
-            10,
+            quantityNeumaticosInTable,
           ),
           {
             method:
@@ -83,7 +83,7 @@ export const AsignarNeumaticos = () => {
           endpointsAPI.neumaticos.obtenerTodosLosNeumaticosAsignadosAVehiculo.action(
             vehiculo!.idVehiculo!,
             currentPageAssigned,
-            10,
+            quantityNeumaticosInTable,
           ),
           {
             method:
@@ -313,6 +313,28 @@ export const AsignarNeumaticos = () => {
                   colWidths={["30%", "40%", "30%"]}
                   tableData={tableDataAssignedNeumaticos()}
                 />
+
+                {neumaticoAssignedToVehiculo.data.length > 0 &&
+                  neumaticoAssignedToVehiculo.totalPaginasCalculadas > 1 && (
+                    <div className="p-3 d-flex justify-content-center">
+                      <PaginatorForTable
+                        nextPage={() =>
+                          currentPageAssigned <
+                            neumaticoAssignedToVehiculo.totalPaginasCalculadas &&
+                          setCurrentPageAssigned((c) => c + 1)
+                        }
+                        previousPage={() =>
+                          currentPageAssigned > 1 &&
+                          setCurrentPageAssigned((c) => c - 1)
+                        }
+                        onPageChange={setCurrentPageAssigned}
+                        currentPage={currentPageAssigned}
+                        totalCountPages={
+                          neumaticoAssignedToVehiculo.totalPaginasCalculadas
+                        }
+                      />
+                    </div>
+                  )}
               </TableContainer>
             </FormCard>
 
@@ -347,33 +369,36 @@ export const AsignarNeumaticos = () => {
                           <tr key="0">
                             <td
                               colSpan={3}
-                              className="text-center p-4 text-muted">
+                              className="text-center p-4 "
+                              style={{ color: geminiTheme.textMuted }}>
                               Sin Stock
                             </td>
                           </tr>,
                         ]
                   }
                 />
-                {tableDataAvailableNeumaticos.length > 0 && (
-                  <div className="p-3 d-flex justify-content-center">
-                    <PaginatorForTable
-                      nextPage={() =>
-                        currentPageAvailable <
-                          neumaticoAvailableToAssign.totalPaginasCalculadas &&
-                        setCurrentPageAvailable((c) => c + 1)
-                      }
-                      previousPage={() =>
-                        currentPageAvailable > 1 &&
-                        setCurrentPageAvailable((c) => c - 1)
-                      }
-                      onPageChange={setCurrentPageAvailable}
-                      currentPage={currentPageAvailable}
-                      totalCountPages={
-                        neumaticoAvailableToAssign.totalPaginasCalculadas
-                      }
-                    />
-                  </div>
-                )}
+
+                {tableDataAvailableNeumaticos.length > 0 &&
+                  neumaticoAvailableToAssign.totalPaginasCalculadas > 1 && (
+                    <div className="p-3 d-flex justify-content-center">
+                      <PaginatorForTable
+                        nextPage={() =>
+                          currentPageAvailable <
+                            neumaticoAvailableToAssign.totalPaginasCalculadas &&
+                          setCurrentPageAvailable((c) => c + 1)
+                        }
+                        previousPage={() =>
+                          currentPageAvailable > 1 &&
+                          setCurrentPageAvailable((c) => c - 1)
+                        }
+                        onPageChange={setCurrentPageAvailable}
+                        currentPage={currentPageAvailable}
+                        totalCountPages={
+                          neumaticoAvailableToAssign.totalPaginasCalculadas
+                        }
+                      />
+                    </div>
+                  )}
               </TableContainer>
             </FormCard>
           </div>
