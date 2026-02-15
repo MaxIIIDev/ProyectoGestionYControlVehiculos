@@ -244,12 +244,17 @@ export const endpointsAPI = {
       method: "PUT",
     },
     obtenerTodosLosNeumaticosAsignadosAVehiculo: {
-      action: (idVehiculo: number) =>
-        `${API_ROUTE}/neumaticos/getAllAssignedTo/${idVehiculo}`,
+      action: (
+        idVehiculo: number,
+        numeroPagina: number,
+        tamanoPagina: number,
+      ) =>
+        `${API_ROUTE}/neumaticos/getAllAssignedTo?idVehiculo=${idVehiculo}&numeroPagina=${numeroPagina}&tamanoPagina=${tamanoPagina}`,
       method: "GET",
     },
     obtenerTodosLosNeumaticosNoAsignados: {
-      action: () => `${API_ROUTE}/neumaticos/getAllNotAssigned`,
+      action: (numeroPagina: number, tamanoPagina: number) =>
+        `${API_ROUTE}/neumaticos/getAllNotAssigned?numeroPagina=${numeroPagina}&tamanoPagina=${tamanoPagina}`,
       method: "GET",
     },
   },

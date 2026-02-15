@@ -43,16 +43,29 @@ public class ControllerNeumatico : ControllerBase
     }
 
     [HttpGet("getAllNotAssigned")]
-    public async Task<IActionResult> GetAllNotAssigned()
+    public async Task<IActionResult> GetAllNotAssigned(
+        [FromQuery] int numeroPagina = 1,
+        [FromQuery] int tamanoPagina = 10
+    )
     {
-        var neumaticos = await _serviceNeumatico.GetAllNotAssignedAsync();
+        Console.WriteLine("============\nnumeroPagina: " + numeroPagina);
+        var neumaticos = await _serviceNeumatico.GetAllNotAssignedAsync(numeroPagina, tamanoPagina);
         return Ok(neumaticos);
     }
 
-    [HttpGet("getAllAssignedTo/{idVehiculo}")]
-    public async Task<IActionResult> GetAllAssignedTo(int idVehiculo)
+    [HttpGet("getAllAssignedTo")]
+    public async Task<IActionResult> GetAllAssignedTo(
+        int idVehiculo,
+        [FromQuery] int numeroPagina = 1,
+        [FromQuery] int tamanoPagina = 10
+    )
     {
-        var neumaticos = await _serviceNeumatico.GetAllAssignedToAsync(idVehiculo);
+        Console.WriteLine("numeroPagina: " + numeroPagina);
+        var neumaticos = await _serviceNeumatico.GetAllAssignedToAsync(
+            idVehiculo,
+            numeroPagina,
+            tamanoPagina
+        );
         return Ok(neumaticos);
     }
 

@@ -33,24 +33,50 @@ namespace Backend.Services
             );
         }
 
-        public async Task<List<Neumatico>?> GetAllAssignedToAsync(int idVehiculo)
+        public async Task<PagedResponse<Neumatico>?> GetAllAssignedToAsync(
+            int idVehiculo,
+            int nroPagina,
+            int tamanoPagina
+        )
         {
-            IQueryable<Neumatico> query = _context.Neumaticos;
+            IQueryable<Neumatico> query = _context.Neumaticos.Where(n =>
+                n.IdVehiculo == idVehiculo
+            );
+            int totalRegistrosNeumatico = await query.CountAsync();
             List<Neumatico>? neumaticos = await query
-                .Where(n => n.IdVehiculo == idVehiculo)
                 .OrderBy(n => n.IdNeumatico)
+                .Skip((nroPagina - 1) * tamanoPagina)
+                .Take(tamanoPagina)
                 .ToListAsync();
-            return neumaticos;
+            return new PagedResponse<Neumatico>(
+                neumaticos,
+                totalRegistrosNeumatico,
+                nroPagina,
+                tamanoPagina
+            );
         }
 
-        public async Task<List<Neumatico>> GetAllNotAssignedAsync()
+        public async Task<PagedResponse<Neumatico>> GetAllNotAssignedAsync(
+            int nroPagina,
+            int tamanoPagina
+        )
         {
-            IQueryable<Neumatico> query = _context.Neumaticos;
+            IQueryable<Neumatico> query = _context.Neumaticos.Where(n =>
+                n.IdVehiculo == null && n.Estado == true
+            );
+            int totalRegistrosNeumatico = await query.CountAsync();
             List<Neumatico>? neumaticos = await query
                 .Where(n => n.IdVehiculo == null && n.Estado == true)
                 .OrderBy(n => n.IdNeumatico)
+                .Skip((nroPagina - 1) * tamanoPagina)
+                .Take(tamanoPagina)
                 .ToListAsync();
-            return neumaticos;
+            return new PagedResponse<Neumatico>(
+                neumaticos,
+                totalRegistrosNeumatico,
+                nroPagina,
+                tamanoPagina
+            );
         }
 
         // NEUMATICO POR ID
