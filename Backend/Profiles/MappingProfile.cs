@@ -7,6 +7,8 @@ namespace Backend.Profiles
     {
         public MappingProfile()
         {
+            CreateMap<RegisterDto, Persona>().ConstructUsing(x => new Persona());
+            CreateMap<RegisterDto, Usuario>().ConstructUsing(x => new Usuario());
             CreateMap<CreateAuditoriaDto, Auditoria>();
             CreateMap<UpdateAuditoriaDto, Auditoria>()
                 .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
