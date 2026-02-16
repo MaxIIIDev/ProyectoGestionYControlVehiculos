@@ -28,4 +28,22 @@ public class ControllerAuth : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginDto dto)
+    {
+        try
+        {
+            string token = await _serviceAuth.Login(dto);
+            return Ok(new { token });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
 }

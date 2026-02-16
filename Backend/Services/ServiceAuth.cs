@@ -9,13 +9,15 @@ public class ServiceAuth
     private readonly AppDbContext _context;
     private readonly IMapper _mapper;
     private readonly ServicePassword _servicePassword;
+    private readonly ServicenToken _servicenToken;
 
     public ServiceAuth(
         ServicePersona servicePersona,
         ServiceUsuario serviceUsuario,
         AppDbContext context,
         IMapper mapper,
-        ServicePassword servicePassword
+        ServicePassword servicePassword,
+        ServicenToken servicenToken
     )
     {
         _servicePersona = servicePersona;
@@ -23,6 +25,7 @@ public class ServiceAuth
         _context = context;
         _mapper = mapper;
         _servicePassword = servicePassword;
+        _servicenToken = servicenToken;
     }
 
     public async Task<bool> Register(RegisterDto dto)
@@ -54,5 +57,15 @@ public class ServiceAuth
             await transaction.RollbackAsync();
             throw;
         }
+    }
+
+    public async Task<string> Login(LoginDto dto)
+    {
+        Usuario? usuario = await _serviceUsuario.getUsuarioByEmailAsync(dto.Gmail!);
+        if (usuario is null)
+            throw new KeyNotFoundException("Usuario no encontrado");
+        if (!_servicePassword.VerifyPassword(dto.Contrasena!, usuario.Contrasena))
+            throw new Exception("Contraseña incorrecta");
+        return _servicenToken.GenerateToken(usuario);
     }
 }
