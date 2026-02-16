@@ -1,10 +1,12 @@
 using AutoMapper;
 using Backend.Models;
 using Backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/vehiculos")]
 [ApiController]
+[Authorize]
 public class ControllerVehiculo : ControllerBase
 {
     private readonly ServiceVehiculo _serviceVehiculo;

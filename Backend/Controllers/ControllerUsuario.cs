@@ -1,10 +1,12 @@
 using AutoMapper;
 using Backend.Models;
 using Backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/usuarios")]
 [ApiController]
+[Authorize]
 public class ControllerUsuario : ControllerBase
 {
     private readonly ServiceUsuario _serviceUsuario;

@@ -1,10 +1,12 @@
 using AutoMapper;
 using Backend.Models;
 using Backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/rol")]
 [ApiController]
+[Authorize]
 public class ControllerRol : ControllerBase
 {
     private readonly ServiceRol _serviceRol;

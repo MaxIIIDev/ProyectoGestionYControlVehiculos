@@ -1,11 +1,13 @@
 using AutoMapper;
 using Backend.Models;
 using Backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 [Route("api/checklist")]
 [ApiController]
+[Authorize]
 public class ControllerChecklistDiario : ControllerBase
 {
     private readonly ServiceChecklistDiario _serviceChecklistDiario;

@@ -1,10 +1,12 @@
 using AutoMapper;
 using Backend.Models;
 using Backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/registro-kilometraje")]
 [ApiController]
+[Authorize]
 public class ControllerRegistroKilometraje : ControllerBase
 {
     private readonly ServiceRegistroKilometraje _serviceRegistroKilometraje;

@@ -1,11 +1,13 @@
 using AutoMapper;
 using Backend.Models;
 using Backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 [Route("api/matafuegos")]
 [ApiController]
+[Authorize]
 public class ControllerMatafuego : ControllerBase
 {
     private readonly ServiceMatafuego _serviceMatafuego;

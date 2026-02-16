@@ -1,10 +1,12 @@
 using AutoMapper;
 using Backend.Models;
 using Backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/documentos")]
 [ApiController]
+[Authorize]
 public class ControllerDocumento : ControllerBase
 {
     private readonly ServiceDocumento _serviceDocumento;

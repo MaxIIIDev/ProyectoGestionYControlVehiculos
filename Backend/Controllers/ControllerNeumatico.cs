@@ -1,10 +1,12 @@
 using AutoMapper;
 using Backend.Models;
 using Backend.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/neumaticos")]
 [ApiController]
+[Authorize]
 public class ControllerNeumatico : ControllerBase
 {
     private readonly ServiceNeumatico _serviceNeumatico;
