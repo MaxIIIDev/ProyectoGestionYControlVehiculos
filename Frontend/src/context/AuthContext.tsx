@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import {
   getToken,
   getUserFromToken,
@@ -17,14 +17,9 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>(null!);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [user, setUser] = useState<UserPayload | null>(null);
-  useEffect(() => {
-    if (getToken()) {
-      setIsAuthenticated(true);
-      setUser(getUserFromToken());
-    }
-  }, []);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!getToken());
+  const [user, setUser] = useState<UserPayload | null>(getUserFromToken());
+
   const login = (token: string) => {
     saveToken(token);
     setIsAuthenticated(true);
