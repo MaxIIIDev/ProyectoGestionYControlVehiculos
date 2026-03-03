@@ -1,4 +1,4 @@
-const API_ROUTE = "http://localhost:5097/api";
+export const API_ROUTE = "http://localhost:5097/api";
 
 export const endpointsAPI = {
   vehiculos: {
@@ -258,6 +258,9 @@ export const endpointsAPI = {
       method: "GET",
     },
   },
+  login: {
+    action: `${API_ROUTE}/ControllerAuth/login`,
+  },
 };
 //ENDPOINTS DEL FRONTEND
 export const endpointFront = {
@@ -326,6 +329,15 @@ export const endpointFront = {
   checklist: {
     gestion: { action: "/Checklist" },
     listar: { action: "/Checklist/Listar" },
+  },
+  login: {
+    action: "/login",
+  },
+  unauthoraized: {
+    action: "/unauthoraized",
+  },
+  logout: {
+    action: "/logout",
   },
 };
 export default endpointsAPI;

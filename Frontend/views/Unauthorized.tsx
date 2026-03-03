@@ -1,0 +1,40 @@
+import { useNavigate } from "react-router-dom";
+import { Container, Row, Col, Button } from "react-bootstrap";
+
+export default function Unauthorized() {
+  const navigate = useNavigate();
+
+  return (
+    // Usamos d-flex para centrar todo perfectamente en el medio de la pantalla
+    <Container
+      className="d-flex justify-content-center align-items-center"
+      style={{ minHeight: "100vh" }}>
+      <Row className="text-center shadow p-5 bg-white rounded">
+        <Col>
+          {/* Un ícono de candado gigante usando Bootstrap Icons */}
+          <i
+            className="bi bi-shield-lock-fill text-danger"
+            style={{ fontSize: "6rem" }}></i>
+
+          <h1 className="mt-3 text-danger fw-bold">403</h1>
+          <h2 className="mb-3">Acceso Denegado</h2>
+
+          <p className="lead text-muted">
+            Lo sentimos, tu rol actual no tiene los permisos necesarios <br />
+            para acceder a esta sección de ArgenCore.
+          </p>
+
+          {/* Botón para devolver al usuario a una zona segura */}
+          <Button
+            variant="primary"
+            size="lg"
+            className="mt-4 px-5"
+            onClick={() => navigate("/")}>
+            <i className="bi bi-arrow-left-circle me-2"></i>
+            Volver al Inicio
+          </Button>
+        </Col>
+      </Row>
+    </Container>
+  );
+}

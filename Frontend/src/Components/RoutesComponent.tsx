@@ -1,5 +1,5 @@
-import { Col } from "react-bootstrap";
-import { Routes, Route } from "react-router-dom";
+import { Col, Container, Row } from "react-bootstrap";
+import { Routes, Route, Outlet } from "react-router-dom";
 import VehiculosGestion from "../../views/Vehiculo/VehiculosGestion";
 import VehiculosKilometros from "../../views/VehiculosKilometros";
 import { AgregarRegistroKilometraje } from "../../views/RegistrosKilometraje/AgregarRegistroKilometraje";
@@ -27,125 +27,154 @@ import { AgregarNeumatico } from "../../views/Neumaticos/AgregarNeumatico";
 import { ListarNeumaticos } from "../../views/Neumaticos/ListarNeumaticos";
 import { EditarNeumaticos } from "../../views/Neumaticos/EditarNeumaticos";
 import { AsignarNeumaticos } from "../../views/Neumaticos/AsignarNeumaticos";
+import Unauthorized from "../../views/Unauthorized";
+import SideNavBar from "./SideNavBar";
+import TopNavBar from "./TopNavBar";
+import { ProtectedRoute } from "./ProtectedRoute";
+import Login from "../../views/Auth/Login";
+const ProtectedLayout = () => {
+  return (
+    <>
+      <TopNavBar />
+      <Container fluid>
+        <Row>
+          <SideNavBar />
+          <Col
+            xs={12}
+            md={9}
+            lg={10}
+            className="p-4 bg-secondary"
+            style={{ minHeight: "100vh" }}>
+            <Outlet />
+          </Col>
+        </Row>
+      </Container>
+    </>
+  );
+};
 export default function RoutesComponent() {
   return (
-    <Col xs={12} md={9} lg={10} className="p-4 bg-secondary">
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <>
-              <h1>
-                Bienvenido al sistema de Gestión de vehículos de Eco Group
-                S.R.L.
-              </h1>
-              <p>App con React y Bootstrap.</p>
-            </>
-          }
-        />
-        <Route
-          path={endpointFront.vehiculos.gestion.action}
-          element={<VehiculosGestion />}
-        />
-        <Route
-          path={endpointFront.controlKilometraje.gestion.action}
-          element={<VehiculosKilometros />}
-        />
-        <Route
-          path={endpointFront.controlKilometraje.nuevo.action}
-          element={<AgregarRegistroKilometraje />}
-        />
-        <Route
-          path={endpointFront.controlKilometraje.actualizar.endpoint}
-          element={<ActualizarRegistroKilometraje />}
-        />
-        <Route
-          path={endpointFront.controlKilometraje.listar.action}
-          element={<KilometrosListar />}
-        />
-        <Route
-          path={endpointFront.mantenimiento.gestion.action}
-          element={<VehiculosMantenimiento />}
-        />
-        <Route
-          path={endpointFront.vehiculos.listar.action}
-          element={<VehiculosListar />}
-        />
-        <Route
-          path={endpointFront.vehiculos.nuevo.action}
-          element={<VehiculosAgregar />}
-        />
-        <Route
-          path={endpointFront.vehiculos.actualizar.endpoint}
-          element={<VehiculosAcualizar />}
-        />
-        <Route
-          path={endpointFront.matafuegos.gestion.action}
-          element={<Matafuegos />}
-        />
-        <Route
-          path={endpointFront.neumaticos.gestion.action}
-          element={<Neumaticos />}
-        />
-        <Route
-          path={endpointFront.neumaticos.agregar.action}
-          element={<AgregarNeumatico />}></Route>
+    <Routes>
+      <Route path={endpointFront.login.action} element={<Login />} />
+      <Route path={endpointFront.login.action} element={<Unauthorized />} />
+      <Route element={ProtectedRoute({ allowedRoles: ["2"] })}>
+        <Route element={ProtectedLayout()}>
+          <Route
+            path="/"
+            element={
+              <>
+                <h1>
+                  Bienvenido al sistema de Gestión de vehículos de Eco Group
+                  S.R.L.
+                </h1>
+                <p>App con React y Bootstrap.</p>
+              </>
+            }
+          />
+          <Route
+            path={endpointFront.vehiculos.gestion.action}
+            element={<VehiculosGestion />}
+          />
+          <Route
+            path={endpointFront.controlKilometraje.gestion.action}
+            element={<VehiculosKilometros />}
+          />
+          <Route
+            path={endpointFront.controlKilometraje.nuevo.action}
+            element={<AgregarRegistroKilometraje />}
+          />
+          <Route
+            path={endpointFront.controlKilometraje.actualizar.endpoint}
+            element={<ActualizarRegistroKilometraje />}
+          />
+          <Route
+            path={endpointFront.controlKilometraje.listar.action}
+            element={<KilometrosListar />}
+          />
+          <Route
+            path={endpointFront.mantenimiento.gestion.action}
+            element={<VehiculosMantenimiento />}
+          />
+          <Route
+            path={endpointFront.vehiculos.listar.action}
+            element={<VehiculosListar />}
+          />
+          <Route
+            path={endpointFront.vehiculos.nuevo.action}
+            element={<VehiculosAgregar />}
+          />
+          <Route
+            path={endpointFront.vehiculos.actualizar.endpoint}
+            element={<VehiculosAcualizar />}
+          />
+          <Route
+            path={endpointFront.matafuegos.gestion.action}
+            element={<Matafuegos />}
+          />
+          <Route
+            path={endpointFront.neumaticos.gestion.action}
+            element={<Neumaticos />}
+          />
+          <Route
+            path={endpointFront.neumaticos.agregar.action}
+            element={<AgregarNeumatico />}></Route>
 
-        <Route
-          path={endpointFront.neumaticos.editar.endpoint}
-          element={<EditarNeumaticos />}></Route>
-        <Route
-          path={endpointFront.neumaticos.asignar.action}
-          element={<AsignarNeumaticos />}></Route>
-        <Route
-          path={endpointFront.neumaticos.listar.action}
-          element={<ListarNeumaticos />}></Route>
+          <Route
+            path={endpointFront.neumaticos.editar.endpoint}
+            element={<EditarNeumaticos />}></Route>
+          <Route
+            path={endpointFront.neumaticos.asignar.action}
+            element={<AsignarNeumaticos />}></Route>
+          <Route
+            path={endpointFront.neumaticos.listar.action}
+            element={<ListarNeumaticos />}></Route>
 
-        <Route
-          path={endpointFront.vehiculos.documentos.action}
-          element={<VehiculosDocumentos />}
-        />
-        <Route
-          path={endpointFront.checklist.gestion.action}
-          element={<Checklist />}
-        />
-        <Route
-          path={endpointFront.matafuegos.agregar.action}
-          element={<AgregarMatafuego />}
-        />
-        <Route
-          path={endpointFront.matafuegos.listar.action}
-          element={<ListarMatafuegos />}
-        />
-        <Route
-          path={endpointFront.matafuegos.editar.endpoint}
-          element={<EditarMatafuego />}
-        />
-        <Route
-          path={endpointFront.matafuegos.asignarAVehiculo.action}
-          element={<AsignarMatafuegoAVehiculo />}
-        />
-        <Route
-          path={endpointFront.matafuegos.documentos.action}
-          element={<MatafuegoDocumentos />}
-        />
-        <Route
-          path={endpointFront.checklist.listar.action}
-          element={<ChecklistListar />}
-        />
-        <Route
-          path={endpointFront.mantenimiento.nuevo.action}
-          element={<NuevoServicio />}
-        />
-        <Route
-          path={endpointFront.mantenimiento.nuevoEx.action}
-          element={<NuevoExcepcional />}
-        />
-        <Route
-          path={endpointFront.mantenimiento.listarPorVehiculo.action}
-          element={<ListarServicios />}
-        />
-      </Routes>
-    </Col>
+          <Route
+            path={endpointFront.vehiculos.documentos.action}
+            element={<VehiculosDocumentos />}
+          />
+          <Route
+            path={endpointFront.checklist.gestion.action}
+            element={<Checklist />}
+          />
+          <Route
+            path={endpointFront.matafuegos.agregar.action}
+            element={<AgregarMatafuego />}
+          />
+          <Route
+            path={endpointFront.matafuegos.listar.action}
+            element={<ListarMatafuegos />}
+          />
+          <Route
+            path={endpointFront.matafuegos.editar.endpoint}
+            element={<EditarMatafuego />}
+          />
+          <Route
+            path={endpointFront.matafuegos.asignarAVehiculo.action}
+            element={<AsignarMatafuegoAVehiculo />}
+          />
+          <Route
+            path={endpointFront.matafuegos.documentos.action}
+            element={<MatafuegoDocumentos />}
+          />
+          <Route
+            path={endpointFront.checklist.listar.action}
+            element={<ChecklistListar />}
+          />
+          <Route
+            path={endpointFront.mantenimiento.nuevo.action}
+            element={<NuevoServicio />}
+          />
+          <Route
+            path={endpointFront.mantenimiento.nuevoEx.action}
+            element={<NuevoExcepcional />}
+          />
+          <Route
+            path={endpointFront.mantenimiento.listarPorVehiculo.action}
+            element={<ListarServicios />}
+          />
+        </Route>
+      </Route>
+    </Routes>
   );
 }
