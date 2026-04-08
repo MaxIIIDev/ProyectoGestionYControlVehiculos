@@ -339,5 +339,10 @@ export const endpointFront = {
   logout: {
     action: "/logout",
   },
+  usuarios: {
+    gestion: { action: `/Usuarios` },
+    nuevo: { action: `/Usuarios/Nuevo` },
+    listar: { action: `/Usuarios/Listar` },
+  },
 };
 export default endpointsAPI;

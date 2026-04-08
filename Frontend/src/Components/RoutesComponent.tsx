@@ -32,6 +32,9 @@ import SideNavBar from "./SideNavBar";
 import TopNavBar from "./TopNavBar";
 import { ProtectedRoute } from "./ProtectedRoute";
 import Login from "../../views/Auth/Login";
+import Usuarios from "../../views/Usuarios";
+import RegisterUsers from "../../views/Users/RegisterUsers";
+import UsersList from "../../views/Users/UsersList";
 const ProtectedLayout = () => {
   return (
     <>
@@ -172,6 +175,18 @@ export default function RoutesComponent() {
           <Route
             path={endpointFront.mantenimiento.listarPorVehiculo.action}
             element={<ListarServicios />}
+          />
+          <Route
+            path={endpointFront.usuarios.gestion.action}
+            element={<Usuarios />}
+          />
+          <Route
+            path={endpointFront.usuarios.nuevo.action}
+            element={<RegisterUsers />}
+          />
+          <Route
+            path={endpointFront.usuarios.listar.action}
+            element={<UsersList />}
           />
         </Route>
       </Route>

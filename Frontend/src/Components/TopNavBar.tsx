@@ -1,9 +1,18 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar, Nav } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { endpointFront } from "./Routes/Enrouters";
+import { useAuth } from "../context/AuthContext";
 
 export default function TopNavBar() {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate(endpointFront.login.action);
+  };
+
   return (
     <Navbar bg="dark" variant="dark" expand="lg" className="px-3">
       <Navbar.Brand href={endpointFront.home.action}>
@@ -25,7 +34,7 @@ export default function TopNavBar() {
           <Nav.Link as={Link} to="/Notifications">
             <i className="bi bi-bell me-2"></i> Notificaciones
           </Nav.Link>
-          <Nav.Link as={Link} to="/Logout">
+          <Nav.Link onClick={handleLogout} style={{ cursor: "pointer" }}>
             <i className="bi bi-box-arrow-right me-2"></i> Salir
           </Nav.Link>
         </Nav>

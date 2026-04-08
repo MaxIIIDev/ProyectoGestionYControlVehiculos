@@ -28,24 +28,17 @@ export default function Login() {
     setIsSubmitting(true);
 
     try {
-      // Llamada a tu API en C#
       const response = await fetch(endpointsApi.login.action, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // Asegúrate de que los nombres coincidan con el DTO de tu backend
         body: JSON.stringify({ gmail, contrasena }),
       });
 
       if (response.ok) {
         const data = await response.json();
-
-        // Guardamos el token en el contexto (esto actualiza el localStorage y el estado global)
         login(data.token);
-
-        // Redirigimos al Dashboard
         navigate("/");
       } else {
-        // Si el backend devuelve 400 o 401
         setError("El correo o la contraseña son incorrectos.");
       }
     } catch (err) {
