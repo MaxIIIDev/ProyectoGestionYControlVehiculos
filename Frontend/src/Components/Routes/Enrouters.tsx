@@ -261,6 +261,18 @@ export const endpointsAPI = {
   login: {
     action: `${API_ROUTE}/ControllerAuth/login`,
   },
+  usuarios: {
+    nuevo: { action: `${API_ROUTE}/ControllerAuth/register`, method: "POST" },
+    listar: { action: `${API_ROUTE}/Usuarios`, method: "GET" },
+    baja: {
+      action: (id: number) => `${API_ROUTE}/Usuarios/baja/${id}`,
+      method: "PATCH",
+    },
+    alta: {
+      action: (id: number) => `${API_ROUTE}/Usuarios/alta/${id}`,
+      method: "PATCH",
+    },
+  },
 };
 //ENDPOINTS DEL FRONTEND
 export const endpointFront = {

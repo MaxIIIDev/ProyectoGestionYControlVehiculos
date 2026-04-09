@@ -33,7 +33,7 @@ import TopNavBar from "./TopNavBar";
 import { ProtectedRoute } from "./ProtectedRoute";
 import Login from "../../views/Auth/Login";
 import Usuarios from "../../views/Usuarios";
-import RegisterUsers from "../../views/Users/RegisterUsers";
+import { AgregarUsuario } from "../../views/Users/RegisterUsers";
 import UsersList from "../../views/Users/UsersList";
 const ProtectedLayout = () => {
   return (
@@ -182,7 +182,7 @@ export default function RoutesComponent() {
           />
           <Route
             path={endpointFront.usuarios.nuevo.action}
-            element={<RegisterUsers />}
+            element={<AgregarUsuario />}
           />
           <Route
             path={endpointFront.usuarios.listar.action}
