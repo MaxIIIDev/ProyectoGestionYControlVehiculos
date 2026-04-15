@@ -263,7 +263,11 @@ export const endpointsAPI = {
   },
   usuarios: {
     nuevo: { action: `${API_ROUTE}/ControllerAuth/register`, method: "POST" },
-    listar: { action: `${API_ROUTE}/Usuarios`, method: "GET" },
+    listar: {
+      action: (nroPagina: number, tamanoPagina: number): string =>
+        `${API_ROUTE}/Usuarios?numeroPagina=${nroPagina}&tamanoPagina=${tamanoPagina}`,
+      method: "GET",
+    },
     baja: {
       action: (id: number) => `${API_ROUTE}/Usuarios/baja/${id}`,
       method: "PATCH",

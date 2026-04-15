@@ -45,11 +45,24 @@ export default function SideNavBar() {
                     <Nav.Link as={Link} to="/Neumaticos" className="ps-4">
                       <i className="bi bi-disc"></i> Neumaticos
                     </Nav.Link>
+                  </Nav>
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
+            <Accordion
+              className="w-100 mb-2 accordion-dark"
+              defaultActiveKey="1">
+              <Accordion.Item eventKey="1">
+                <Accordion.Header>
+                  <i className="bi bi-envelope me-2"></i> Servicios
+                </Accordion.Header>
+                <Accordion.Body className="p-0">
+                  <Nav className="flex-column">
                     <Nav.Link
                       as={Link}
                       to={endpointFront.usuarios.gestion.action}
                       className="ps-4">
-                      <i className="bi bi-disc"></i> Usuarios
+                      <i className="bi bi-person-circle"></i> Usuarios
                     </Nav.Link>
                   </Nav>
                 </Accordion.Body>

@@ -25,7 +25,7 @@ public class ControllerUsuario : ControllerBase
         [FromQuery] int tamanoPagina = 10
     )
     {
-        PagedResponse<Usuario> usuarios = await _serviceUsuario.GetAllAsync(
+        PagedResponse<UsuarioDto> usuarios = await _serviceUsuario.GetAllAsync(
             numeroPagina,
             tamanoPagina
         );

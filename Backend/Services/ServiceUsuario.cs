@@ -16,16 +16,29 @@ namespace Backend.Services
         }
 
         // GET TODO USUARIOS
-        public async Task<PagedResponse<Usuario>> GetAllAsync(int nroPagina, int tamanoPagina)
+        public async Task<PagedResponse<UsuarioDto>> GetAllAsync(int nroPagina, int tamanoPagina)
         {
-            IQueryable<Usuario> query = _context.Usuarios;
+            IQueryable<Usuario> query = _context
+                .Usuarios.Include(u => u.Persona)
+                .Include(u => u.Rol);
             int totalRegistrosUsuario = await query.CountAsync();
-            List<Usuario>? usuarios = await query
+            List<UsuarioDto>? usuarios = await query
                 .OrderBy(u => u.IdUsuario)
                 .Skip((nroPagina - 1) * tamanoPagina)
                 .Take(tamanoPagina)
+                .Select(u => new UsuarioDto
+                {
+                    IdUsuario = u.IdUsuario,
+                    Gmail = u.Gmail,
+                    AvatarUrl = u.AvatarUrl,
+                    IdRol = u.IdRol,
+                    Rol = u.Rol,
+                    IdPersona = u.IdPersona,
+                    Persona = u.Persona,
+                    Estado = u.Estado,
+                })
                 .ToListAsync();
-            return new PagedResponse<Usuario>(
+            return new PagedResponse<UsuarioDto>(
                 usuarios,
                 totalRegistrosUsuario,
                 nroPagina,
@@ -34,9 +47,25 @@ namespace Backend.Services
         }
 
         // USUARIO POR ID
-        public async Task<Usuario?> GetByIdAsync(int id)
+        public async Task<UsuarioDto?> GetByIdAsync(int id)
         {
-            return await _context.Usuarios.FindAsync(id);
+            Usuario? usuario = await _context
+                .Usuarios.Include(u => u.Persona)
+                .Include(u => u.Rol)
+                .FirstOrDefaultAsync(u => u.IdUsuario == id);
+            if (usuario == null)
+                return null;
+            return new UsuarioDto
+            {
+                IdUsuario = usuario.IdUsuario,
+                Gmail = usuario.Gmail,
+                AvatarUrl = usuario.AvatarUrl,
+                IdRol = usuario.IdRol,
+                Rol = usuario.Rol,
+                IdPersona = usuario.IdPersona,
+                Persona = usuario.Persona,
+                Estado = usuario.Estado,
+            };
         }
 
         public async Task<Usuario?> getUsuarioByIdPersonaAsync(int id)
