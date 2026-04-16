@@ -2,7 +2,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Navbar, Nav, Accordion, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { endpointFront } from "../Components/Routes/Enrouters";
+import { useAuth } from "../context/AuthContext";
 export default function SideNavBar() {
+  const { user } = useAuth();
+
+  console.log(user);
+  console.log(user!.role);
+
   return (
     <Col
       xs={12}
@@ -49,25 +55,27 @@ export default function SideNavBar() {
                 </Accordion.Body>
               </Accordion.Item>
             </Accordion>
-            <Accordion
-              className="w-100 mb-2 accordion-dark"
-              defaultActiveKey="1">
-              <Accordion.Item eventKey="1">
-                <Accordion.Header>
-                  <i className="bi bi-envelope me-2"></i> Servicios
-                </Accordion.Header>
-                <Accordion.Body className="p-0">
-                  <Nav className="flex-column">
-                    <Nav.Link
-                      as={Link}
-                      to={endpointFront.usuarios.gestion.action}
-                      className="ps-4">
-                      <i className="bi bi-person-circle"></i> Usuarios
-                    </Nav.Link>
-                  </Nav>
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
+            {user && user.role == 1 && (
+              <Accordion
+                className="w-100 mb-2 accordion-dark"
+                defaultActiveKey="1">
+                <Accordion.Item eventKey="1">
+                  <Accordion.Header>
+                    <i className="bi bi-envelope me-2"></i> Servicios
+                  </Accordion.Header>
+                  <Accordion.Body className="p-0">
+                    <Nav className="flex-column">
+                      <Nav.Link
+                        as={Link}
+                        to={endpointFront.usuarios.gestion.action}
+                        className="ps-4">
+                        <i className="bi bi-person-circle"></i> Usuarios
+                      </Nav.Link>
+                    </Nav>
+                  </Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
