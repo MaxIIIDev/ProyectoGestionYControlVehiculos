@@ -276,6 +276,14 @@ export const endpointsAPI = {
       action: (id: number) => `${API_ROUTE}/Usuarios/alta/${id}`,
       method: "PATCH",
     },
+    cambiarRol: {
+      action: (id: number) => `${API_ROUTE}/usuarios/rol/${id}`,
+      method: "PUT",
+    },
+    resetPassword: {
+      action: (id: number) => `${API_ROUTE}/usuarios/reset/${id}`,
+      method: "PUT",
+    },
   },
 };
 //ENDPOINTS DEL FRONTEND

@@ -1,3 +1,4 @@
+using System.Drawing;
 using AutoMapper;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -87,6 +88,11 @@ namespace Backend.Services
             rol.Estado = true;
             _context.Roles.Update(rol);
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<int> getCountRol()
+        {
+            return await _context.Roles.CountAsync();
         }
     }
 }

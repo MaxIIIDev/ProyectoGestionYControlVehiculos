@@ -49,6 +49,131 @@ export default function UsersList() {
       <td>{usuario.estado ? "Activo" : "Inactivo"}</td>
     </tr>
   ));
+  const handleChangeRole = async () => {
+    try {
+      const responseFromApi = await fetch(
+        endpointsAPI.usuarios.cambiarRol.action(selectedUser!.idUsuario),
+        {
+          method: endpointsAPI.usuarios.cambiarRol.method,
+        },
+      );
+      if (responseFromApi.ok) {
+        const dataFromApi = await responseFromApi.json();
+        selectedUser!.idRol = dataFromApi.idRol;
+        selectedUser!.rol!.idRol = dataFromApi.idRol;
+        selectedUser!.rol!.nombre = dataFromApi.nombre;
+
+        setMetadataPage((prevData) => ({
+          ...prevData,
+          data: prevData.data.map((usuario) => {
+            if (String(usuario.idUsuario) === String(selectedUser!.idUsuario)) {
+              return {
+                ...usuario,
+                idRol: dataFromApi.idRol,
+                rol: {
+                  estado: selectedUser!.rol!.estado,
+                  idRol: dataFromApi.idRol,
+                  nombre: dataFromApi.nombre,
+                },
+              };
+            }
+            return usuario;
+          }),
+        }));
+        return;
+      }
+      setShowModal(false);
+
+      const rawText = await responseFromApi.text();
+      throw new Error("" + rawText);
+    } catch (error) {
+      Swal.fire({
+        title: "Error al cambiar el rol: ",
+        text:
+          error instanceof Error
+            ? error.message
+            : "Ha ocurrido un error inesperado",
+        icon: "error",
+        showCloseButton: true,
+      });
+    }
+  };
+  const confirmarAccionPeligrosa = (funcionAEjecutar: () => void): void => {
+    setShowModal(false);
+
+    Swal.fire({
+      title: "¿Estás absolutamente seguro?",
+      text: 'Esta acción es irreversible. Escribe la palabra "Confirmar" para continuar:',
+      input: "text",
+      inputPlaceholder: "Escribe Confirmar",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, ejecutar",
+      cancelButtonText: "Cancelar",
+      didOpen: () => {
+        const confirmButton = Swal.getConfirmButton();
+        const input = Swal.getInput();
+
+        if (confirmButton) {
+          confirmButton.disabled = true;
+        }
+
+        if (input) {
+          input.addEventListener("input", () => {
+            if (confirmButton) {
+              confirmButton.disabled = input.value !== "Confirmar";
+            }
+          });
+        }
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        funcionAEjecutar();
+        return;
+      }
+      if (result.isDismissed) {
+        setShowModal(true);
+        return;
+      }
+    });
+  };
+  const handleResetPassword = async () => {
+    try {
+      const responseFromApi = await fetch(
+        endpointsAPI.usuarios.resetPassword.action(selectedUser!.idUsuario),
+        {
+          method: endpointsAPI.usuarios.resetPassword.method,
+        },
+      );
+      if (responseFromApi.ok) {
+        const rawText = await responseFromApi.json();
+
+        Swal.fire({
+          title: `Contraseña reseteada | Usuario: ${selectedUser!.gmail}`,
+          text: `${"" + rawText.message}`,
+          icon: "success",
+          showCloseButton: true,
+        }).then(() => {
+          setShowModal(true);
+        });
+        return;
+      }
+      const errorMessage = await responseFromApi.text();
+      throw new Error(errorMessage + "");
+    } catch (error) {
+      Swal.fire({
+        title: "Error al resetear la contraseña: ",
+        text:
+          error instanceof Error
+            ? error.message
+            : "Ha ocurrido un error inesperado",
+        icon: "error",
+        showCloseButton: true,
+      });
+    }
+  };
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -131,6 +256,14 @@ export default function UsersList() {
                   }),
                 }));
               }}></AltaBajaLogica>
+            <button
+              className="btn btn-primary"
+              onClick={handleChangeRole}>{`Cambiar Rol`}</button>
+            <button
+              className="btn btn-dark"
+              onClick={() => confirmarAccionPeligrosa(handleResetPassword)}>
+              {"Resetear Contraseña"}
+            </button>
           </>
         )}
       </ModalTable>

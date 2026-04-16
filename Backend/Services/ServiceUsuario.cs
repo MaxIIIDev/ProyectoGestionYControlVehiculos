@@ -8,11 +8,20 @@ namespace Backend.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper mapper;
+        private readonly ServiceRol _serviceRol;
+        private readonly ServicePassword _servicePassword;
 
-        public ServiceUsuario(AppDbContext context, IMapper mapper)
+        public ServiceUsuario(
+            AppDbContext context,
+            IMapper mapper,
+            ServiceRol serviceRol,
+            ServicePassword servicePassword
+        )
         {
             _context = context;
             this.mapper = mapper;
+            _serviceRol = serviceRol;
+            _servicePassword = servicePassword;
         }
 
         // GET TODO USUARIOS
@@ -144,6 +153,37 @@ namespace Backend.Services
             usuario.Estado = true;
             _context.Usuarios.Update(usuario);
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> UpdateRolUsuario(int id)
+        {
+            Usuario? usuarioFinded = await _context.Usuarios.FindAsync(id);
+            if (usuarioFinded == null)
+                throw new KeyNotFoundException("Usuario con id " + id + " no encontrado");
+            if (usuarioFinded.IdRol == 0)
+            {
+                throw new InvalidOperationException("El usuario no tiene rol");
+            }
+            int rolCount = await _serviceRol.getCountRol();
+            if (rolCount == 0)
+            {
+                throw new InvalidOperationException("No hay roles");
+            }
+            int newRolId = (usuarioFinded.IdRol == rolCount) ? 1 : usuarioFinded.IdRol + 1;
+            usuarioFinded.IdRol = newRolId;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> resetPassword(int id)
+        {
+            Usuario? usuarioFinded = await _context.Usuarios.FindAsync(id);
+            if (usuarioFinded == null)
+                throw new KeyNotFoundException("Usuario con id " + id + " no encontrado");
+            string password = _servicePassword.HashPassword("Reset123456!");
+            usuarioFinded.Contrasena = password;
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

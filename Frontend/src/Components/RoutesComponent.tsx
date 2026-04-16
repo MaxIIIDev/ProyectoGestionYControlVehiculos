@@ -59,8 +59,11 @@ export default function RoutesComponent() {
   return (
     <Routes>
       <Route path={endpointFront.login.action} element={<Login />} />
-      <Route path={endpointFront.login.action} element={<Unauthorized />} />
-      <Route element={ProtectedRoute({ allowedRoles: ["2"] })}>
+      <Route
+        path={endpointFront.unauthoraized.action}
+        element={<Unauthorized />}
+      />
+      <Route element={ProtectedRoute({ allowedRoles: ["1", "2"] })}>
         <Route element={ProtectedLayout()}>
           <Route
             path="/"
@@ -176,17 +179,21 @@ export default function RoutesComponent() {
             path={endpointFront.mantenimiento.listarPorVehiculo.action}
             element={<ListarServicios />}
           />
+        </Route>
+      </Route>
+      <Route element={ProtectedRoute({ allowedRoles: ["1"] })}>
+        <Route element={ProtectedLayout()}>
           <Route
-            path={endpointFront.usuarios.gestion.action}
-            element={<Usuarios />}
+            path={endpointFront.usuarios.listar.action}
+            element={<UsersList />}
           />
           <Route
             path={endpointFront.usuarios.nuevo.action}
             element={<AgregarUsuario />}
           />
           <Route
-            path={endpointFront.usuarios.listar.action}
-            element={<UsersList />}
+            path={endpointFront.usuarios.gestion.action}
+            element={<Usuarios />}
           />
         </Route>
       </Route>

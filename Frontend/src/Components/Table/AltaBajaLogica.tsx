@@ -38,7 +38,9 @@ export default function AltaBajaLogica({
   };
 
   return (
-    <button onClick={handleAltaBaja}>
+    <button
+      className={`btn ${estado ? "btn-warning" : "btn-success"}`}
+      onClick={handleAltaBaja}>
       <i className={estado ? "bi bi-x-lg" : "bi bi-check-circle"}></i>
       {estado ? " Dar de Baja" : " Dar de Alta"}
     </button>

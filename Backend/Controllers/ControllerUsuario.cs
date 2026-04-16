@@ -1,8 +1,11 @@
+using System.Security.Claims;
 using AutoMapper;
 using Backend.Models;
 using Backend.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 [Route("api/usuarios")]
 [ApiController]
@@ -10,14 +13,17 @@ using Microsoft.AspNetCore.Mvc;
 public class ControllerUsuario : ControllerBase
 {
     private readonly ServiceUsuario _serviceUsuario;
+    private readonly ServiceRol _serviceRol;
     private readonly IMapper mapper;
 
-    public ControllerUsuario(ServiceUsuario serviceUsuario, IMapper mapper)
+    public ControllerUsuario(ServiceUsuario serviceUsuario, IMapper mapper, ServiceRol serviceRol)
     {
         _serviceUsuario = serviceUsuario;
+        _serviceRol = serviceRol;
         this.mapper = mapper;
     }
 
+    [Authorize(Policy = "RequireAdmin")]
     // GET TODOS LOS USUARIOS
     [HttpGet]
     public async Task<IActionResult> GetAllUsuarios(
@@ -32,6 +38,7 @@ public class ControllerUsuario : ControllerBase
         return Ok(usuarios);
     }
 
+    [Authorize(Policy = "RequireAdmin")]
     // GET USUARIO POR ID
     [HttpGet("{id}")]
     public async Task<IActionResult> GetUsuarioById(int id)
@@ -44,6 +51,7 @@ public class ControllerUsuario : ControllerBase
         return Ok(usuario);
     }
 
+    [Authorize(Policy = "RequireAdmin")]
     // POST NUEVO USUARIO
     [HttpPost]
     public async Task<IActionResult> CreateUsuario([FromBody] CreateUsuarioDto usuarioDto)
@@ -64,6 +72,7 @@ public class ControllerUsuario : ControllerBase
         }
     }
 
+    [Authorize(Policy = "RequireAdmin")]
     // PUT ACTUALIZAR USUARIO
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateUsuario(int id, [FromBody] UpdateUsuarioDto usuarioDto)
@@ -90,6 +99,7 @@ public class ControllerUsuario : ControllerBase
         }
     }
 
+    [Authorize(Policy = "RequireAdmin")]
     // DELETE USUARIO
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUsuario(int id)
@@ -102,6 +112,7 @@ public class ControllerUsuario : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Policy = "RequireAdmin")]
     // BAJA LOGICA USUARIO
     [HttpPatch("baja/{id}")]
     public async Task<IActionResult> SoftDeleteUsuario(int id)
@@ -114,6 +125,7 @@ public class ControllerUsuario : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Policy = "RequireAdmin")]
     // ALTA LOGICA USUARIO
     [HttpPatch("alta/{id}")]
     public async Task<IActionResult> RestoreUsuario(int id)
@@ -124,5 +136,59 @@ public class ControllerUsuario : ControllerBase
             return NotFound();
         }
         return NoContent();
+    }
+
+    [Authorize(Policy = "RequireAdmin")]
+    [HttpPut("rol/{id}")]
+    public async Task<IActionResult> UpdateRolUsuario(int id)
+    {
+        try
+        {
+            if (Int32.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value) == id)
+            {
+                return BadRequest("No puedes cambiar el rol de ti mismo");
+            }
+
+            await _serviceUsuario.UpdateRolUsuario(id);
+            UsuarioDto? usuarioFinded = await _serviceUsuario.GetByIdAsync(id);
+            if (usuarioFinded == null)
+            {
+                return NotFound("Usuario con id " + id + " no encontrado");
+            }
+            Rol? rolFinded = await _serviceRol.GetByIdAsync(usuarioFinded.IdRol);
+            if (rolFinded == null)
+            {
+                return NotFound($"Rol con id {usuarioFinded.IdRol} no encontrado");
+            }
+            var rol = new { idRol = usuarioFinded.IdRol, nombre = rolFinded.Nombre };
+            return Ok(rol);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { mensaje = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { mensaje = ex.Message });
+        }
+    }
+
+    [Authorize(Policy = "RequireAdmin")]
+    [HttpPut("reset/{id}")]
+    public async Task<IActionResult> ResetPassword(int id)
+    {
+        try
+        {
+            await _serviceUsuario.resetPassword(id);
+            return Ok(new { message = "Contraseña reseteada: Reset123456!" });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { mensaje = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { mensaje = ex.Message });
+        }
     }
 }

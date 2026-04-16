@@ -49,7 +49,7 @@ export default function ModalTable({
             justifyContent: "center",
           }}>
           {children}
-          <button onClick={onClose}>
+          <button className="btn btn-danger" onClick={onClose}>
             <i className="bi bi-x-circle"></i> Cerrar
           </button>
         </div>
