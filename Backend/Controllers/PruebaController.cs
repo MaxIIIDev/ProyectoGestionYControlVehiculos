@@ -1,11 +1,18 @@
+using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
 [Route("api/[controller]")]
 [ApiController]
 public class PruebaController : ControllerBase
 {
-    [HttpGet]
-    public IActionResult GetPrueba()
+    ServiceUsuario serviceUsuario;
+    PruebaController(ServiceUsuario serviceUsuario)
     {
+        this.serviceUsuario = serviceUsuario;
+    }
+    [HttpGet]
+    public async Task<IActionResult> GetPrueba()
+    {
+        await serviceUsuario.resetPassword(1, "Reset123456@",null);
         return Ok(new
         {
             message = "Prueba"
